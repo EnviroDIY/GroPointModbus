@@ -1,0 +1,18 @@
+# Windows
+Thumbs.db
+~*
+*.lnk
+
+# OSX
+.DS_Store
+
+
+# VSCode
+.vscode
+
+
+# PlatformIO
+.pio
+/platformio.ini
+
+# Other
