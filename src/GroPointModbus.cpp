@@ -125,6 +125,11 @@ bool gropoint::getValues(int16_t &valueM1, int16_t &valueM2)
     valueM1 = -9999;
     valueM2 = -9999;
 
+    // Trigger read request
+    Serial.println("Trigger read request");
+    modbus.getRegisters(0x04, 0x7531, 2);
+    delay(200);
+
     switch(_model)
     {
         case GPLP_2: 

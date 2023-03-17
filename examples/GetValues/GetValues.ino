@@ -117,12 +117,9 @@ void setup() {
         pinMode(adapterPwrPin, OUTPUT);
         digitalWrite(adapterPwrPin, HIGH);
     }
-
     if (DEREPin > 0)    {
         pinMode(DEREPin, OUTPUT);
     }
-
-    if (DEREPin > 0) pinMode(DEREPin, OUTPUT);
 
     Serial.begin(serialBaud); // Main serial port for debugging via USB Serial Monitor
 
