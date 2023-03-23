@@ -14,8 +14,7 @@
 
 // The various GroPoint GPLP-X Moisture/Temperature Profiling Probes 
 // supported by this library
-typedef enum gropointModel
-{
+typedef enum gropointModel {
     GPLP_2 = 2,  // GroPoint Profiling Probe with 2 segments (30 cm)
     GPLP_3 = 3,  // GroPoint Profiling Probe with 3 segments (45 cm)
     GPLP_4 = 4,  // GroPoint Profiling Probe with 4 segments (60 cm)
@@ -27,8 +26,7 @@ typedef enum gropointModel
               // the serial number of an unknown model.
 } gropointModel;
 
-class gropoint
-{
+class gropoint {
 
 public:
 
@@ -43,32 +41,51 @@ public:
     // The sensor itself does not return its model information.
     String getModel(void);
 
-    // This gets the modbus slave ID.  Not supported by many sensors.
-    byte getSlaveID(void);
+    // This gets the modbus sensor (slave) address. 
+    // Does not seem to work with a broadcast address of 0x00 or 0xFF
+    byte getSensorAddress(void);
 
     // This sets a new modbus slave ID
-    bool setSlaveID(byte newSlaveID);
+    bool setSensorAddress(byte newSlaveID);
+
+    // Gets sensor information as a String
+    // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
+    // vvv is the firmware version (v.v.v) and 
+    // nnnnnn is the probe serial number.
+    String getSensorInfo(void);
 
     // This gets the instrument serial number as a String
     String getSerialNumber(void);
 
-    // This gets the hardware and software version of the sensor
-    // The float variables for the hardware and software versions must be
-    // initialized prior to calling this function.
-    // The reference (&) is needed when declaring this function so that
-    // the function is able to modify the actual input floats rather than
-    // create and destroy copies of them.
-    // There is no need to add the & when actually using the function.
-    bool getVersion(float &hardwareVersion, float &softwareVersion);
+    // This gets the firmware version of the sensor
+    String getVersion(void);
+
+    // Get sensor modbus baud 
+    int16_t getSensorBaud(void);
+
+    // Get sensor modbus serial parity 
+    int16_t getSensorParity(void);
 
     // This tells the sensors to begin taking measurements
     bool startMeasurement(void);
 
-    // This tells the optical sensors to stop taking measurements
+    // This tells the sensors to stop taking measurements
     bool stopMeasurement(void);
 
-    // This gets values back from the sensor
-    bool getValues(int16_t &valueM1, int16_t &valueM2);
+    // This gets read-only input registers containing measured values
+    // Similar to modbusMaster::getRegisters(), but with a trigger request
+    // followed by a 200 ms delay before the read measurement request
+    bool getInputRegisters(int16_t startRegister, int16_t numRegisters);
+
+    // This gets values back from the sensor as a float
+    // The float variables for must be initialized prior to calling this function.
+    // The reference (&) is needed when declaring this function so that
+    // the function is able to modify the actual input floats rather than
+    // create and destroy copies of them.
+    // There is no need to add the & when actually using the function.
+    bool getValues(float &valueM1, float &valueM2, float &valueM3, 
+                   float &valueM4, float &valueM5, float &valueM6, 
+                   float &valueM7, float &valueM8);
     // bool getValues(float &valueM1, float &valueM2, float &valueM3);
     // bool getValues(float &valueM1, float &valueM2, float &valueM3, float &valueM4);
     // bool getValues(float &valueM1, float &valueM2, float &valueM3, float &valueM4, float &valueM5);
@@ -76,14 +93,10 @@ public:
     // bool getValues(float &valueM1, float &valueM2, float &valueM3, float &valueM4, float &valueM5, float &valueM6, float &valueM7, float &valueM8);
 
     // This returns the temperature values from a sensor as a float
-    bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4);
-    // bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4, float &valueT5, float &valueT6);
-    // bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4, float &valueT5, float &valueT6, float &valueT7);
-    // bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4, float &valueT5, float &valueT6, float &valueT7, float &valueT8, float &valueT9);
-    // bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4, float &valueT5, float &valueT6, float &valueT7, float &valueT8, float &valueT9, float &valueT10);
-    // bool getValues(float &valueT1, float &valueT2, float &valueT3, float &valueT4, float &valueT5, float &valueT6, float &valueT7, float &valueT8, float &valueT9, float &valueT10, float &valueT11, float &valueT12, float &valueT13);
-
-
+    bool getTemperatureValues(float &valueT1, float &valueT2,  
+            float &valueT3, float &valueT4, float &valueT5, float &valueT6, 
+            float &valueT7, float &valueT8, float &valueT9, float &valueT10, 
+            float &valueT11, float &valueT12, float &valueT13);
 
     // This sets a stream for debugging information to go to;
     void setDebugStream(Stream *stream){modbus.setDebugStream(stream);}
@@ -95,7 +108,8 @@ private:
 
     byte _slaveID;
 
-    modbusMaster modbus;  // Class from EnviroDIY SensorModbusMaster library, https://github.com/EnviroDIY/SensorModbusMaster
+    // Class from EnviroDIY SensorModbusMaster library, https://github.com/EnviroDIY/SensorModbusMaster
+    modbusMaster modbus;  
 };
 
 #endif

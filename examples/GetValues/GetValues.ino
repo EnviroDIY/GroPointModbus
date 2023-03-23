@@ -1,11 +1,18 @@
 /*****************************************************************************
-testing.ino
+GetValues.ino
 
 This prints basic meta-data about a sensor to the first serial port and then
 begins taking measurements from the sensor.
 
 The sensor model and address can easily be modified to use this sketch with any
 GroPoint Profile modbus sensor.
+
+NOTE: GroPoint Profile sensor default Modbus communication settings are 
+19200 Baud, 8 Bits, Even Parity, one Stop Bit (8-E-1). See p35 of manual.
+8-N-1 (no parity) is the most common configuration for serial communications.
+
+NOTE:  that neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial
+will support either even or odd parity!
 *****************************************************************************/
 
 // ---------------------------------------------------------------------------
@@ -34,16 +41,18 @@ GroPoint Profile modbus sensor.
 //  Sensor Settings
 // ==========================================================================
 // Define the sensor type
-gropointModel model = GPLP_2;  // The sensor model number
+gropointModel model = GPLP_8;  // The sensor model number
 
 // Define the sensor's modbus address, or SlaveID
-// NOTE: The GroPoint User Manual presents SlaveID and registers as integers (decimal),
-// whereas EnviroDIY and most other modbus systems present it in hexadecimal form.
-// Use an online "HEX to DEC Converter".
-byte modbusAddress = 0x01;  // Yosemitech ships sensors with a default ID of 0x01.
+    // NOTE: The GroPoint User Manual presents SlaveID and registers as integers (decimal),
+    // whereas EnviroDIY and most other modbus systems present it in hexadecimal form.
+    // Use an online "HEX to DEC Converter".
+byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
 
-// Sensor Timing
-// Edit these to explore 
+// The Modbus baud rate the sensor uses
+const int32_t modbusBaud = 19200;  // GroPoint default baud is 19200.
+
+// Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
     // GroPoint Profile User Manual page 7:
     // The time from application of power to the SDI-12 power bus until the 
@@ -74,7 +83,19 @@ const int SSRxPin = 13;  // Receive pin for software serial (Rx on RS485 adapter
 const int SSTxPin = 14;  // Send pin for software serial (Tx on RS485 adapter)
 
 // Construct software serial object for Modbus
-#if defined __AVR__
+    // Hardware serial is the only serial stream that can have parity (even or odd).
+    // The Uno only has 1 hardware serial port, which is dedicated to comunication with the computer
+    // If using an Uno, you will be restricted to using AltSofSerial or SoftwareSerial
+
+// If using the Mayfly, you can use the hardware Serial1 port with the following define:
+#define HARDWARE_MODBUS_SERIAL
+    // To access HardwareSerial on the Mayfly, use jumpers to connect 
+    // the Modbus adapter pins that would go to D5 & D6 to 
+    // TX1 and RX1 respectivley on the left 20-pin header
+
+#if defined HARDWARE_MODBUS_SERIAL
+    HardwareSerial& modbusSerial = Serial1;
+#elif defined __AVR__
     // SoftwareSerial modbusSerial(SSRxPin, SSTxPin);
     AltSoftSerial modbusSerial;
 #elif defined ESP8266
@@ -92,16 +113,21 @@ const int SSTxPin = 14;  // Send pin for software serial (Tx on RS485 adapter)
 gropoint sensor;
 bool success;
 
+// Construct a SensorModbusMaster class instance, from 
+// https://github.com/EnviroDIY/SensorModbusMaster
+modbusMaster modbus;  
+
 
 // ==========================================================================
 // Working Functions
 // ==========================================================================
-// A function for pretty-printing the Modbuss Address, from ModularSensors
-String sensorLocation(byte _modbusAddress) {
-    String sensorLocation = F("0x");
-    if (_modbusAddress < 0x10) sensorLocation += "0";
-    sensorLocation += String(_modbusAddress, HEX);
-    return sensorLocation;
+// A function for pretty-printing the Modbuss Address in Hexadecimal notation, 
+// from ModularSensors `sensorLocation()`
+String prettyprintAddressHex(byte _modbusAddress) {
+    String addressHex = F("0x");
+    if (_modbusAddress < 0x10) addressHex += "0";
+    addressHex += String(_modbusAddress, HEX);
+    return addressHex;
 }
 
 
@@ -121,16 +147,23 @@ void setup() {
         pinMode(DEREPin, OUTPUT);
     }
 
-    Serial.begin(serialBaud); // Main serial port for debugging via USB Serial Monitor
+    // Turn on the "main" serial port for debugging via USB Serial Monitor
+    Serial.begin(serialBaud); 
 
-    // Setup Modbus serial stream
-    #if defined ESP8266
-        modbusSerial.begin(9600, SWSERIAL_8N1, SSRxPin, SSTxPin, false, 256); // The modbus serial stream - Baud rate MUST be 9600.
+    // Setup your modbus serial port
+    #if defined HARDWARE_MODBUS_SERIAL
+        modbusSerial.begin(modbusBaud, SERIAL_8E1);  // The modbus serial stream.
+        // ^^ use this for 8 data bits - even parity - 1 stop bit
+    #elif defined ESP8266
+        modbusSerial.begin(modbusBaud, SWSERIAL_8N1, SSRxPin, SSTxPin, false, 256); // The modbus serial stream
     #else
-        modbusSerial.begin(9600);  // The modbus serial stream - Baud rate MUST be 9600.
+        modbusSerial.begin(modbusBaud); // The modbus serial stream
+        // ^^ use this for 8 data bits - no parity - 1 stop bits
+        // Despite being technically "non-compliant" with the modbus specifications
+        // 8N1 parity is very common and the EnviroDIY default.
     #endif
 
-    // Start up the sensor
+    // Setup the sensor instance
     sensor.begin(model, modbusAddress, &modbusSerial, DEREPin);
 
     // Turn on debugging
@@ -139,96 +172,78 @@ void setup() {
     #endif
 
     // Start up note
-    Serial.print("\nGroPoint Profile Soil Moisture and Temperature");
-    Serial.print(sensor.getModel());
+    Serial.print("\nGroPoint Profile Soil Moisture and Temperature \nModel: ");
+    Serial.println(sensor.getModel());
+    Serial.println();
 
     // Allow the sensor and converter to warm up
-    Serial.println("\nWaiting for sensor and adapter to be ready.");
+    Serial.println("Waiting for sensor and adapter to be ready.");
     Serial.print("    Warm up time (ms): ");
     Serial.println(WARM_UP_TIME);
+    Serial.println();
     delay(WARM_UP_TIME);
 
     // Confirm Modbus Address 
-    Serial.println("\nSelected modbus address:");
+    Serial.println("Selected modbus address:");
     Serial.print("    integer: ");
     Serial.print(modbusAddress, DEC);
     Serial.print(", hexidecimal: ");
-    Serial.println(sensorLocation(modbusAddress));
+    Serial.println(prettyprintAddressHex(modbusAddress));
+    Serial.println();
 
-    Serial.println("Discovered modbus address.");
+    // Read Sensor Modbus Address from holding register 40201 (0x9D09)
+    Serial.println("Get sensor modbus address.");
+    byte id = sensor.getSensorAddress();
     Serial.print("    integer: ");
-    byte id = sensor.getSlaveID();
     Serial.print(id, DEC);
     Serial.print(", hexidecimal: ");
-    // Serial.print(id, HEX);
-    Serial.println(sensorLocation(id));
+    Serial.println(prettyprintAddressHex(id));
 
-    // if (id != modbusAddress){
-    //     Serial.print("Updating sensor modbus address to: ");
-    //     modbusAddress = id;
-    //     Serial.println(sensorLocation(modbusAddress));
-    //     Serial.println();
-    //     // Restart the sensor
-    //     sensor.begin(model, modbusAddress, &modbusSerial, DEREPin);
-    //     delay(1500);
-    // };
-
+     // Get Sensor Information
+    Serial.println("Get sensor information.");
+    Serial.println(sensor.getSensorInfo());
+    Serial.println();
+    /* Next two functions NOT YET IMPLEMENTED
     // Get the sensor serial number
     Serial.println("\nGetting sensor serial number.");
     String SN = sensor.getSerialNumber();
     Serial.print("    Serial Number: ");
     Serial.println(SN);
     
-    // // Get the sensor's hardware and software version
-    // Serial.println("Getting sensor version numbers.");
-    // float hardwareV, softwareV;
-    // sensor.getVersion(hardwareV, softwareV);
-    // Serial.print("    Current Hardware Version: ");
-    // Serial.println(hardwareV);
-    // Serial.print("    Current Software Version: ");
-    // Serial.println(softwareV);
+    // Get the sensor's hardware and software version
+    Serial.println("Getting sensor version numbers.");
+    float hardwareV, softwareV;
+    sensor.getVersion(hardwareV, softwareV);
+    Serial.print("    Current Hardware Version: ");
+    Serial.println(hardwareV);
+    Serial.print("    Current Software Version: ");
+    Serial.println(softwareV);
+    */
 
-    // // Get the sensor calibration equation / status (pH only)
-    // switch(model)
-    // {
-    //     case Y532:          // pH, calibration status
-    //     {
-    //         Serial.println("Getting sensor calibration status.");
-    //         byte status = sensor.pHCalibrationStatus();
-    //         Serial.print("    Status: 0x0");
-    //         Serial.println(status, HEX);
-    //     }
-    //     case Y4000:
-    //     {
-    //         Serial.println("For Y4000, use YosemiTech software to get calibration parameters.");
-    //         break;
-    //     }
-    //     default:  // Get the sensor's current calibration values
-    //     {
-    //         Serial.println("Getting sensor calibration equation.");
-    //         float Kval = 0;
-    //         float Bval = 0;
-    //         sensor.getCalibration(Kval, Bval);
-    //         Serial.print("    Current Calibration Equation: final = ");
-    //         Serial.print(Kval);
-    //         Serial.print("*raw + ");
-    //         Serial.println(Bval);
-    //     }
-    //     Serial.println();
-    // }
+    // Get Sensor Modbus Baud
+    Serial.println("Get sensor modbus baud setting.");
+    int16_t sensorBaud = sensor.getSensorBaud();
+    Serial.print("    Baud: ");
+    Serial.println(sensorBaud);
 
+    // Get Sensor Modbus Parity
+    Serial.println("Get sensor modbus parity setting.");
+    int16_t sensorParity = sensor.getSensorParity();
+    Serial.print("    Parity: ");
+    Serial.println(sensorParity);
+    Serial.println();
 
     // Tell the sensor to start taking measurements
     Serial.println("Starting sensor measurements");
     success = sensor.startMeasurement();
     if (success) Serial.println("    Measurements started.");
     else Serial.println("    Failed to start measuring!");
+    Serial.println();
 
     Serial.println("Waiting for sensor to stabilize..");
     Serial.print("    Stabilization time (ms): ");
     Serial.println(STABILIZATION_TIME);
-    for (int i = (STABILIZATION_TIME+500)/1000; i > 0; i--)  // +500 to round up
-    {
+    for (int i = (STABILIZATION_TIME+500)/1000; i > 0; i--) {  // +500 to round up
         Serial.print(i);
         delay (250);
         Serial.print(".");
@@ -242,20 +257,22 @@ void setup() {
 
 
     // Print table headers
-    switch (model)
-    {
-        case GPLP_2:
-        {
-            Serial.print("Time(ms) ");
-            // Serial.println(sensor.getParameter());
-            Serial.println(" M1,  M2,  T1,  T2,  T3,  T4");
+    switch (model) {
+        case GPLP_8: {
+            // Variable Names
+            Serial.print("Time(ms)");
+            Serial.print("  M1   M2   M3   M4   M5   M6   M7   M8   |");
+            Serial.print("  T1   T2   T3   T4   T5   T6   T7   T8   ");
+            Serial.println("T9   T10  T11  T12  T13");
+            // Variable Units
             Serial.print("ms       ");
-            // Serial.println(sensor.getUnits());
-            Serial.println(" % ,  % ,  *C,  *C,  *C,  *C");
+            Serial.print("  %    %    %    %    %    %    %    %   |");
+            Serial.print("  *C   *C   *C   *C   *C   *C   *C   *C   ");
+            Serial.println("*C   *C   *C   *C   *C");
             break;
         }
-        default:
-        {
+        default: {
+            Serial.println("Other sensors not yet implemented.");
         }
     }
 }
@@ -263,30 +280,68 @@ void setup() {
 // ==========================================================================
 //  Arduino Loop Function
 // ==========================================================================
-void loop()
-{
+void loop() {
     // send the command to get the values
-    switch (model)
-    {
-        case GPLP_2:
-        {
-            int16_t M1,  M2,  T1,  T2,  T3,  T4 = -9999;
+    switch (model) {
+        case GPLP_8: {
+            float M1, M2, M3, M4, M5, M6, M7, M8 = -9999;
+            sensor.getValues(M1, M2, M3, M4, M5, M6, M7, M8);
 
-            sensor.getValues(M1,  M2);
+            float T1, T2, T3, T4, T5, T6, T7, T8 = -9999;
+            float T9, T10, T11, T12, T13 = -9999;
+            sensor.getTemperatureValues(T1, T2, T3, T4, T5, T6, T7, T8,
+                                        T9, T10, T11, T12, T13);
 
             Serial.print(millis());
-            Serial.print("    ");
-            Serial.print(M1, 3);
+            Serial.print("     ");
+            Serial.print(M1, 1);
             Serial.print("  ");
-            Serial.print(M2, 3);
+            Serial.print(M2, 1);
+            Serial.print("  ");
+            Serial.print(M3, 1);
+            Serial.print("  ");
+            Serial.print(M4, 1);
+            Serial.print("  ");
+            Serial.print(M5, 1);
+            Serial.print("  ");
+            Serial.print(M6, 1);
+            Serial.print("  ");
+            Serial.print(M7, 1);
+            Serial.print(" ");
+            Serial.print(M8, 1);
+            Serial.print("  | ");
+            Serial.print(T1, 1);
+            Serial.print(" ");
+            Serial.print(T2, 1);
+            Serial.print(" ");
+            Serial.print(T3, 1);
+            Serial.print(" ");
+            Serial.print(T4, 1);
+            Serial.print(" ");
+            Serial.print(T5, 1);
+            Serial.print(" ");
+            Serial.print(T6, 1);
+            Serial.print(" ");
+            Serial.print(T7, 1);
+            Serial.print(" ");
+            Serial.print(T8, 1);
+            Serial.print(" ");
+            Serial.print(T9, 1);
+            Serial.print(" ");
+            Serial.print(T10, 1);
+            Serial.print(" ");
+            Serial.print(T11, 1);
+            Serial.print(" ");
+            Serial.print(T12, 1);
+            Serial.print(" ");
+            Serial.print(T13, 1);
             Serial.println();
             break;
         }
-        default:
-        {
+        default: {
+            Serial.println("Only GPLP-8 has been implemented.");
         }
     }
-
-    // Delay between readings
-    delay(MEASUREMENT_TIME);
+    // Delay between readings is built into the getInputRegisters() function
+    // delay(MEASUREMENT_TIME);
 }
