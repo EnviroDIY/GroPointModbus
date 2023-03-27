@@ -51,8 +51,10 @@ String gropoint::getModel(void) {
 // holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 // Does not seem to work with a broadcast address of 0x00 or 0xFF
 byte gropoint::getSensorAddress(void) {
+    // Based on internals of modbusMaster::getRegisters(), rather than using it
+    // to enable testing with broadcast addresses
     byte getAddressCommand[8] = {
-        0x01,    0x03,        0x00, 0xC8,    0x00, 0x01,    0x0000
+        _slaveID,    0x03,        0x00, 0xC8,    0x00, 0x01,    0x0000
     //  address, ReadHolding, startRegister, numRegisters,  CRC
     };                   
     int16_t numRegisters = 1;
@@ -79,8 +81,6 @@ byte gropoint::getSensorAddress(void) {
 
 // This sets a new modbus slave ID or Sensor Modbus Address.
 // holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
-// The address change will take effect immediately, 
-// so any subsequent commands must use the new address.
 bool gropoint::setSensorAddress(byte newSensorAddress) {
     // 8-bit data values are stored in the lower 8 bits of the 16-bit registers. 
     byte dataToSend[2] = {0x00, newSensorAddress};
@@ -96,31 +96,13 @@ bool gropoint::setSensorAddress(byte newSensorAddress) {
     // nnnnnn is the probe serial number.
 String gropoint::getSensorInfo(void) {
     byte command[4] = {
-        0x01,    0x11,     0x00, 0x00
-    //  address, function, CRC
+        _slaveID, 0x11,     0x00, 0x00
+    //  address,  function, CRC
     };
     int16_t respSize = 0;
     respSize = modbus.sendCommand(command, 4);
 
     return modbus.StringFromFrame(respSize, 5);
-}
-
-// Get sensor modbus baud  
-// from holding register 40203, decimal offset 202 (hexadecimal 0x00CA)
-int16_t gropoint::getSensorBaud(void) {
-    int16_t sensorBaud = -9999;
-    sensorBaud = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
-    // Parity setting (0=none, 1=odd, 2=even)
-    return sensorBaud;
-}
-
-// Get sensor modbus serial parity 
-// from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
-int16_t gropoint::getSensorParity(void) {
-    int16_t sensorParity = -9999;
-    sensorParity = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
-    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
-    return sensorParity;
 }
 
 
@@ -135,6 +117,77 @@ int16_t gropoint::getSensorParity(void) {
 //     }
 //     else return false;
 // }
+
+// This restarts communications, 
+// using the modbus diagnostic command 08 (0x08) with subfunction 01.
+// A request data field contents of FF 00 hex causes the port’s Communications 
+// Event Log to be cleared also. Contents of 00 00 leave the log as it was 
+// prior to the restart.
+bool gropoint::restartCommunications(void) {
+    byte command[8] = {
+        _slaveID, 0x08,     0x00, 0x01,  0x00, 0x00, 0x00, 0x00
+    //  address,  function, subfunction, data field, CRC
+    };
+    int16_t respSize = 0;
+    respSize = modbus.sendCommand(command, 8);
+    if (respSize == 8)
+        return true;
+    else return false;
+}
+
+
+// Get sensor modbus baud  
+// from holding register 40203, decimal offset 202 (hexadecimal 0x00CA)
+int16_t gropoint::getSensorBaud(void) {
+    int16_t sensorBaudCode = -9999;
+    int16_t sensorBaud = -9999;
+    sensorBaudCode = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
+    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
+    if (sensorBaudCode == 0) {
+        sensorBaud = 19200;
+    } else if (sensorBaudCode == 1) {
+        sensorBaud = 9600;
+    } else if (sensorBaudCode == 2) {
+        sensorBaud = 4800;
+    } else if (sensorBaudCode == 3) {
+        sensorBaud = 2400;
+    } else if (sensorBaudCode == 4) {
+        sensorBaud = 1200;
+    } else if (sensorBaudCode == 5) {
+        sensorBaud = 600;
+    } else if (sensorBaudCode == 6) {
+        sensorBaud = 300;
+    } else {
+        Serial.println("Error");
+    }
+    return sensorBaud;
+}
+
+// Set sensor modbus baud  
+// from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
+int16_t gropoint::setSensorBaud(void) {
+
+}
+
+
+// Get sensor modbus serial parity 
+// from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
+String gropoint::getSensorParity(void) {
+    int16_t sensorParityCode = -9999;
+    String sensorParity = "error";
+    sensorParityCode = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
+    // Parity setting (0=none, 1=odd, 2=even)
+    if (sensorParityCode == 0) {
+        sensorParity = "None";
+    } else if (sensorParityCode == 1) {
+        sensorParity = "Odd";
+    } else if (sensorParityCode == 2) {
+        sensorParity = "Even";
+    } else {
+        sensorParity = "Error";
+    }
+    return sensorParity;
+}
 
 
 // This tells the sensors to begin taking measurements
@@ -205,14 +258,17 @@ bool gropoint::getInputRegisters(int16_t startRegister, int16_t numRegisters) {
     // Try up to 5 times to get the right results
     int tries = 0;
     int16_t respSize = 0;
-    while ((respSize != (numRegisters*2 + 5) && tries < 5)) {
+    while ((respSize != (numRegisters*2 + 5) && tries < 15)) {
         // Send out the command (this adds the CRC)
         respSize = modbus.sendCommand(command, 8);
         tries++;
-        // Measurements take ~200 ms per segment/sensor after trigger request
-        delay(260*numRegisters);  // 260 ms by trial and error
+        // Manual says measurements take ~200 ms per segment/sensor after trigger request
+        delay(160);  // 160 ms gives results fastest by trial and error
+            // Requires 5 requests (3 no responses) to get a result in ~5 sec.
+            // Shorter delays give 4 no responses but do not shorten result.
+            // Longer delays reduce no responses (2080 required to get none), 
+            // but take much longer to get an answer.
     }
-
     if (respSize == (numRegisters*2 + 5))
         return true;
     else return false;

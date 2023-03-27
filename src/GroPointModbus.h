@@ -45,10 +45,13 @@ public:
     // Does not seem to work with a broadcast address of 0x00 or 0xFF
     byte getSensorAddress(void);
 
-    // This sets a new modbus slave ID
+    // This sets the modbus sensor (slave) address.
+    // The address change will take effect immediately, 
+    // so any subsequent commands must use the new address.
+    // This register cannot be updated using the broadcast address.
     bool setSensorAddress(byte newSlaveID);
 
-    // Gets sensor information as a String
+    // This gets sensor information as a String
     // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
     // vvv is the firmware version (v.v.v) and 
     // nnnnnn is the probe serial number.
@@ -60,11 +63,32 @@ public:
     // This gets the firmware version of the sensor
     String getVersion(void);
 
-    // Get sensor modbus baud 
+    // This restarts communications, 
+    // using the modbus diagnostic command 08 (0x08) with subfunction 01.
+    bool restartCommunications(void);
+
+    // This gets sensor modbus baud rate
+    // The factory default value is 0, corresponding to a baud rate of 19200.
+    // Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
     int16_t getSensorBaud(void);
 
-    // Get sensor modbus serial parity 
-    int16_t getSensorParity(void);
+    // This sets sensor modbus baud  
+    // Change this value to any of the following valid values: 0=19200, 1=9600, 
+    // 2=4800, 3=2400, 4=1200, 5=600, 6=300. The new baud rate does not take 
+    // effect until the sensor is power cycled, or if the restart 
+    // communications diagnostic command (08, with subfunction 01) is received.
+    int16_t setSensorBaud(void);
+
+    // This gets sensor modbus serial parity 
+    // The factory default value is 2 corresponding to Even parity.
+    String getSensorParity(void);
+
+    // This sets sensor modbus serial parity 
+    // Change this value to any of the following valid values:
+    // 0=None, 1=Odd, 2=Even. The new parity setting 
+    // does not take effect until the sensor is power cycled, or if the restart 
+    // communications diagnostic command (08, with subfunction 01) is received.
+    String setSensorParity(void);
 
     // This tells the sensors to begin taking measurements
     bool startMeasurement(void);

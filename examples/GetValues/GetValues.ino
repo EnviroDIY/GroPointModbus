@@ -228,7 +228,7 @@ void setup() {
 
     // Get Sensor Modbus Parity
     Serial.println("Get sensor modbus parity setting.");
-    int16_t sensorParity = sensor.getSensorParity();
+    String sensorParity = sensor.getSensorParity();
     Serial.print("    Parity: ");
     Serial.println(sensorParity);
     Serial.println();

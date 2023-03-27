@@ -133,6 +133,73 @@ String getSensorInfo(void) {
     return modbus.StringFromFrame(respSize, 5);
 }
 
+// This restarts communications, 
+// using the modbus diagnostic command 08 (0x08) with subfunction 01.
+// A request data field contents of FF 00 hex causes the port’s Communications 
+// Event Log to be cleared also. Contents of 00 00 leave the log as it was 
+// prior to the restart.
+bool restartCommunications(void) {
+    byte command[8] = {
+        modbusAddress, 0x08,     0x00, 0x01,  0x00, 0x00, 0x00, 0x00
+    //  address,  function, subfunction, data field, CRC
+    };
+    int16_t respSize = 0;
+    respSize = modbus.sendCommand(command, 8);
+    if (respSize == 8)
+        return true;
+    else return false;
+}
+
+// Get input registers with GroPoint measurements
+// Based off modbusMaster::getRegisters(), 
+// but with trigger followed by a 200 ms delay before read request
+// Page 39 of GroPoint Profile User Manual says:
+//   A new measurement is triggered by a read request to the input registers 
+//   (either read single or read multiple). The first read command will initiate 
+//   the start of a measurement (soil moisture or soil temperature) and will 
+//   respond to the master with an ACKNOWLEDGE (05) exception response. 
+//   Moisture measurements take approximately 200 ms per segment. 
+//   Temperature measurements take approximately 200 ms per sensor. 
+//   The master should wait for this amount of time to expire before attempting 
+//   to retrieve the measurement values with another read command.
+bool getInputRegisters(int16_t startRegister, int16_t numRegisters) {
+    byte readCommand = 0x04;  // For an input register = 0x04
+
+    // Create an array for the command
+    byte command[8];
+
+    // Put in the slave id and the command
+    command[0] = modbusAddress;
+    command[1] = readCommand;
+
+    // Put in the starting register
+    leFrame fram = {{0,}};
+    fram.Int16[0] = startRegister;
+    command[2] = fram.Byte[1];
+    command[3] = fram.Byte[0];
+
+    // Put in the number of registers
+    fram.Int16[1] = numRegisters;
+    command[4] = fram.Byte[3];
+    command[5] = fram.Byte[2];
+
+    // The size of the returned frame should be:
+    // # Registers X 2 bytes/register + 5 bytes of modbus RTU frame
+
+    // Try up to 5 times to get the right results
+    int tries = 0;
+    int16_t respSize = 0;
+    while ((respSize != (numRegisters*2 + 5) && tries < 20)) {
+        // Send out the command (this adds the CRC)
+        respSize = modbus.sendCommand(command, 8);
+        tries++;
+        delay(25);  // 
+    }
+
+    if (respSize == (numRegisters*2 + 5))
+        return true;
+    else return false;
+}
 
 
 
@@ -224,6 +291,14 @@ void setup() {
     Serial.print("    Parity: ");
     Serial.println(sensorParity);
     Serial.println();
+
+    // Reset communication
+    Serial.println("Resetting sensor communications.");
+    if (restartCommunications()) {
+        Serial.println("    Communications reset succeeded.\n");
+    } else {
+        Serial.println("    Communications reset failed.\n");
+    }
 }
 
 // ==========================================================================
@@ -233,26 +308,40 @@ void loop()
 {
     // Get data values from read-only input registers (0x04)
 
-    // Segment 1 Moisture
-    int16_t M1 = -9999;
-    M1 = modbus.int16FromRegister(0x04, 0x0000, bigEndian);
-    float valueM1 = 0.1 * M1;
-    Serial.print("Segment 1 Moisture: ");
-    Serial.print(valueM1, 1);
-    Serial.println(" % volumetric soil moisture");
-    Serial.println();
+    // // Segment 1 Moisture
+    // int16_t M1 = -9999;
+    // M1 = modbus.int16FromRegister(0x04, 0x0000, bigEndian);
+    // float valueM1 = 0.1 * M1;
+    // Serial.print("Segment 1 Moisture: ");
+    // Serial.print(valueM1, 1);
+    // Serial.println(" % volumetric soil moisture");
+    // Serial.println();
 
-    // Temperature Sensor 1
-    int16_t T1 = -9999;
-    T1 = modbus.int16FromRegister(0x04, 0x0064, bigEndian);
-    float valueT1 = 0.1 * T1;
-    Serial.print("Temperature Sensor 1: ");
-    Serial.print(valueT1, 1);
-    Serial.println(" degrees C");
-    Serial.println();
+    // // Temperature Sensor 1
+    // int16_t T1 = -9999;
+    // T1 = modbus.int16FromRegister(0x04, 0x0064, bigEndian);
+    // float valueT1 = 0.1 * T1;
+    // Serial.print("Temperature Sensor 1: ");
+    // Serial.print(valueT1, 1);
+    // Serial.println(" degrees C");
+    // Serial.println();
 
+    // int16_t startRegister = 0x0000; // Moisture
+    int16_t startRegister = 0x0064; // Temperature
+    int16_t numRegisters = 13;
+        // 1 registers had 1 "no response" (3 requests)
+        // 2 registers had 1 "no response"
+        // 3 registers had 4 "no response" (6 requests)
+        // 4 registers had 4 "no response"
+        // 6 registers had 4 "no response"
+        // 7 registers had 4 "no response"
+        // 8 registers had 4 "no response"
+        // 13 registers had 4 "no response"
+    Serial.print("Requested Registers: ");
+    Serial.println(numRegisters);
+    getInputRegisters(startRegister, numRegisters);
+    Serial.println();
 
     // Delay between readings
     delay(MEASUREMENT_TIME);
-
 }
