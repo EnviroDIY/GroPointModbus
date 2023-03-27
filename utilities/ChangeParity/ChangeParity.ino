@@ -36,7 +36,7 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 // Use an online "HEX to DEC Converter".
 byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
 // The Modbus baud rate the sensor uses
-const int32_t modbusBaudRate = 9600;  // GroPoint default baud is 19200.
+const int32_t modbusBaudRate = 19200;  // GroPoint default baud is 19200.
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
