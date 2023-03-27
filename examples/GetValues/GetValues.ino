@@ -44,13 +44,13 @@ will support either even or odd parity!
 gropointModel model = GPLP8;  // The sensor model number
 
 // Define the sensor's modbus address, or SlaveID
-    // NOTE: The GroPoint User Manual presents SlaveID and registers as integers (decimal),
-    // whereas EnviroDIY and most other modbus systems present it in hexadecimal form.
-    // Use an online "HEX to DEC Converter".
+// NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
+// integers, whereas EnviroDIY and most other modbus systems present it in 
+// hexadecimal form. Use an online "HEX to DEC Converter".
 byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
 
 // The Modbus baud rate the sensor uses
-const int32_t modbusBaud = 19200;  // GroPoint default baud is 19200.
+const int32_t modbusBaud = 9600;  // GroPoint default baud is 19200.
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
@@ -73,11 +73,11 @@ const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 
 // Define pin number variables
 const int sensorPwrPin = 10;  // The pin sending power to the sensor
-const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
-const int DEREPin = -1;   // The pin controlling Driver Enable and Recieve Enable
-                          // on the RS485 adapter, if applicable (else, -1)
-                          // Setting HIGH enables the driver (arduino) to send text
-                          // Setting LOW enables the receiver (sensor) to send text
+const int adapterPwrPin = 22; // The pin sending power to the RS485 adapter
+const int DEREPin = -1; // The pin controlling Recieve Enable & Driver Enable
+                        // on the RS485 adapter, if applicable (else, -1)
+                        // Setting HIGH enables the driver (arduino) to send
+                        // Setting LOW enables the receiver (sensor) to send
 // Pins for `SoftwareSerial` only. Not for `AltSoftSerial`, which uses fixed pins.
 const int SSRxPin = 13;  // Receive pin for software serial (Rx on RS485 adapter)
 const int SSTxPin = 14;  // Send pin for software serial (Tx on RS485 adapter)
@@ -88,10 +88,10 @@ const int SSTxPin = 14;  // Send pin for software serial (Tx on RS485 adapter)
     // If using an Uno, you will be restricted to using AltSofSerial or SoftwareSerial
 
 // If using the Mayfly, you can use the hardware Serial1 port with the following define:
-#define HARDWARE_MODBUS_SERIAL
-    // To access HardwareSerial on the Mayfly, use jumpers to connect 
-    // the Modbus adapter pins that would go to D5 & D6 to 
-    // TX1 and RX1 respectivley on the left 20-pin header
+// #define HARDWARE_MODBUS_SERIAL
+    // To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
+    // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
+    // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
 
 #if defined HARDWARE_MODBUS_SERIAL
     HardwareSerial& modbusSerial = Serial1;
@@ -135,15 +135,16 @@ String prettyprintAddressHex(byte _modbusAddress) {
 //  Arduino Setup Function
 // ==========================================================================
 void setup() {
-    if (sensorPwrPin > 0)    {
+    // Setup power pins
+    if (sensorPwrPin > 0) {
         pinMode(sensorPwrPin, OUTPUT);
         digitalWrite(sensorPwrPin, HIGH);
     }
-    if (adapterPwrPin > 0)    {
+    if (adapterPwrPin > 0) {
         pinMode(adapterPwrPin, OUTPUT);
         digitalWrite(adapterPwrPin, HIGH);
     }
-    if (DEREPin > 0)    {
+    if (DEREPin > 0) {
         pinMode(DEREPin, OUTPUT);
     }
 
@@ -178,14 +179,14 @@ void setup() {
 
     // Allow the sensor and converter to warm up
     Serial.println("Waiting for sensor and adapter to be ready.");
-    Serial.print("    Warm up time (ms): ");
+    Serial.print("  Warm up time (ms): ");
     Serial.println(WARM_UP_TIME);
     Serial.println();
     delay(WARM_UP_TIME);
 
     // Confirm Modbus Address 
     Serial.println("Selected modbus address:");
-    Serial.print("    integer: ");
+    Serial.print("  integer: ");
     Serial.print(modbusAddress, DEC);
     Serial.print(", hexidecimal: ");
     Serial.println(prettyprintAddressHex(modbusAddress));
@@ -194,7 +195,7 @@ void setup() {
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
     Serial.println("Get sensor modbus address.");
     byte id = sensor.getSensorAddress();
-    Serial.print("    integer: ");
+    Serial.print("  integer: ");
     Serial.print(id, DEC);
     Serial.print(", hexidecimal: ");
     Serial.println(prettyprintAddressHex(id));
@@ -223,7 +224,7 @@ void setup() {
     // Get Sensor Modbus Baud
     Serial.println("Get sensor modbus baud setting.");
     int16_t sensorBaud = sensor.getSensorBaud();
-    Serial.print("    Baud: ");
+    Serial.print("  Baud: ");
     Serial.println(sensorBaud);
 
     // Get Sensor Modbus Parity

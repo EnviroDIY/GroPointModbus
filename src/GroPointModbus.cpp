@@ -47,7 +47,7 @@ String gropoint::getModel(void) {
 }
 
 
-// Get modbus slave ID or Sensor Modbus Address from 
+// This gets modbus slave ID or Sensor Modbus Address from 
 // holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 // Does not seem to work with a broadcast address of 0x00 or 0xFF
 byte gropoint::getSensorAddress(void) {
@@ -165,8 +165,28 @@ int16_t gropoint::getSensorBaud(void) {
 
 // Set sensor modbus baud  
 // from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
-bool gropoint::setSensorBaud(byte newBaudCode) {
-    byte dataToSend[2] = {0x00, newBaudCode};
+bool gropoint::setSensorBaud(int16_t newSensorBaud) {
+    int16_t newSensorBaud = -9999;
+    byte newSensorBaudCode = 0xFF;  // Error code
+    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
+    if (newSensorBaud == 19200) {
+        newSensorBaudCode = 0x00;
+    } else if (newSensorBaud == 9600) {
+        newSensorBaudCode = 0x01;
+    } else if (newSensorBaud == 4800) {
+        newSensorBaudCode = 0x02;
+    } else if (newSensorBaud == 2400) {
+        newSensorBaudCode = 0x03;
+    } else if (newSensorBaud == 1200) {
+        newSensorBaudCode = 0x04;
+    } else if (newSensorBaud == 600) {
+        newSensorBaudCode = 0x05;
+    } else if (newSensorBaud == 300) {
+        newSensorBaudCode = 0x06;
+    } else {
+        Serial.println("Error");
+    }
+    byte dataToSend[2] = {0x00, newSensorBaudCode};
     return modbus.setRegisters(0x00CA, 1, dataToSend, true);
 }
 

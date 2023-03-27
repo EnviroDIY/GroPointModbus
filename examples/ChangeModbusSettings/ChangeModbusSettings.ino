@@ -1,8 +1,8 @@
 /*****************************************************************************
-ChangeParity.ino
+ChangeModbusSettings.ino
 
 This scetch uses hardware serial to connect with GroPoint Profile and 
-change the parity to "none", along with other Modbus Serial settings.
+change default modbus settings from 19200 8E1 to 9600 8N1.
 
 NOTE: GroPoint Profile sensor default Modbus communication settings are 
 19200 Baud, 8 Bits, Even Parity, one Stop Bit (8-E-1). See p35 of manual.
@@ -11,8 +11,8 @@ NOTE: GroPoint Profile sensor default Modbus communication settings are
 NOTE:  that neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial
 will support either even or odd parity!
 
-This sketch does not depend on the GropointModbus library, but only on the 
-SensorModbusMaster library and is based on it's example sketch:
+This sketch depends on the GropointModbus library and also loosly on the
+SensorModbusMaster library via it's example sketch:
 SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 *****************************************************************************/
 
@@ -20,7 +20,7 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 // Include the base required libraries
 // ---------------------------------------------------------------------------
 #include <Arduino.h>
-#include <SensorModbusMaster.h>
+#include <GroPointModbus.h>
 
 // Turn on debugging outputs (i.e. raw Modbus requests & responsds) 
 // by uncommenting next line (i.e. `#define DEBUG`)
@@ -40,7 +40,7 @@ byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in Modular
 
 // The Modbus baud rate the sensor uses
 int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
-int32_t newModbusBaud     = 9600;  // 9600 baud is the default for YosemiTech & Keller.
+int32_t newModbusBaud     = 9600;  // 9600, to match the default for YosemiTech & Keller.
 
 
 // Sensor Timing. Edit these to explore!
@@ -74,8 +74,7 @@ const int DEREPin = -1; // The pin controlling Recieve Enable & Driver Enable
     // To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
     // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
     // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
-// This is just a assigning another name to the same port, for convienence
-HardwareSerial* modbusSerial = &Serial1;
+    HardwareSerial& modbusSerial = Serial1;
 
 // Construct a SensorModbusMaster class instance, from 
 // https://github.com/EnviroDIY/SensorModbusMaster
@@ -93,52 +92,6 @@ String prettyprintAddressHex(byte _modbusAddress) {
     addressHex += String(_modbusAddress, HEX);
     return addressHex;
 }
-
-    
-// Get modbus slave ID or Sensor Modbus Address from 
-// holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
-byte getSensorAddress(void) {
-    byte getAddressCommand[8] = {
-        defaultModbusAddress,    0x03,        0x00, 0xC8,    0x00, 0x01,    0x0000
-    //  address,                 ReadHolding, startRegister, numRegisters,  CRC
-    };                   
-    int16_t numRegisters = 1;
-    
-    // The size of the returned frame should be:
-    // # Registers X 2 bytes/register + 5 bytes of modbus RTU frame
-
-    // Try up to 5 times to get the right results
-    int tries = 0;
-    int16_t respSize = 0;
-    while ((respSize != (numRegisters*2 + 5) && tries < 5))
-    {
-        // Send out the command (this adds the CRC)
-        respSize = modbus.sendCommand(getAddressCommand, 8);
-        tries++;
-
-        delay(50);
-    }
-    if (respSize == (numRegisters*2 + 5))
-        return modbus.byteFromFrame(4); // 2nd byte in register
-    else return 0x00;
-}
-
-// Set sensor modbus baud  
-// from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
-// valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
-bool setSensorBaud(byte newBaudCode) {
-    byte dataToSend[2] = {0x00, newBaudCode};
-    return modbus.setRegisters(0x00CA, 1, dataToSend, true);
-}
-
-// Set sensor modbus serial parity 
-// from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
-// Parity setting (0=none, 1=odd, 2=even)
-bool setSensorParity(byte newParityCode) {
-    byte dataToSend[2] = {0x00, newParityCode};
-    return modbus.setRegisters(0x00CB, 1, dataToSend, true);
-}
-
 
 
 // ==========================================================================
@@ -162,27 +115,27 @@ void setup() {
     Serial.begin(serialBaud);
 
     // Turn on your modbus serial port
-    // Serial1.begin(modbusBaudRate, SERIAL_8O1);
+    // modbusSerial.begin(modbusBaudRate, SERIAL_8O1);
     // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    Serial1.begin(defaultModbusBaud, SERIAL_8E1);
+    modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
     // ^^ use this for 8 data bits - even parity - 1 stop bit
-    // Serial1.begin(modbusBaudRate, SERIAL_8N2);
+    // modbusSerial.begin(modbusBaudRate, SERIAL_8N2);
     // ^^ use this for 8 data bits - no parity - 2 stop bits
-    // Serial1.begin(modbusBaudRate);
+    // modbusSerial.begin(modbusBaudRate);
     // ^^ use this for 8 data bits - no parity - 1 stop bits
     // Despite being technically "non-compliant" with the modbus specifications
     // 8N1 parity is very common.
 
-    // Setup the modbus instance
-    modbus.begin(defaultModbusAddress, modbusSerial, DEREPin);
+    // Setup the sensor instance
+    sensor.begin(model, modbusAddress, &modbusSerial, DEREPin);
 
     // Turn on debugging
     #ifdef DEBUG
-        modbus.setDebugStream(&Serial);
+        sensor.setDebugStream(&Serial);
     #endif
 
     // Start up note
-    Serial.println("\nChange Parity utility for GroPoint Profile sensors ");
+    Serial.println("\nChange Modbus Settings for GroPoint Profile sensors ");
 
     // Allow the sensor and converter to warm up
     Serial.println("Waiting for sensor and adapter to be ready.");
@@ -192,7 +145,7 @@ void setup() {
     delay(WARM_UP_TIME);
 
     // Confirm Modbus Address 
-    Serial.println("Default modbus address:");
+    Serial.println("Default sensor modbus address:");
     Serial.print("  integer: ");
     Serial.print(defaultModbusAddress, DEC);
     Serial.print(", hexidecimal: ");
@@ -200,47 +153,49 @@ void setup() {
     Serial.println();
 
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
-    Serial.println("Get sensor modbus address.");
-    byte id = getSensorAddress();
+    Serial.println("Read sensor modbus address.");
+    byte id = sensor.getSensorAddress();
     Serial.print("  integer: ");
     Serial.print(id, DEC);
     Serial.print(", hexidecimal: ");
     Serial.println(prettyprintAddressHex(id));
     Serial.println();
 
-    // Get Sensor Modbus Baud from holding register 40203, 
-    // decimal offset 202 (hexadecimal 0x00CA)
+    // Get Sensor Modbus Baud
     Serial.println("Get sensor modbus baud setting.");
-    Serial.println("  Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.");
-    int16_t sensorBaudCode = -9999;
-    sensorBaudCode = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
-    Serial.print("    Baud Code: ");
-    Serial.println(sensorBaudCode);
+    int16_t sensorBaud = sensor.getSensorBaud();
+    Serial.print("  Baud: ");
+    Serial.println(sensorBaud);
+    Serial.println("  Change is effective immediately, so change last.");
     Serial.println();
 
-    // Get Sensor Modbus Parity from holding register 40204, 
-    // decimal offset 0203 (hexadecimal 0x00CB)
+    // Get Sensor Modbus Parity
     Serial.println("Get sensor modbus parity setting.");
-    int16_t sensorParity = -9999;
-    sensorParity = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
+    String sensorParity = sensor.getSensorParity();
     Serial.print("    Parity: ");
     Serial.println(sensorParity);
     Serial.println();
 
     // Delay to give time to restart with serial monitor turned on.
+    Serial.println("Resetting Modbus Serial Settings.");
+    Serial.println("  Additional 10s delay time to turn on serial monitor");
     delay(10000);
+
 
     // Set sensor modbus baud
     Serial.print("Set sensor modbus baud to ");
     Serial.println(newModbusBaud);
-    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
-    Serial.println(setSensorBaud(0x01));
+    if (sensor.setSensorBaud(newModbusBaud)) {
+        Serial.println("  Success! New baud will take effect once sensor is power cycled.");
+    } else {
+        Serial.println("  Failed!");
+    }
     Serial.println();
 
 
 
-    // Set sensor parity
-    Serial.println("Set sensor modbus baud.");
+    // Set sensor modbus parity
+    Serial.println("Set sensor modbus baud to ");
     // Parity setting (0=none, 1=odd, 2=even)
     Serial.println(setSensorParity(0x00));
     Serial.println();
