@@ -165,8 +165,9 @@ int16_t gropoint::getSensorBaud(void) {
 
 // Set sensor modbus baud  
 // from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
-int16_t gropoint::setSensorBaud(void) {
-
+bool gropoint::setSensorBaud(byte newBaudCode) {
+    byte dataToSend[2] = {0x00, newBaudCode};
+    return modbus.setRegisters(0x00CA, 1, dataToSend, true);
 }
 
 
@@ -187,6 +188,13 @@ String gropoint::getSensorParity(void) {
         sensorParity = "Error";
     }
     return sensorParity;
+}
+
+// Set sensor modbus serial parity 
+// from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
+bool gropoint::setSensorParity(byte newParityCode) {
+    byte dataToSend[2] = {0x00, newParityCode};
+    return modbus.setRegisters(0x00CB, 1, dataToSend, true);
 }
 
 

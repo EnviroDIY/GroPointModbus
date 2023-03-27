@@ -77,7 +77,7 @@ public:
     // 2=4800, 3=2400, 4=1200, 5=600, 6=300. The new baud rate does not take 
     // effect until the sensor is power cycled, or if the restart 
     // communications diagnostic command (08, with subfunction 01) is received.
-    int16_t setSensorBaud(void);
+    bool setSensorBaud(byte newBaudCode);
 
     // This gets sensor modbus serial parity 
     // The factory default value is 2 corresponding to Even parity.
@@ -88,7 +88,7 @@ public:
     // 0=None, 1=Odd, 2=Even. The new parity setting 
     // does not take effect until the sensor is power cycled, or if the restart 
     // communications diagnostic command (08, with subfunction 01) is received.
-    String setSensorParity(void);
+    bool setSensorParity(byte newParityCode);
 
     // This tells the sensors to begin taking measurements
     bool startMeasurement(void);

@@ -258,7 +258,7 @@ void setup() {
 
     // Print table headers
     switch (model) {
-        case GPLP_8: {
+        case GPLP8: {
             // Variable Names
             Serial.print("Time(ms)");
             Serial.print("  M1   M2   M3   M4   M5   M6   M7   M8   |");
@@ -267,8 +267,8 @@ void setup() {
             // Variable Units
             Serial.print("ms       ");
             Serial.print("  %    %    %    %    %    %    %    %   |");
-            Serial.print("  *C   *C   *C   *C   *C   *C   *C   *C   ");
-            Serial.println("*C   *C   *C   *C   *C");
+            Serial.print("  °C   °C   °C   °C   °C   °C   °C   °C   ");
+            Serial.println("°C   °C   °C   °C   °C");
             break;
         }
         default: {

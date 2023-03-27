@@ -36,7 +36,7 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 // Use an online "HEX to DEC Converter".
 byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
 // The Modbus baud rate the sensor uses
-const int32_t modbusBaudRate = 19200;  // GroPoint default baud is 19200.
+const int32_t modbusBaudRate = 9600;  // GroPoint default baud is 19200.
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
@@ -57,7 +57,7 @@ const int32_t modbusBaudRate = 19200;  // GroPoint default baud is 19200.
 const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 
 // Define pin number variables
-const int sensorPwrPin = 11;  // The pin sending power to the sensor
+const int sensorPwrPin = 10;  // The pin sending power to the sensor
 const int adapterPwrPin = 22; // The pin sending power to the RS485 adapter
 const int DEREPin = -1;       // The pin controlling Recieve Enable and Driver Enable
                               // on the RS485 adapter, if applicable (else, -1)
@@ -149,6 +149,23 @@ bool restartCommunications(void) {
         return true;
     else return false;
 }
+
+// Set sensor modbus baud  
+// from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
+// valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
+bool setSensorBaud(byte newBaudCode) {
+    byte dataToSend[2] = {0x00, newBaudCode};
+    return modbus.setRegisters(0x00CA, 1, dataToSend, true);
+}
+
+// Set sensor modbus serial parity 
+// from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
+// Parity setting (0=none, 1=odd, 2=even)
+bool setSensorParity(byte newParityCode) {
+    byte dataToSend[2] = {0x00, newParityCode};
+    return modbus.setRegisters(0x00CB, 1, dataToSend, true);
+}
+
 
 // Get input registers with GroPoint measurements
 // Based off modbusMaster::getRegisters(), 
@@ -299,6 +316,20 @@ void setup() {
     } else {
         Serial.println("    Communications reset failed.\n");
     }
+
+    delay(10000);
+
+    // Set sensor modbus baud
+    Serial.println("Set sensor modbus baud.");
+    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
+    Serial.println(setSensorBaud(0x01));
+
+    // Set sensor parity
+    Serial.println("Set sensor modbus baud.");
+    // Parity setting (0=none, 1=odd, 2=even)
+    Serial.println(setSensorParity(0x00));
+
+
 }
 
 // ==========================================================================
