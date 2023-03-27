@@ -41,7 +41,7 @@ will support either even or odd parity!
 //  Sensor Settings
 // ==========================================================================
 // Define the sensor type
-gropointModel model = GPLP_8;  // The sensor model number
+gropointModel model = GPLP8;  // The sensor model number
 
 // Define the sensor's modbus address, or SlaveID
     // NOTE: The GroPoint User Manual presents SlaveID and registers as integers (decimal),
@@ -72,7 +72,7 @@ const int32_t modbusBaud = 19200;  // GroPoint default baud is 19200.
 const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 
 // Define pin number variables
-const int sensorPwrPin = 11;  // The pin sending power to the sensor
+const int sensorPwrPin = 10;  // The pin sending power to the sensor
 const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
 const int DEREPin = -1;   // The pin controlling Driver Enable and Recieve Enable
                           // on the RS485 adapter, if applicable (else, -1)
@@ -283,7 +283,7 @@ void setup() {
 void loop() {
     // send the command to get the values
     switch (model) {
-        case GPLP_8: {
+        case GPLP8: {
             float M1, M2, M3, M4, M5, M6, M7, M8 = -9999;
             sensor.getValues(M1, M2, M3, M4, M5, M6, M7, M8);
 

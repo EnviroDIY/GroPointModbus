@@ -15,12 +15,12 @@
 // The various GroPoint GPLP-X Moisture/Temperature Profiling Probes 
 // supported by this library
 typedef enum gropointModel {
-    GPLP_2 = 2,  // GroPoint Profiling Probe with 2 segments (30 cm)
-    GPLP_3 = 3,  // GroPoint Profiling Probe with 3 segments (45 cm)
-    GPLP_4 = 4,  // GroPoint Profiling Probe with 4 segments (60 cm)
-    GPLP_5 = 5,  // GroPoint Profiling Probe with 5 segments (75 cm)
-    GPLP_6 = 6,  // GroPoint Profiling Probe with 6 segments (90 cm)
-    GPLP_8 = 8,  // GroPoint Profiling Probe with 8 segments (120 cm)
+    GPLP2 = 2,  // GroPoint Profiling Probe with 2 segments (30 cm)
+    GPLP3 = 3,  // GroPoint Profiling Probe with 3 segments (45 cm)
+    GPLP4 = 4,  // GroPoint Profiling Probe with 4 segments (60 cm)
+    GPLP5 = 5,  // GroPoint Profiling Probe with 5 segments (75 cm)
+    GPLP6 = 6,  // GroPoint Profiling Probe with 6 segments (90 cm)
+    GPLP8 = 8,  // GroPoint Profiling Probe with 8 segments (120 cm)
     UNKNOWN   // Use if the sensor model is unknown. Doing this is generally a
               // bad idea, but it can be helpful for doing things like getting
               // the serial number of an unknown model.

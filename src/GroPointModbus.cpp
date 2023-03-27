@@ -36,12 +36,12 @@ bool gropoint::begin(gropointModel model, byte modbusSlaveID, Stream &stream, in
 // This returns a pretty string with the model information
 String gropoint::getModel(void) {
     switch (_model) {
-        case GPLP_2: {return "GPLP-2";}
-        case GPLP_3: {return "GPLP-3";}
-        case GPLP_4: {return "GPLP-4";}
-        case GPLP_5: {return "GPLP-5";}
-        case GPLP_6: {return "GPLP-6";}
-        case GPLP_8: {return "GPLP-8";}
+        case GPLP2: {return "GPLP-2";}
+        case GPLP3: {return "GPLP-3";}
+        case GPLP4: {return "GPLP-4";}
+        case GPLP5: {return "GPLP-5";}
+        case GPLP6: {return "GPLP-6";}
+        case GPLP8: {return "GPLP-8";}
         default:  {return "Unknown";}
     }
 }
@@ -294,7 +294,7 @@ bool gropoint::getValues(float &valueM1, float &valueM2, float &valueM3,
     int16_t startRegister = 0x0000;
 
     switch(_model) {
-        case GPLP_8: {
+        case GPLP8: {
             int16_t numRegisters = 8;
             if (getInputRegisters(startRegister, numRegisters)) {
                 // Muliply by 0.1 to convert from int to float as per manual
@@ -340,7 +340,7 @@ bool gropoint::getTemperatureValues(float &valueT1, float &valueT2,
     int16_t startRegister = 0x0064;
 
     switch(_model) {
-        case GPLP_8: {
+        case GPLP8: {
             int16_t numRegisters = 13;
             if (getInputRegisters(startRegister, numRegisters)) {
                 // Muliply by 0.1 to convert from int to float as per manual
