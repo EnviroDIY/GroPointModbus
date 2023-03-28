@@ -206,24 +206,25 @@ void setup() {
 
      // Get Sensor Information
     Serial.println("Get sensor information.");
+    Serial.print("    ");
     Serial.println(sensor.getSensorInfo());
     Serial.println();
-    /* Next two functions NOT YET IMPLEMENTED
+
     // Get the sensor serial number
-    Serial.println("\nGetting sensor serial number.");
+    Serial.println("Getting sensor serial number.");
     String SN = sensor.getSerialNumber();
     Serial.print("    Serial Number: ");
     Serial.println(SN);
     
     // Get the sensor's hardware and software version
     Serial.println("Getting sensor version numbers.");
-    float hardwareV, softwareV;
+    String hardwareV, softwareV;
     sensor.getVersion(hardwareV, softwareV);
     Serial.print("    Current Hardware Version: ");
     Serial.println(hardwareV);
     Serial.print("    Current Software Version: ");
     Serial.println(softwareV);
-    */
+    Serial.println();
 
     // Get Sensor Modbus Baud
     Serial.println("Get sensor modbus baud setting.");
@@ -266,14 +267,14 @@ void setup() {
     switch (model) {
         case GPLP8: {
             // Variable Names
-            Serial.print("Time(ms)");
-            Serial.print("  M1   M2   M3   M4   M5   M6   M7   M8   |");
-            Serial.print("  T1   T2   T3   T4   T5   T6   T7   T8   ");
+            Serial.print("Time(ms)  ");
+            Serial.print(sensor.getParameter());
+            Serial.print("  |  T1   T2   T3   T4   T5   T6   T7   T8   ");
             Serial.println("T9   T10  T11  T12  T13");
             // Variable Units
-            Serial.print("ms       ");
-            Serial.print("  %    %    %    %    %    %    %    %   |");
-            Serial.print("  °C   °C   °C   °C   °C   °C   °C   °C   ");
+            Serial.print("ms         ");
+            Serial.print(sensor.getUnits());
+            Serial.print("  |  °C   °C   °C   °C   °C   °C   °C   °C   ");
             Serial.println("°C   °C   °C   °C   °C");
             break;
         }

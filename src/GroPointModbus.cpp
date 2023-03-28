@@ -47,14 +47,30 @@ String gropoint::getModel(void) {
 }
 
 
-// This gets modbus slave ID or Sensor Modbus Address from 
-// holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
+// This returns a pretty string with the parameter measured.
+String gropoint::getParameter(void) {
+    switch (_model) {
+            case GPLP8: {return "M1,  M2,  M3,  M4,  M5,  M6,  M7,  M8";}
+        default:  {return "Unknown";}
+    }
+}
+
+
+// This returns a pretty string with the parameter measured.
+String gropoint::getUnits(void) {
+    switch (_model) {
+        case GPLP8: {return "%,   %,   %,   %,   %,   %,   %,   %";}
+        default:  {return "Unknown";}
+    }
+}
+// This gets the modbus slave ID or Sensor Modbus Address. 
+// from holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 // Does not seem to work with a broadcast address of 0x00 or 0xFF
 byte gropoint::getSensorAddress(void) {
     // Based on internals of modbusMaster::getRegisters(), rather than using it
     // to enable testing with broadcast addresses
     byte getAddressCommand[8] = {
-        _slaveID,    0x03,        0x00, 0xC8,    0x00, 0x01,    0x0000
+        _slaveID, 0x03,       0x00, 0xC8,    0x00, 0x01,    0x0000
     //  address, ReadHolding, startRegister, numRegisters,  CRC
     };                   
     int16_t numRegisters = 1;
@@ -80,7 +96,7 @@ byte gropoint::getSensorAddress(void) {
 
 
 // This sets a new modbus slave ID or Sensor Modbus Address.
-// holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
+// From holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 bool gropoint::setSensorAddress(byte newSensorAddress) {
     // 8-bit data values are stored in the lower 8 bits of the 16-bit registers. 
     byte dataToSend[2] = {0x00, newSensorAddress};
@@ -181,7 +197,7 @@ bool gropoint::setSensorParity(String newSensorParity) {
     } else if (newSensorParity == "Even") {
         newSensorParityCode = 2;
     } else {
-        newSensorParityCode = "Error";
+        Serial.println("  Input value not valid!");
     }
     byte dataToSend[2] = {0x00, newSensorParityCode};
     return modbus.setRegisters(0x00CB, 1, dataToSend, true);
@@ -205,17 +221,28 @@ String gropoint::getSensorInfo(void) {
     return modbus.StringFromFrame(respSize, 5);
 }
 
-// This gets the hardware and software version of the sensor
-// This data begins in holding register 0x0700 (1792) and continues for 2 registers
-// bool gropoint::getVersion(String softwareVersion) {
-//     String info = modbus.getSensorInfo();
+// This gets the instrument serial number as a String
+// Not fully tested
+String gropoint::getSerialNumber(void) {
+    String SN;
+    SN = getSensorInfo();
+    // Select the Serial Number
+    SN = SN.substring(17,25);
 
-//     if (info) {
-//         softwareVersion = info // selected bytes
-//         return true;
-//     }
-//     else return false;
-// }
+    // Return the serial number
+    return SN;
+}
+
+
+// This gets the hardware and software version of the sensor
+// Not fully tested
+bool gropoint::getVersion(String &hardwareVersion, String &softwareVersion) {
+    String info = getSensorInfo();
+
+    hardwareVersion = info.substring(8,14);
+    softwareVersion = info.substring(14,17);
+    return true;
+}
 
 
 // This restarts communications, 

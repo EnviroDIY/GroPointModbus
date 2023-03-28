@@ -41,11 +41,21 @@ public:
     // The sensor itself does not return its model information.
     String getModel(void);
 
+    // This returns a pretty string with the parameter measured.
+    // NOTE:  This is only based on the model input from the "begin" fxn.
+    // The sensor itself does not return this information.
+    String getParameter(void);
+
+    // This returns a pretty string with the measurement units.
+    // NOTE:  This is only based on the model input from the "begin" fxn.
+    // The sensor itself does not return this information.
+    String getUnits(void);
+
     // This gets the modbus sensor (slave) address. 
     // Does not seem to work with a broadcast address of 0x00 or 0xFF
     byte getSensorAddress(void);
 
-    // This sets the modbus sensor (slave) address.
+    // This sets a new modbus sensor (slave) address.
     // The address change will take effect immediately, 
     // so any subsequent commands must use the new address.
     // This register cannot be updated using the broadcast address.
@@ -84,7 +94,7 @@ public:
     String getSerialNumber(void);
 
     // This gets the firmware version of the sensor
-    String getVersion(void);
+    bool getVersion(String &hardwareVersion, String &softwareVersion);
 
     // This restarts communications, 
     // using the modbus diagnostic command 08 (0x08) with subfunction 01.
@@ -101,7 +111,7 @@ public:
     // followed by a 200 ms delay before the read measurement request
     bool getInputRegisters(int16_t startRegister, int16_t numRegisters);
 
-    // This gets values back from the sensor as a float
+    // This gets values back from the sensor
     // The float variables for must be initialized prior to calling this function.
     // The reference (&) is needed when declaring this function so that
     // the function is able to modify the actual input floats rather than
@@ -116,7 +126,7 @@ public:
     // bool getValues(float &valueM1, float &valueM2, float &valueM3, float &valueM4, float &valueM5, float &valueM6);
     // bool getValues(float &valueM1, float &valueM2, float &valueM3, float &valueM4, float &valueM5, float &valueM6, float &valueM7, float &valueM8);
 
-    // This returns the temperature values from a sensor as a float
+    // This gets the temperature values from the sensor    
     bool getTemperatureValues(float &valueT1, float &valueT2,  
             float &valueT3, float &valueT4, float &valueT5, float &valueT6, 
             float &valueT7, float &valueT8, float &valueT9, float &valueT10, 
