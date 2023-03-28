@@ -140,7 +140,7 @@ bool gropoint::restartCommunications(void) {
 // from holding register 40203, decimal offset 202 (hexadecimal 0x00CA)
 int16_t gropoint::getSensorBaud(void) {
     int16_t sensorBaudCode = -9999;
-    int16_t sensorBaud = -9999;
+    int32_t sensorBaud = -9999;
     sensorBaudCode = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
     // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
     if (sensorBaudCode == 0) {
@@ -165,26 +165,34 @@ int16_t gropoint::getSensorBaud(void) {
 
 // Set sensor modbus baud  
 // from holding register 40203, decimal offset 202 (hexadecimal 0x00CA).
-bool gropoint::setSensorBaud(int16_t newSensorBaud) {
-    int16_t newSensorBaud = -9999;
+bool gropoint::setSensorBaud(int32_t newSensorBaud) {
     byte newSensorBaudCode = 0xFF;  // Error code
-    // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
-    if (newSensorBaud == 19200) {
-        newSensorBaudCode = 0x00;
-    } else if (newSensorBaud == 9600) {
-        newSensorBaudCode = 0x01;
-    } else if (newSensorBaud == 4800) {
-        newSensorBaudCode = 0x02;
-    } else if (newSensorBaud == 2400) {
-        newSensorBaudCode = 0x03;
-    } else if (newSensorBaud == 1200) {
-        newSensorBaudCode = 0x04;
-    } else if (newSensorBaud == 600) {
-        newSensorBaudCode = 0x05;
-    } else if (newSensorBaud == 300) {
-        newSensorBaudCode = 0x06;
-    } else {
-        Serial.println("Error");
+    // Convert valid values to codes:  
+    // 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
+    switch (newSensorBaud) {
+        case 19200: 
+            newSensorBaudCode = 0x00;
+            break;
+        case 9600: 
+            newSensorBaudCode = 0x01;
+            break;
+        case 4800: 
+            newSensorBaudCode = 0x02;
+            break;
+        case 2400: 
+            newSensorBaudCode = 0x03;
+            break;
+        case 1200: 
+            newSensorBaudCode = 0x04;
+            break;
+        case 600: 
+            newSensorBaudCode = 0x05;
+            break;
+        case 300: 
+            newSensorBaudCode = 0x06;
+            break;
+        default:
+            Serial.println("  Input value not valid!");
     }
     byte dataToSend[2] = {0x00, newSensorBaudCode};
     return modbus.setRegisters(0x00CA, 1, dataToSend, true);
@@ -197,7 +205,7 @@ String gropoint::getSensorParity(void) {
     int16_t sensorParityCode = -9999;
     String sensorParity = "error";
     sensorParityCode = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
-    // Parity setting (0=none, 1=odd, 2=even)
+    // valid values: 0=None, 1=Odd, 2=Even
     if (sensorParityCode == 0) {
         sensorParity = "None";
     } else if (sensorParityCode == 1) {
@@ -212,8 +220,19 @@ String gropoint::getSensorParity(void) {
 
 // Set sensor modbus serial parity 
 // from holding register 40204, decimal offset 0203 (hexadecimal 0x00CB)
-bool gropoint::setSensorParity(byte newParityCode) {
-    byte dataToSend[2] = {0x00, newParityCode};
+bool gropoint::setSensorParity(String newSensorParity) {
+    byte newSensorParityCode = 0xFF;
+    // Convert valid values to codes: 0=None, 1=Odd, 2=Even
+    if (newSensorParity == "None") {
+        newSensorParityCode = 0;
+    } else if (newSensorParity == "Odd") {
+        newSensorParityCode = 1;
+    } else if (newSensorParity == "Even") {
+        newSensorParityCode = 2;
+    } else {
+        newSensorParityCode = "Error";
+    }
+    byte dataToSend[2] = {0x00, newSensorParityCode};
     return modbus.setRegisters(0x00CB, 1, dataToSend, true);
 }
 

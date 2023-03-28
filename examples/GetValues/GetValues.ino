@@ -50,7 +50,7 @@ gropointModel model = GPLP8;  // The sensor model number
 byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
 
 // The Modbus baud rate the sensor uses
-const int32_t modbusBaud = 9600;  // GroPoint default baud is 19200.
+int32_t modbusBaud = 9600;  // GroPoint default baud rate is 19200.
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.

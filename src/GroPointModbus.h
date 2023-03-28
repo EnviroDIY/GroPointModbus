@@ -49,7 +49,7 @@ public:
     // The address change will take effect immediately, 
     // so any subsequent commands must use the new address.
     // This register cannot be updated using the broadcast address.
-    bool setSensorAddress(byte newSlaveID);
+    bool setSensorAddress(byte newSensorAddress);
 
     // This gets sensor information as a String
     // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
@@ -73,11 +73,11 @@ public:
     int16_t getSensorBaud(void);
 
     // This sets sensor modbus baud  
-    // Change this value to any of the following valid values: 0=19200, 1=9600, 
-    // 2=4800, 3=2400, 4=1200, 5=600, 6=300. The new baud rate does not take 
+    // Change this value to any of the following valid values: 19200, 9600, 
+    // 4800, 2400, 1200, 600, 300. The new baud rate does not take 
     // effect until the sensor is power cycled, or if the restart 
     // communications diagnostic command (08, with subfunction 01) is received.
-    bool setSensorBaud(int16_t newSensorBaud);
+    bool setSensorBaud(int32_t newSensorBaud);
 
     // This gets sensor modbus serial parity 
     // The factory default value is 2 corresponding to Even parity.
@@ -85,10 +85,10 @@ public:
 
     // This sets sensor modbus serial parity 
     // Change this value to any of the following valid values:
-    // 0=None, 1=Odd, 2=Even. The new parity setting 
+    // "None", "Odd", "Even". The new parity setting 
     // does not take effect until the sensor is power cycled, or if the restart 
     // communications diagnostic command (08, with subfunction 01) is received.
-    bool setSensorParity(byte newParityCode);
+    bool setSensorParity(String newSensorParity);
 
     // This tells the sensors to begin taking measurements
     bool startMeasurement(void);

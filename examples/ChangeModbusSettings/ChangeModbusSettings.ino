@@ -30,18 +30,26 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 // ==========================================================================
 //  Sensor Settings
 // ==========================================================================
+// Define the sensor type
+gropointModel model = GPLP8;  // The sensor model number
 
 // Define the sensor's modbus address, or SlaveID
 // NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
 // integers, whereas EnviroDIY and most other modbus systems present it in 
 // hexadecimal form. Use an online "HEX to DEC Converter".
-byte defaultModbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
-byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in ModularSensors.
+byte defaultModbusAddress = 0x01;  // GroPoint default modbus address is 0x01.
+byte newModbusAddress     = 0x01;  // HEX 0x19 = DEC 25 is unique in ModularSensors.
 
 // The Modbus baud rate the sensor uses
-int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
-int32_t newModbusBaud     = 9600;  // 9600, to match the default for YosemiTech & Keller.
+int32_t defaultModbusBaud = 9600;  // 19200 is GroPoint default baud rate.
+int32_t newModbusBaud     = 9600;  // 9600 is default for YosemiTech & Keller.
 
+
+// The Modbus parity the sensor uses
+String defaultModbusParity = "None";  // "Even" is GroPoint default parity.
+String newModbusParity     = "None";  // "None" is default for YosemiTech and 
+                                    // Keller, and the only allowable parity for 
+                                    // AltSoftSerial, NeoSWSerial, & SoftSerial
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
@@ -75,6 +83,9 @@ const int DEREPin = -1; // The pin controlling Recieve Enable & Driver Enable
     // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
     // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
     HardwareSerial& modbusSerial = Serial1;
+// Construct the gropoint sensor instance
+gropoint sensor;
+bool success;
 
 // Construct a SensorModbusMaster class instance, from 
 // https://github.com/EnviroDIY/SensorModbusMaster
@@ -114,20 +125,25 @@ void setup() {
     // Turn on the "main" serial port for debugging via USB Serial Monitor
     Serial.begin(serialBaud);
 
-    // Turn on your modbus serial port
-    // modbusSerial.begin(modbusBaudRate, SERIAL_8O1);
-    // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
-    // ^^ use this for 8 data bits - even parity - 1 stop bit
-    // modbusSerial.begin(modbusBaudRate, SERIAL_8N2);
-    // ^^ use this for 8 data bits - no parity - 2 stop bits
-    // modbusSerial.begin(modbusBaudRate);
-    // ^^ use this for 8 data bits - no parity - 1 stop bits
-    // Despite being technically "non-compliant" with the modbus specifications
-    // 8N1 parity is very common.
-
+    // Setup your modbus hardware serial port
+    if (defaultModbusBaud == "Odd") {
+        modbusSerial.begin(defaultModbusBaud, SERIAL_8O1);
+        // ^^ use this for 8 data bits - odd parity - 1 stop bit
+    } else if (defaultModbusBaud == "Even") {
+        modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
+        // ^^ use this for 8 data bits - even parity - 1 stop bit
+    } else if (defaultModbusBaud == "None") {
+        modbusSerial.begin(defaultModbusBaud);
+        // ^^ use this for 8 data bits - no parity - 1 stop bits
+        // Despite being technically "non-compliant" with the modbus specifications
+        // 8N1 parity is very common.
+    } else {
+        modbusSerial.begin(defaultModbusBaud, SERIAL_8N2);
+        // ^^ use this for 8 data bits - no parity - 2 stop bits
+    }
+    
     // Setup the sensor instance
-    sensor.begin(model, modbusAddress, &modbusSerial, DEREPin);
+    sensor.begin(model, defaultModbusAddress, &modbusSerial, DEREPin);
 
     // Turn on debugging
     #ifdef DEBUG
@@ -178,9 +194,8 @@ void setup() {
 
     // Delay to give time to restart with serial monitor turned on.
     Serial.println("Resetting Modbus Serial Settings.");
-    Serial.println("  Additional 10s delay time to turn on serial monitor");
-    delay(10000);
-
+    Serial.println("  Additional 5s delay time to turn on serial monitor.\n");
+    delay(5000);
 
     // Set sensor modbus baud
     Serial.print("Set sensor modbus baud to ");
@@ -188,62 +203,41 @@ void setup() {
     if (sensor.setSensorBaud(newModbusBaud)) {
         Serial.println("  Success! New baud will take effect once sensor is power cycled.");
     } else {
-        Serial.println("  Failed!");
+        Serial.println("  Baud reset failed!");
+    }
+    Serial.println();
+
+    // Set sensor modbus parity
+    Serial.print("Set sensor modbus parity to ");
+    Serial.println(newModbusParity);
+    if (sensor.setSensorParity(newModbusParity)) {
+        Serial.println("  Success! New parity will take effect once sensor is power cycled.");
+    } else {
+        Serial.println("  Parity reset failed!");
     }
     Serial.println();
 
 
+    // Set sensor modbus address
+    Serial.print("Set sensor modbus address to ");
+    Serial.println(newModbusAddress);
+    if (sensor.setSensorAddress(newModbusAddress)) {
+        Serial.println("  Success! New modbus address will take effect immediately.");
+    } else {
+        Serial.println("  Address reset failed!");
+    }
+    Serial.println("\n");
 
-    // Set sensor modbus parity
-    Serial.println("Set sensor modbus baud to ");
-    // Parity setting (0=none, 1=odd, 2=even)
-    Serial.println(setSensorParity(0x00));
-    Serial.println();
+    
 
+    Serial.println("Power cycle the sensor for new settings to take effect.");
 
 }
 
 // ==========================================================================
 //  Arduino Loop Function
 // ==========================================================================
-void loop()
-{
-    // Get data values from read-only input registers (0x04)
+void loop() {
+    // Empty loop function
 
-    // // Segment 1 Moisture
-    // int16_t M1 = -9999;
-    // M1 = modbus.int16FromRegister(0x04, 0x0000, bigEndian);
-    // float valueM1 = 0.1 * M1;
-    // Serial.print("Segment 1 Moisture: ");
-    // Serial.print(valueM1, 1);
-    // Serial.println(" % volumetric soil moisture");
-    // Serial.println();
-
-    // // Temperature Sensor 1
-    // int16_t T1 = -9999;
-    // T1 = modbus.int16FromRegister(0x04, 0x0064, bigEndian);
-    // float valueT1 = 0.1 * T1;
-    // Serial.print("Temperature Sensor 1: ");
-    // Serial.print(valueT1, 1);
-    // Serial.println(" degrees C");
-    // Serial.println();
-
-    // int16_t startRegister = 0x0000; // Moisture
-    int16_t startRegister = 0x0064; // Temperature
-    int16_t numRegisters = 13;
-        // 1 registers had 1 "no response" (3 requests)
-        // 2 registers had 1 "no response"
-        // 3 registers had 4 "no response" (6 requests)
-        // 4 registers had 4 "no response"
-        // 6 registers had 4 "no response"
-        // 7 registers had 4 "no response"
-        // 8 registers had 4 "no response"
-        // 13 registers had 4 "no response"
-    Serial.print("Requested Registers: ");
-    Serial.println(numRegisters);
-    getInputRegisters(startRegister, numRegisters);
-    Serial.println();
-
-    // Delay between readings
-    delay(MEASUREMENT_TIME);
 }
