@@ -51,22 +51,6 @@ public:
     // This register cannot be updated using the broadcast address.
     bool setSensorAddress(byte newSensorAddress);
 
-    // This gets sensor information as a String
-    // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
-    // vvv is the firmware version (v.v.v) and 
-    // nnnnnn is the probe serial number.
-    String getSensorInfo(void);
-
-    // This gets the instrument serial number as a String
-    String getSerialNumber(void);
-
-    // This gets the firmware version of the sensor
-    String getVersion(void);
-
-    // This restarts communications, 
-    // using the modbus diagnostic command 08 (0x08) with subfunction 01.
-    bool restartCommunications(void);
-
     // This gets sensor modbus baud rate
     // The factory default value is 0, corresponding to a baud rate of 19200.
     // Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300. 
@@ -89,6 +73,22 @@ public:
     // does not take effect until the sensor is power cycled, or if the restart 
     // communications diagnostic command (08, with subfunction 01) is received.
     bool setSensorParity(String newSensorParity);
+
+    // This gets sensor information as a String
+    // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
+    // vvv is the firmware version (v.v.v) and 
+    // nnnnnn is the probe serial number.
+    String getSensorInfo(void);
+
+    // This gets the instrument serial number as a String
+    String getSerialNumber(void);
+
+    // This gets the firmware version of the sensor
+    String getVersion(void);
+
+    // This restarts communications, 
+    // using the modbus diagnostic command 08 (0x08) with subfunction 01.
+    bool restartCommunications(void);
 
     // This tells the sensors to begin taking measurements
     bool startMeasurement(void);

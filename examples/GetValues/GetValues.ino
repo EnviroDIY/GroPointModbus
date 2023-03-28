@@ -47,10 +47,13 @@ gropointModel model = GPLP8;  // The sensor model number
 // NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
 // integers, whereas EnviroDIY and most other modbus systems present it in 
 // hexadecimal form. Use an online "HEX to DEC Converter".
-byte modbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
+byte modbusAddress = 0x19;  // HEX 0x01 is the GroPoint default modbus address.
 
 // The Modbus baud rate the sensor uses
-int32_t modbusBaud = 9600;  // GroPoint default baud rate is 19200.
+int32_t modbusBaud = 9600;  // 19200 is GroPoint default baud rate.
+
+// The Modbus parity the sensor uses
+String modbusParity = "None";  // "Even" is GroPoint default parity.
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
@@ -186,19 +189,20 @@ void setup() {
 
     // Confirm Modbus Address 
     Serial.println("Selected modbus address:");
-    Serial.print("  integer: ");
+    Serial.print("  Decimal: ");
     Serial.print(modbusAddress, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(modbusAddress));
     Serial.println();
 
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
     Serial.println("Get sensor modbus address.");
     byte id = sensor.getSensorAddress();
-    Serial.print("  integer: ");
+    Serial.print("  Decimal: ");
     Serial.print(id, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(id));
+    Serial.println();
 
      // Get Sensor Information
     Serial.println("Get sensor information.");
@@ -226,6 +230,7 @@ void setup() {
     int16_t sensorBaud = sensor.getSensorBaud();
     Serial.print("  Baud: ");
     Serial.println(sensorBaud);
+    Serial.println();
 
     // Get Sensor Modbus Parity
     Serial.println("Get sensor modbus parity setting.");

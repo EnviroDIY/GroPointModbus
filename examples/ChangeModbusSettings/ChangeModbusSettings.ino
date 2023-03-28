@@ -24,7 +24,7 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 
 // Turn on debugging outputs (i.e. raw Modbus requests & responsds) 
 // by uncommenting next line (i.e. `#define DEBUG`)
-#define DEBUG
+// #define DEBUG
 
 
 // ==========================================================================
@@ -37,16 +37,16 @@ gropointModel model = GPLP8;  // The sensor model number
 // NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
 // integers, whereas EnviroDIY and most other modbus systems present it in 
 // hexadecimal form. Use an online "HEX to DEC Converter".
-byte defaultModbusAddress = 0x01;  // GroPoint default modbus address is 0x01.
-byte newModbusAddress     = 0x01;  // HEX 0x19 = DEC 25 is unique in ModularSensors.
+byte defaultModbusAddress = 0x01;  // HEX 0x01 is the GroPoint default modbus address.
+byte newModbusAddress     = 0x19;  // HEX 0x19 = DEC 25 is unique in ModularSensors.
 
 // The Modbus baud rate the sensor uses
-int32_t defaultModbusBaud = 9600;  // 19200 is GroPoint default baud rate.
+int32_t defaultModbusBaud = 19200;  // 19200 is GroPoint default baud rate.
 int32_t newModbusBaud     = 9600;  // 9600 is default for YosemiTech & Keller.
 
 
 // The Modbus parity the sensor uses
-String defaultModbusParity = "None";  // "Even" is GroPoint default parity.
+String defaultModbusParity = "Even";  // "Even" is GroPoint default parity.
 String newModbusParity     = "None";  // "None" is default for YosemiTech and 
                                     // Keller, and the only allowable parity for 
                                     // AltSoftSerial, NeoSWSerial, & SoftSerial
@@ -126,13 +126,13 @@ void setup() {
     Serial.begin(serialBaud);
 
     // Setup your modbus hardware serial port
-    if (defaultModbusBaud == "Odd") {
+    if (defaultModbusParity == "Odd") {
         modbusSerial.begin(defaultModbusBaud, SERIAL_8O1);
         // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    } else if (defaultModbusBaud == "Even") {
+    } else if (defaultModbusParity == "Even") {
         modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
         // ^^ use this for 8 data bits - even parity - 1 stop bit
-    } else if (defaultModbusBaud == "None") {
+    } else if (defaultModbusParity == "None") {
         modbusSerial.begin(defaultModbusBaud);
         // ^^ use this for 8 data bits - no parity - 1 stop bits
         // Despite being technically "non-compliant" with the modbus specifications
@@ -162,18 +162,18 @@ void setup() {
 
     // Confirm Modbus Address 
     Serial.println("Default sensor modbus address:");
-    Serial.print("  integer: ");
+    Serial.print("  Decimal: ");
     Serial.print(defaultModbusAddress, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(defaultModbusAddress));
     Serial.println();
 
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
     Serial.println("Read sensor modbus address.");
     byte id = sensor.getSensorAddress();
-    Serial.print("  integer: ");
+    Serial.print("  Decimal: ");
     Serial.print(id, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(id));
     Serial.println();
 
@@ -200,38 +200,31 @@ void setup() {
     // Set sensor modbus baud
     Serial.print("Set sensor modbus baud to ");
     Serial.println(newModbusBaud);
-    if (sensor.setSensorBaud(newModbusBaud)) {
-        Serial.println("  Success! New baud will take effect once sensor is power cycled.");
-    } else {
-        Serial.println("  Baud reset failed!");
-    }
+    success = sensor.setSensorBaud(newModbusBaud);
+    if (success) Serial.println("  Success! New baud will take effect once sensor is power cycled.");
+    else Serial.println("  Baud reset failed!");
     Serial.println();
 
     // Set sensor modbus parity
     Serial.print("Set sensor modbus parity to ");
     Serial.println(newModbusParity);
-    if (sensor.setSensorParity(newModbusParity)) {
-        Serial.println("  Success! New parity will take effect once sensor is power cycled.");
-    } else {
-        Serial.println("  Parity reset failed!");
-    }
+    success = sensor.setSensorParity(newModbusParity);
+    if (success) Serial.println("  Success! New parity will take effect once sensor is power cycled.");
+    else Serial.println("  Parity reset failed!");
     Serial.println();
 
 
     // Set sensor modbus address
     Serial.print("Set sensor modbus address to ");
-    Serial.println(newModbusAddress);
-    if (sensor.setSensorAddress(newModbusAddress)) {
-        Serial.println("  Success! New modbus address will take effect immediately.");
-    } else {
-        Serial.println("  Address reset failed!");
-    }
+    Serial.println(prettyprintAddressHex(newModbusAddress));
+    success = sensor.setSensorAddress(newModbusAddress);
+    if (success) Serial.println("  Success! New modbus address will take effect immediately.");
+    else Serial.println("  Address reset failed!");
     Serial.println("\n");
 
-    
 
-    Serial.println("Power cycle the sensor for new settings to take effect.");
-
+    Serial.println("Upload a sketch with the new Modbus settings ");
+    Serial.println("to reestablish communications with the sensor.");
 }
 
 // ==========================================================================

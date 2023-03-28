@@ -87,55 +87,6 @@ bool gropoint::setSensorAddress(byte newSensorAddress) {
     return modbus.setRegisters(0x00C8, 1, dataToSend, true);
 }
 
-
-// Gets sensor information as a String
-// Page 35 of GroPoint Profile User Manual says:
-    // Function 17 (0x11) returns the ASCII encoded string 
-    // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
-    // vvv is the firmware version (v.v.v) and 
-    // nnnnnn is the probe serial number.
-String gropoint::getSensorInfo(void) {
-    byte command[4] = {
-        _slaveID, 0x11,     0x00, 0x00
-    //  address,  function, CRC
-    };
-    int16_t respSize = 0;
-    respSize = modbus.sendCommand(command, 4);
-
-    return modbus.StringFromFrame(respSize, 5);
-}
-
-
-// This gets the hardware and software version of the sensor
-// This data begins in holding register 0x0700 (1792) and continues for 2 registers
-// bool gropoint::getVersion(String softwareVersion) {
-//     String info = modbus.getSensorInfo();
-
-//     if (info) {
-//         softwareVersion = info // selected bytes
-//         return true;
-//     }
-//     else return false;
-// }
-
-// This restarts communications, 
-// using the modbus diagnostic command 08 (0x08) with subfunction 01.
-// A request data field contents of FF 00 hex causes the port’s Communications 
-// Event Log to be cleared also. Contents of 00 00 leave the log as it was 
-// prior to the restart.
-bool gropoint::restartCommunications(void) {
-    byte command[8] = {
-        _slaveID, 0x08,     0x00, 0x01,  0x00, 0x00, 0x00, 0x00
-    //  address,  function, subfunction, data field, CRC
-    };
-    int16_t respSize = 0;
-    respSize = modbus.sendCommand(command, 8);
-    if (respSize == 8)
-        return true;
-    else return false;
-}
-
-
 // Get sensor modbus baud  
 // from holding register 40203, decimal offset 202 (hexadecimal 0x00CA)
 int16_t gropoint::getSensorBaud(void) {
@@ -237,6 +188,54 @@ bool gropoint::setSensorParity(String newSensorParity) {
 }
 
 
+// Gets sensor information as a String
+// Page 35 of GroPoint Profile User Manual says:
+    // Function 17 (0x11) returns the ASCII encoded string 
+    // ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where 
+    // vvv is the firmware version (v.v.v) and 
+    // nnnnnn is the probe serial number.
+String gropoint::getSensorInfo(void) {
+    byte command[4] = {
+        _slaveID, 0x11,     0x00, 0x00
+    //  address,  function, CRC
+    };
+    int16_t respSize = 0;
+    respSize = modbus.sendCommand(command, 4);
+
+    return modbus.StringFromFrame(respSize, 5);
+}
+
+// This gets the hardware and software version of the sensor
+// This data begins in holding register 0x0700 (1792) and continues for 2 registers
+// bool gropoint::getVersion(String softwareVersion) {
+//     String info = modbus.getSensorInfo();
+
+//     if (info) {
+//         softwareVersion = info // selected bytes
+//         return true;
+//     }
+//     else return false;
+// }
+
+
+// This restarts communications, 
+// using the modbus diagnostic command 08 (0x08) with subfunction 01.
+// A request data field contents of FF 00 hex causes the port’s Communications 
+// Event Log to be cleared also. Contents of 00 00 leave the log as it was 
+// prior to the restart.
+bool gropoint::restartCommunications(void) {
+    byte command[8] = {
+        _slaveID, 0x08,     0x00, 0x01,  0x00, 0x00, 0x00, 0x00
+    //  address,  function, subfunction, data field, CRC
+    };
+    int16_t respSize = 0;
+    respSize = modbus.sendCommand(command, 8);
+    if (respSize == 8)
+        return true;
+    else return false;
+}
+
+
 // This tells the sensors to begin taking measurements
 // Page 39 of GroPoint Profile User Manual says:
 //   A new measurement is triggered by a read request to the input registers 
@@ -251,7 +250,7 @@ bool gropoint::setSensorParity(String newSensorParity) {
 bool gropoint::startMeasurement(void) {
     // A start command is not in their Modbus Manuals.
     // However, Start/Stop functions are required to get these to work in ModularSensors.
-    // Confirm that sensor in communicating with a getSensorAddress() command
+    // Instead, just confirm that sensor in communicating with a getSensorAddress() command
     if (getSensorAddress() != 0x00) {
         return true;
     } 
