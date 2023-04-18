@@ -55,14 +55,33 @@ String gropoint::getParameter(void) {
     }
 }
 
+// This returns a pretty string with the 2nd parameter measured.
+String gropoint::getParameter1(void) {
+    switch (_model) {
+            case GPLP8: {return "T1,  T2,  T3,  T4,  T5,  T6,  T7,  T8,  T9, T10, T11, T12, T13";}
+        default:  {return "Unknown";}
+    }
+}
 
-// This returns a pretty string with the parameter measured.
+
+
+// This returns a pretty string with the measurement units for Parameter.
 String gropoint::getUnits(void) {
     switch (_model) {
         case GPLP8: {return "%,   %,   %,   %,   %,   %,   %,   %";}
         default:  {return "Unknown";}
     }
 }
+
+
+// This returns a pretty string with the measurement units for Parameter1.
+String gropoint::getUnits1(void) {
+    switch (_model) {
+        case GPLP8: {return "°C,  °C,  °C,  °C,  °C,  °C,  °C,  °C,  °C,  °C,  °C,  °C,  °C";}
+        default:  {return "Unknown";}
+    }
+}
+
 // This gets the modbus slave ID or Sensor Modbus Address. 
 // from holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 // Does not seem to work with a broadcast address of 0x00 or 0xFF

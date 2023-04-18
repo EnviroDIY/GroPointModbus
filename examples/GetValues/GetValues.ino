@@ -269,13 +269,13 @@ void setup() {
             // Variable Names
             Serial.print("Time(ms)  ");
             Serial.print(sensor.getParameter());
-            Serial.print("  |  T1   T2   T3   T4   T5   T6   T7   T8   ");
-            Serial.println("T9   T10  T11  T12  T13");
+            Serial.print("  |  ");
+            Serial.println(sensor.getParameter1());
             // Variable Units
             Serial.print("ms         ");
             Serial.print(sensor.getUnits());
-            Serial.print("  |  °C   °C   °C   °C   °C   °C   °C   °C   ");
-            Serial.println("°C   °C   °C   °C   °C");
+            Serial.print("  |  ");
+            Serial.println(sensor.getUnits1());
             break;
         }
         default: {

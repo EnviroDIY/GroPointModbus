@@ -41,15 +41,26 @@ public:
     // The sensor itself does not return its model information.
     String getModel(void);
 
-    // This returns a pretty string with the parameter measured.
+    // This returns a pretty string with the measured parameter group.
     // NOTE:  This is only based on the model input from the "begin" fxn.
     // The sensor itself does not return this information.
     String getParameter(void);
+
+    // This returns a pretty string with the measured parameter1 group.
+    // NOTE:  This is only based on the model input from the "begin" fxn.
+    // The sensor itself does not return this information.
+    String getParameter1(void);
 
     // This returns a pretty string with the measurement units.
     // NOTE:  This is only based on the model input from the "begin" fxn.
     // The sensor itself does not return this information.
     String getUnits(void);
+
+    // This returns a pretty string with the measurement units for Parameter1.
+    // NOTE:  This is only based on the model input from the "begin" fxn.
+    // The sensor itself does not return this information.
+    String getUnits1(void);
+
 
     // This gets the modbus sensor (slave) address. 
     // Does not seem to work with a broadcast address of 0x00 or 0xFF
