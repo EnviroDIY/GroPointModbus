@@ -286,7 +286,7 @@ void loop()
         // 13 registers had 4 "no response"
     Serial.print("Requested Registers: ");
     Serial.println(numRegisters);
-    getInputRegisters(startRegister, numRegisters);
+    modbus.getRegisters(0x04, startRegister, numRegisters);
     Serial.println();
 
     // Delay between readings
