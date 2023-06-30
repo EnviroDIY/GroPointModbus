@@ -10,10 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        example:
-          [
-            examples/GetValues/,
-          ]
+        example: [examples/GetValues/]
 
     steps:
       - uses: actions/checkout@v3
@@ -56,12 +53,12 @@ jobs:
           pio lib -g install https://github.com/PaulStoffregen/AltSoftSerial.git
           pio lib -g install https://github.com/switchdoclabs/SDL_Arduino_SSD1306.git
 
-      # Install YosemitechModbus at the Global level for PlatformIO
+      # Install GroPointModbus at the Global level for PlatformIO
       # Force install to get the right version
-      - name: Install the testing version of Yosemitech Modbus for PlatformIO
+      - name: Install the testing version of GroPoint Modbus for PlatformIO
         run: |
           pio lib -g install -f ${{ env.LIBRARY_INSTALL_SOURCE }}
-          pio lib show YosemitechModbus
+          pio lib show GroPointModbus
 
       - name: Run PlatformIO
         env:
@@ -72,5 +69,5 @@ jobs:
 
       # NOTE:  Don't uninstall for PlatformIO because the library manager will clean up the
       # dependencies leaving nothing for the cache
-      # - name: Uninstall testing version of Yosemitech Modbus before caching
-      #   run: pio lib -g uninstall YosemitechModbus
+      # - name: Uninstall testing version of GroPoint Modbus before caching
+      #   run: pio lib -g uninstall GroPointModbus

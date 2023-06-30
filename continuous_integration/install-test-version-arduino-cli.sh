@@ -7,28 +7,28 @@ echo "\n\e[32mCurrent Arduino CLI version:\e[0m"
 arduino-cli version
 
 echo "\n\e[32mDeleting any archived zips\e[0m"
-rm -f home/arduino/downloads/YosemitechModbus.zip
+rm -f home/arduino/downloads/GroPointModbus.zip
 
 echo "\n\e[32mDownloading library zip from ${LIBRARY_INSTALL_ZIP}\e[0m"
-curl -L  --retry 15 --retry-delay 0 ${LIBRARY_INSTALL_ZIP} --create-dirs -o home/arduino/downloads/YosemitechModbus.zip
+curl -L  --retry 15 --retry-delay 0 ${LIBRARY_INSTALL_ZIP} --create-dirs -o home/arduino/downloads/GroPointModbus.zip
 
 echo "\n\e[32mUnzipping the library\e[0m"
-unzip -o home/arduino/downloads/YosemitechModbus.zip -d home/arduino/downloads/ -x "*.git/*" "continuous_integration/*" "docs/*" "examples/*"
+unzip -o home/arduino/downloads/GroPointModbus.zip -d home/arduino/downloads/ -x "*.git/*" "continuous_integration/*" "docs/*" "examples/*"
 
 echo "\n\e[32mEnsuring no old directories exist\e[0m"
-rm -r -f home/arduino/user/libraries/YosemitechModbus
+rm -r -f home/arduino/user/libraries/GroPointModbus
 
-echo "\n\e[32mCreating a new directory for the testing version of Yosemitech Modbus\e[0m"
-mkdir -p home/arduino/user/libraries/YosemitechModbus
+echo "\n\e[32mCreating a new directory for the testing version of GroPoint Modbus\e[0m"
+mkdir -p home/arduino/user/libraries/GroPointModbus
 
 echo "\n\e[32mMoving the unzipped library to the new directory\e[0m"
 if [ -z "${GITHUB_HEAD_REF}" ]; then
-echo "\n\e[36mExpected unzipped directory name (from commit SHA): home/arduino/downloads/YosemitechModbus-${GITHUB_SHA}\e[0m"
-mv home/arduino/downloads/YosemitechModbus-${GITHUB_SHA}/* home/arduino/user/libraries/YosemitechModbus
+    echo "\n\e[36mExpected unzipped directory name (from commit SHA): home/arduino/downloads/GroPointModbus-${GITHUB_SHA}\e[0m"
+    mv home/arduino/downloads/GroPointModbus-${GITHUB_SHA}/* home/arduino/user/libraries/GroPointModbus
 else
-INTERNAL_ZIP_NAME=$(echo "${GITHUB_HEAD_REF}" | sed -e 's/\//-/g')
-echo "\n\e[36mExpected unzipped directory name (from head of ${GITHUB_HEAD_REF}): home/arduino/downloads/YosemitechModbus-${SAVED_ZIP_NAME}\e[0m"
-mv home/arduino/downloads/YosemitechModbus-${INTERNAL_ZIP_NAME}/* home/arduino/user/libraries/YosemitechModbus
+    INTERNAL_ZIP_NAME=$(echo "${GITHUB_HEAD_REF}" | sed -e 's/\//-/g')
+    echo "\n\e[36mExpected unzipped directory name (from head of ${GITHUB_HEAD_REF}): home/arduino/downloads/GroPointModbus-${SAVED_ZIP_NAME}\e[0m"
+    mv home/arduino/downloads/GroPointModbus-${INTERNAL_ZIP_NAME}/* home/arduino/user/libraries/GroPointModbus
 fi
 
 echo "\n\e[32mUpdating the library index\e[0m"

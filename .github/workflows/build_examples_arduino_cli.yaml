@@ -10,10 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        example:
-          [
-            examples/GetValues/,
-          ]
+        example: [examples/GetValues/]
         # arduino-platform: ['EnviroDIY:avr', 'arduino:avr', 'arduino:samd', 'adafruit:samd']
         fqbn:
           [
@@ -70,8 +67,8 @@ jobs:
           arduino-cli --config-file continuous_integration/arduino_cli.yaml lib update-index
           arduino-cli --config-file continuous_integration/arduino_cli.yaml core list
 
-      # Install YosemitechModbus for the Arduino CLI
-      - name: Install the testing version of Yosemitech Modbus for the Arduino CLI
+      # Install GroPointModbus for the Arduino CLI
+      - name: Install the testing version of GroPoint Modbus for the Arduino CLI
         run: |
           chmod +x continuous_integration/install-test-version-arduino-cli.sh
           sh continuous_integration/install-test-version-arduino-cli.sh
@@ -101,5 +98,5 @@ jobs:
           echo "::debug::Running Arduino CLI for ${{ matrix.example }}"
           arduino-cli --config-file continuous_integration/arduino_cli.yaml compile --clean --build-property "build.extra_flags=$EXTRA_BUILD_FLAGS" --fqbn ${{ matrix.fqbn }} $BUILD_EXAMPLE
 
-      - name: Uninstall testing version of Yosemitech Modbus before caching
-        run: arduino-cli --config-file continuous_integration/arduino_cli.yaml lib uninstall YosemitechModbus
+      - name: Uninstall testing version of GroPoint Modbus before caching
+        run: arduino-cli --config-file continuous_integration/arduino_cli.yaml lib uninstall GroPointModbus
