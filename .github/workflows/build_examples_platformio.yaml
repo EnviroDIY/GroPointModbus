@@ -57,7 +57,7 @@ jobs:
       # Force install to get the right version
       - name: Install the testing version of GroPoint Modbus for PlatformIO
         run: |
-          pio pkg install -l -g -f ${{ env.LIBRARY_INSTALL_SOURCE }}
+          pio pkg install -l -g ${{ env.LIBRARY_INSTALL_SOURCE }} -f
 
       - name: Run PlatformIO
         env:
