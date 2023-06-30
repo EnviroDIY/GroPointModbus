@@ -49,15 +49,15 @@ jobs:
       - name: Install the PlatformIO dependencies at global level
         if: steps.cache_libraries.outputs.cache-hit != 'true'
         run: |
-          pio pkg -g install -l install envirodiy/SensorModbusMaster
-          pio pkg -g install -l install https://github.com/PaulStoffregen/AltSoftSerial.git
-          pio pkg -g install -l install https://github.com/switchdoclabs/SDL_Arduino_SSD1306.git
+          pio pkg install -l -g install envirodiy/SensorModbusMaster
+          pio pkg install -l -g install https://github.com/PaulStoffregen/AltSoftSerial.git
+          pio pkg install -l -g install https://github.com/switchdoclabs/SDL_Arduino_SSD1306.git
 
       # Install GroPointModbus at the Global level for PlatformIO
       # Force install to get the right version
       - name: Install the testing version of GroPoint Modbus for PlatformIO
         run: |
-          pio pkg -g install -l -f ${{ env.LIBRARY_INSTALL_SOURCE }}
+          pio pkg install -l -g -f ${{ env.LIBRARY_INSTALL_SOURCE }}
 
       - name: Run PlatformIO
         env:
@@ -69,4 +69,4 @@ jobs:
       # NOTE:  Don't uninstall for PlatformIO because the library manager will clean up the
       # dependencies leaving nothing for the cache
       # - name: Uninstall testing version of GroPoint Modbus before caching
-      #   run: pio pkg -g install -l uninstall GroPointModbus
+      #   run: pio pkg install -l -g uninstall GroPointModbus
