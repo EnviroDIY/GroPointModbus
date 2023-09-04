@@ -13,7 +13,7 @@ jobs:
         example: [examples/GetValues/]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set environment variable for library installation source
         run: |
