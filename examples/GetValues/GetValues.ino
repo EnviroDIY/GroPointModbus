@@ -1,19 +1,21 @@
-/*****************************************************************************
-GetValues.ino
-
-This prints basic meta-data about a sensor to the first serial port and then
-begins taking measurements from the sensor.
-
-The sensor model and address can easily be modified to use this sketch with any
-GroPoint Profile modbus sensor.
-
-NOTE: GroPoint Profile sensor default Modbus communication settings are
-19200 Baud, 8 Bits, Even Parity, one Stop Bit (8-E-1). See p35 of manual.
-8-N-1 (no parity) is the most common configuration for serial communications.
-
-NOTE:  that neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial
-will support either even or odd parity!
-*****************************************************************************/
+/** =========================================================================
+ * @file GetValues.ino
+ * @author Anthony Aufdenkampe
+ * @copyright Stroud Water Research Center
+ * This example is published under the BSD-3 license.
+ *
+ * @brief This prints basic meta-data about a sensor to the first serial port and then
+ * begins taking measurements from the sensor.
+ *
+ * The sensor model and address can easily be modified to use this sketch with any
+ * GroPoint Profile modbus sensor.
+ * @note GroPoint Profile sensor default Modbus communication settings are 19200 Baud, 8
+ * Bits, Even Parity, one Stop Bit (8-E-1). See p35 of manual. 8-N-1 (no parity) is the
+ * most common configuration for serial communications.
+ *
+ * @warning Neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial will support
+ * either even or odd parity!
+ * ======================================================================= */
 
 // ---------------------------------------------------------------------------
 // Include the base required libraries
