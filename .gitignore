@@ -1,24 +1,112 @@
-# Windows
+# Windows image file caches
 Thumbs.db
-~*
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
 *.lnk
 
-# OSX
-.DS_Store
+# Microsoft Office temp files
+~$*
 
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+
+# Atom / PlatformIO
+.pio
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+lib/readme.txt
+/platformio.ini
+tests/*
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
 
 # VSCode
 .vscode
+.history
 compile_commands.json
 
-# PlatformIO
-.pio
-/platformio.ini
-
-# Other
-.history
+# Other Stuff
 pioScripts
 runDoxygen.bat
+generateKeywords.bat
 output_doxygen.log
 output_doxygen_run.log
 output_mcss_run.log
@@ -26,3 +114,5 @@ output_mcss.log
 docs/output_copyFunctions.log
 docs/output_documentExamples.log
 docs/output_fixSectionsInXml.log
+continuous_integration/output_check_component_inclusion.log
+sync.ffs_db
