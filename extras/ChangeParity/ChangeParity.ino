@@ -26,7 +26,6 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 // by uncommenting next line (i.e. `#define DEBUG`)
 #define DEBUG
 
-
 // ==========================================================================
 //  Sensor Settings
 // ==========================================================================
@@ -40,23 +39,28 @@ byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in Modular
 
 // The Modbus baud rate the sensor uses
 int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
-int32_t newModbusBaud     = 9600;   // 9600 baud is the default for GroPoint & Keller.
+int32_t newModbusBaud     = 9600;   // 9600 is a safer baud rate to use
 
+// The Modbus parity the sensor uses
+// see
+// https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/
+// for allowable configurations.
+uint8_t defaultModbusParity = SERIAL_8E1;  // 8-E-1 is GroPoint default parity.
+uint8_t newModbusParity     = SERIAL_8N1;  // 8-N-1 is the only allowable parity for
+                                       // AltSoftSerial, NeoSWSerial, & SoftwareSerial
 
 // Sensor Timing. Edit these to explore!
-#define WARM_UP_TIME \
-    350  // milliseconds for sensor to respond to commands.
-         // GroPoint Profile User Manual page 7:
-         // The time from application of power to the SDI-12 power bus until the
-         // sensor is ready to receive a command is approximately 350 ms.
+#define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
+// GroPoint Profile User Manual page 7:
+// The time from application of power to the SDI-12 power bus until the
+// sensor is ready to receive a command is approximately 350 ms.
 
 #define STABILIZATION_TIME 100  // milliseconds for readings to stablize.
 
-#define MEASUREMENT_TIME \
-    200  // milliseconds to complete a measurement.
-         // GroPoint Profile User Manual page 39:
-         // Moisture measurements take approximately 200 ms per segment.
-         // Temperature measurements take approximately 200 ms per sensor.
+#define MEASUREMENT_TIME 200  // milliseconds to complete a measurement.
+// GroPoint Profile User Manual page 39:
+// Moisture measurements take approximately 200 ms per segment.
+// Temperature measurements take approximately 200 ms per sensor.
 
 
 // ==========================================================================
@@ -162,17 +166,8 @@ void setup() {
     // Turn on the "main" serial port for debugging via USB Serial Monitor
     Serial.begin(serialBaud);
 
-    // Turn on your modbus serial port
-    // Serial1.begin(modbusBaudRate, SERIAL_8O1);
-    // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    Serial1.begin(defaultModbusBaud, SERIAL_8E1);
-    // ^^ use this for 8 data bits - even parity - 1 stop bit
-    // Serial1.begin(modbusBaudRate, SERIAL_8N2);
-    // ^^ use this for 8 data bits - no parity - 2 stop bits
-    // Serial1.begin(modbusBaudRate);
-    // ^^ use this for 8 data bits - no parity - 1 stop bits
-    // Despite being technically "non-compliant" with the modbus specifications
-    // 8N1 parity is very common.
+    // Setup your modbus hardware serial port
+    modbusSerial.begin(defaultModbusBaud, defaultModbusParity);
 
     // Setup the modbus instance
     modbus.begin(defaultModbusAddress, modbusSerial, DEREPin);
@@ -193,19 +188,19 @@ void setup() {
     delay(WARM_UP_TIME);
 
     // Confirm Modbus Address
-    Serial.println("Default modbus address:");
-    Serial.print("  integer: ");
+    Serial.println("Default sensor modbus address:");
+    Serial.print("  Decimal: ");
     Serial.print(defaultModbusAddress, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(defaultModbusAddress));
     Serial.println();
 
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
-    Serial.println("Get sensor modbus address.");
+    Serial.println("Read sensor modbus address.");
     byte id = getSensorAddress();
-    Serial.print("  integer: ");
+    Serial.print("  Decimal: ");
     Serial.print(id, DEC);
-    Serial.print(", hexidecimal: ");
+    Serial.print(", Hexidecimal: ");
     Serial.println(prettyprintAddressHex(id));
     Serial.println();
 
@@ -240,7 +235,7 @@ void setup() {
     Serial.println();
 
 
-    // Set sensor parity
+    // Set sensor modbus parity
     Serial.println("Set sensor modbus baud.");
     // Parity setting (0=none, 1=odd, 2=even)
     Serial.println(setSensorParity(0x00));

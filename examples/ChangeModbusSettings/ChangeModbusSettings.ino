@@ -36,18 +36,20 @@ gropointModel model = GPLP8;  // The sensor model number
 // NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
 // integers, whereas EnviroDIY and most other modbus systems present it in
 // hexadecimal form. Use an online "HEX to DEC Converter".
-byte defaultModbusAddress = 0x01;  // HEX 0x01 is the GroPoint default modbus address.
-byte newModbusAddress     = 0x19;  // HEX 0x19 = DEC 25 is unique in ModularSensors.
+byte defaultModbusAddress = 0x01;  // GroPoint ships sensors with a default ID of 0x01.
+byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in ModularSensors.
 
 // The Modbus baud rate the sensor uses
-int32_t defaultModbusBaud = 19200;  // 19200 is GroPoint default baud rate.
-int32_t newModbusBaud     = 9600;   // 9600 is default for GroPoint & Keller.
+int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
+int32_t newModbusBaud     = 9600;   // 9600 is a safer baud rate to use
 
 // The Modbus parity the sensor uses
-String defaultModbusParity = "Even";  // "Even" is GroPoint default parity.
-String newModbusParity     = "None";  // "None" is default for GroPoint, GroPoint and
-                                      // Keller, and the only allowable parity for
-                                      // AltSoftSerial, NeoSWSerial, & SoftSerial
+// see
+// https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/
+// for allowable configurations.
+uint8_t defaultModbusParity = SERIAL_8E1;  // 8-E-1 is GroPoint default parity.
+uint8_t newModbusParity     = SERIAL_8N1;  // 8-N-1 is the only allowable parity for
+                                       // AltSoftSerial, NeoSWSerial, & SoftwareSerial
 
 // Sensor Timing. Edit these to explore!
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
@@ -61,6 +63,7 @@ String newModbusParity     = "None";  // "None" is default for GroPoint, GroPoin
 // GroPoint Profile User Manual page 39:
 // Moisture measurements take approximately 200 ms per segment.
 // Temperature measurements take approximately 200 ms per sensor.
+
 
 // ==========================================================================
 //  Data Logging Options
@@ -79,7 +82,9 @@ const int DEREPin       = -1;  // The pin controlling Recieve Enable & Driver En
 // To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
 // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
 // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
-HardwareSerial& modbusSerial = Serial1;
+// This is just a assigning another name to the same port, for convienence
+HardwareSerial* modbusSerial = &Serial1;
+
 // Construct the gropoint sensor instance
 gropoint sensor;
 bool     success;
@@ -87,6 +92,7 @@ bool     success;
 // Construct a SensorModbusMaster class instance, from
 // https://github.com/EnviroDIY/SensorModbusMaster
 modbusMaster modbus;
+
 
 // ==========================================================================
 // Working Functions
@@ -119,21 +125,7 @@ void setup() {
     Serial.begin(serialBaud);
 
     // Setup your modbus hardware serial port
-    if (defaultModbusParity == "Odd") {
-        modbusSerial.begin(defaultModbusBaud, SERIAL_8O1);
-        // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    } else if (defaultModbusParity == "Even") {
-        modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
-        // ^^ use this for 8 data bits - even parity - 1 stop bit
-    } else if (defaultModbusParity == "None") {
-        modbusSerial.begin(defaultModbusBaud);
-        // ^^ use this for 8 data bits - no parity - 1 stop bits
-        // Despite being technically "non-compliant" with the modbus specifications
-        // 8N1 parity is very common.
-    } else {
-        modbusSerial.begin(defaultModbusBaud, SERIAL_8N2);
-        // ^^ use this for 8 data bits - no parity - 2 stop bits
-    }
+    modbusSerial.begin(defaultModbusBaud, defaultModbusParity);
 
     // Setup the sensor instance
     sensor.begin(model, defaultModbusAddress, &modbusSerial, DEREPin);
