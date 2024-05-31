@@ -40,21 +40,23 @@ byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in Modular
 
 // The Modbus baud rate the sensor uses
 int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
-int32_t newModbusBaud     = 9600;  // 9600 baud is the default for GroPoint & Keller.
+int32_t newModbusBaud     = 9600;   // 9600 baud is the default for GroPoint & Keller.
 
 
 // Sensor Timing. Edit these to explore!
-#define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
-    // GroPoint Profile User Manual page 7:
-    // The time from application of power to the SDI-12 power bus until the
-    // sensor is ready to receive a command is approximately 350 ms.
+#define WARM_UP_TIME \
+    350  // milliseconds for sensor to respond to commands.
+         // GroPoint Profile User Manual page 7:
+         // The time from application of power to the SDI-12 power bus until the
+         // sensor is ready to receive a command is approximately 350 ms.
 
 #define STABILIZATION_TIME 100  // milliseconds for readings to stablize.
 
-#define MEASUREMENT_TIME 200  // milliseconds to complete a measurement.
-    // GroPoint Profile User Manual page 39:
-    // Moisture measurements take approximately 200 ms per segment.
-    // Temperature measurements take approximately 200 ms per sensor.
+#define MEASUREMENT_TIME \
+    200  // milliseconds to complete a measurement.
+         // GroPoint Profile User Manual page 39:
+         // Moisture measurements take approximately 200 ms per segment.
+         // Temperature measurements take approximately 200 ms per sensor.
 
 
 // ==========================================================================
@@ -63,17 +65,17 @@ int32_t newModbusBaud     = 9600;  // 9600 baud is the default for GroPoint & Ke
 const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 
 // Define pin number variables
-const int sensorPwrPin = 10;  // The pin sending power to the sensor
-const int adapterPwrPin = 22; // The pin sending power to the RS485 adapter
-const int DEREPin = -1; // The pin controlling Recieve Enable & Driver Enable
-                        // on the RS485 adapter, if applicable (else, -1)
-                        // Setting HIGH enables the driver (arduino) to send
-                        // Setting LOW enables the receiver (sensor) to send
+const int sensorPwrPin  = 10;  // The pin sending power to the sensor
+const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
+const int DEREPin       = -1;  // The pin controlling Recieve Enable & Driver Enable
+                               // on the RS485 adapter, if applicable (else, -1)
+                               // Setting HIGH enables the driver (arduino) to send
+                               // Setting LOW enables the receiver (sensor) to send
 
 // Construct software serial object for Modbus
-    // To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
-    // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
-    // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
+// To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
+// or other set of jumpers to connect Grove D5 & D6 lines to the hardware
+// serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
 // This is just a assigning another name to the same port, for convienence
 HardwareSerial* modbusSerial = &Serial1;
 
@@ -99,8 +101,8 @@ String prettyprintAddressHex(byte _modbusAddress) {
 // holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 byte getSensorAddress(void) {
     byte getAddressCommand[8] = {
-        defaultModbusAddress,    0x03,        0x00, 0xC8,    0x00, 0x01,    0x0000
-    //  address,                 ReadHolding, startRegister, numRegisters,  CRC
+        defaultModbusAddress, 0x03, 0x00, 0xC8, 0x00, 0x01, 0x0000
+        //  address,                 ReadHolding, startRegister, numRegisters,  CRC
     };
     int16_t numRegisters = 1;
 
@@ -108,19 +110,21 @@ byte getSensorAddress(void) {
     // # Registers X 2 bytes/register + 5 bytes of modbus RTU frame
 
     // Try up to 5 times to get the right results
-    int tries = 0;
+    int     tries    = 0;
     int16_t respSize = 0;
-    while ((respSize != (numRegisters*2 + 5) && tries < 5))
-    {
+    while ((respSize != (numRegisters * 2 + 5) && tries < 5)) {
         // Send out the command (this adds the CRC)
         respSize = modbus.sendCommand(getAddressCommand, 8);
         tries++;
 
         delay(50);
     }
-    if (respSize == (numRegisters*2 + 5))
-        return modbus.byteFromFrame(4); // 2nd byte in register
-    else return 0x00;
+    if (respSize == (numRegisters * 2 + 5)) {
+        return modbus.byteFromFrame(4);
+    }  // 2nd byte in register
+    else {
+        return 0x00;
+    }
 }
 
 // Set sensor modbus baud
@@ -140,7 +144,6 @@ bool setSensorParity(byte newParityCode) {
 }
 
 
-
 // ==========================================================================
 //  Arduino Setup Function
 // ==========================================================================
@@ -154,9 +157,7 @@ void setup() {
         pinMode(adapterPwrPin, OUTPUT);
         digitalWrite(adapterPwrPin, HIGH);
     }
-    if (DEREPin > 0) {
-        pinMode(DEREPin, OUTPUT);
-    }
+    if (DEREPin > 0) { pinMode(DEREPin, OUTPUT); }
 
     // Turn on the "main" serial port for debugging via USB Serial Monitor
     Serial.begin(serialBaud);
@@ -176,10 +177,10 @@ void setup() {
     // Setup the modbus instance
     modbus.begin(defaultModbusAddress, modbusSerial, DEREPin);
 
-    // Turn on debugging
-    #ifdef DEBUG
-        modbus.setDebugStream(&Serial);
-    #endif
+// Turn on debugging
+#ifdef DEBUG
+    modbus.setDebugStream(&Serial);
+#endif
 
     // Start up note
     Serial.println("\nChange Parity utility for GroPoint Profile sensors ");
@@ -211,9 +212,10 @@ void setup() {
     // Get Sensor Modbus Baud from holding register 40203,
     // decimal offset 202 (hexadecimal 0x00CA)
     Serial.println("Get sensor modbus baud setting.");
-    Serial.println("  Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.");
+    Serial.println(
+        "  Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.");
     int16_t sensorBaudCode = -9999;
-    sensorBaudCode = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
+    sensorBaudCode         = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
     Serial.print("    Baud Code: ");
     Serial.println(sensorBaudCode);
     Serial.println();
@@ -222,7 +224,7 @@ void setup() {
     // decimal offset 0203 (hexadecimal 0x00CB)
     Serial.println("Get sensor modbus parity setting.");
     int16_t sensorParity = -9999;
-    sensorParity = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
+    sensorParity         = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
     Serial.print("    Parity: ");
     Serial.println(sensorParity);
     Serial.println();
@@ -238,21 +240,17 @@ void setup() {
     Serial.println();
 
 
-
     // Set sensor parity
     Serial.println("Set sensor modbus baud.");
     // Parity setting (0=none, 1=odd, 2=even)
     Serial.println(setSensorParity(0x00));
     Serial.println();
-
-
 }
 
 // ==========================================================================
 //  Arduino Loop Function
 // ==========================================================================
-void loop()
-{
+void loop() {
     // Get data values from read-only input registers (0x04)
 
     // // Segment 1 Moisture
@@ -274,16 +272,16 @@ void loop()
     // Serial.println();
 
     // int16_t startRegister = 0x0000; // Moisture
-    int16_t startRegister = 0x0064; // Temperature
-    int16_t numRegisters = 13;
-        // 1 registers had 1 "no response" (3 requests)
-        // 2 registers had 1 "no response"
-        // 3 registers had 4 "no response" (6 requests)
-        // 4 registers had 4 "no response"
-        // 6 registers had 4 "no response"
-        // 7 registers had 4 "no response"
-        // 8 registers had 4 "no response"
-        // 13 registers had 4 "no response"
+    int16_t startRegister = 0x0064;  // Temperature
+    int16_t numRegisters  = 13;
+    // 1 registers had 1 "no response" (3 requests)
+    // 2 registers had 1 "no response"
+    // 3 registers had 4 "no response" (6 requests)
+    // 4 registers had 4 "no response"
+    // 6 registers had 4 "no response"
+    // 7 registers had 4 "no response"
+    // 8 registers had 4 "no response"
+    // 13 registers had 4 "no response"
     Serial.print("Requested Registers: ");
     Serial.println(numRegisters);
     modbus.getRegisters(0x04, startRegister, numRegisters);

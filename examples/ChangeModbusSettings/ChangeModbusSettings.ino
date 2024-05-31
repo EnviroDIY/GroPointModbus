@@ -30,34 +30,34 @@ SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 //  Sensor Settings
 // ==========================================================================
 // Define the sensor type
-gropointModel model = GPLP8; // The sensor model number
+gropointModel model = GPLP8;  // The sensor model number
 
 // Define the sensor's modbus address, or SlaveID
 // NOTE: The GroPoint User Manual presents SlaveID and registers as decimal
 // integers, whereas EnviroDIY and most other modbus systems present it in
 // hexadecimal form. Use an online "HEX to DEC Converter".
-byte defaultModbusAddress = 0x01; // HEX 0x01 is the GroPoint default modbus address.
-byte newModbusAddress = 0x19;     // HEX 0x19 = DEC 25 is unique in ModularSensors.
+byte defaultModbusAddress = 0x01;  // HEX 0x01 is the GroPoint default modbus address.
+byte newModbusAddress     = 0x19;  // HEX 0x19 = DEC 25 is unique in ModularSensors.
 
 // The Modbus baud rate the sensor uses
-int32_t defaultModbusBaud = 19200; // 19200 is GroPoint default baud rate.
-int32_t newModbusBaud = 9600;      // 9600 is default for GroPoint & Keller.
+int32_t defaultModbusBaud = 19200;  // 19200 is GroPoint default baud rate.
+int32_t newModbusBaud     = 9600;   // 9600 is default for GroPoint & Keller.
 
 // The Modbus parity the sensor uses
-String defaultModbusParity = "Even"; // "Even" is GroPoint default parity.
-String newModbusParity = "None";     // "None" is default for GroPoint, Yosemitech and
-                                     // Keller, and the only allowable parity for
-                                     // AltSoftSerial, NeoSWSerial, & SoftSerial
+String defaultModbusParity = "Even";  // "Even" is GroPoint default parity.
+String newModbusParity     = "None";  // "None" is default for GroPoint, GroPoint and
+                                      // Keller, and the only allowable parity for
+                                      // AltSoftSerial, NeoSWSerial, & SoftSerial
 
 // Sensor Timing. Edit these to explore!
-#define WARM_UP_TIME 350 // milliseconds for sensor to respond to commands.
+#define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
 // GroPoint Profile User Manual page 7:
 // The time from application of power to the SDI-12 power bus until the
 // sensor is ready to receive a command is approximately 350 ms.
 
-#define STABILIZATION_TIME 100 // milliseconds for readings to stablize.
+#define STABILIZATION_TIME 100  // milliseconds for readings to stablize.
 
-#define MEASUREMENT_TIME 200 // milliseconds to complete a measurement.
+#define MEASUREMENT_TIME 200  // milliseconds to complete a measurement.
 // GroPoint Profile User Manual page 39:
 // Moisture measurements take approximately 200 ms per segment.
 // Temperature measurements take approximately 200 ms per sensor.
@@ -65,24 +65,24 @@ String newModbusParity = "None";     // "None" is default for GroPoint, Yosemite
 // ==========================================================================
 //  Data Logging Options
 // ==========================================================================
-const int32_t serialBaud = 115200; // Baud rate for serial monitor
+const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 
 // Define pin number variables
-const int sensorPwrPin = 10;  // The pin sending power to the sensor
-const int adapterPwrPin = 22; // The pin sending power to the RS485 adapter
-const int DEREPin = -1;       // The pin controlling Recieve Enable & Driver Enable
-                              // on the RS485 adapter, if applicable (else, -1)
-                              // Setting HIGH enables the driver (arduino) to send
-                              // Setting LOW enables the receiver (sensor) to send
+const int sensorPwrPin  = 10;  // The pin sending power to the sensor
+const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
+const int DEREPin       = -1;  // The pin controlling Recieve Enable & Driver Enable
+                               // on the RS485 adapter, if applicable (else, -1)
+                               // Setting HIGH enables the driver (arduino) to send
+                               // Setting LOW enables the receiver (sensor) to send
 
 // Construct software serial object for Modbus
 // To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
 // or other set of jumpers to connect Grove D5 & D6 lines to the hardware
 // serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
-HardwareSerial &modbusSerial = Serial1;
+HardwareSerial& modbusSerial = Serial1;
 // Construct the gropoint sensor instance
 gropoint sensor;
-bool success;
+bool     success;
 
 // Construct a SensorModbusMaster class instance, from
 // https://github.com/EnviroDIY/SensorModbusMaster
@@ -93,11 +93,9 @@ modbusMaster modbus;
 // ==========================================================================
 // A function for pretty-printing the Modbuss Address in Hexadecimal notation,
 // from ModularSensors `sensorLocation()`
-String prettyprintAddressHex(byte _modbusAddress)
-{
+String prettyprintAddressHex(byte _modbusAddress) {
     String addressHex = F("0x");
-    if (_modbusAddress < 0x10)
-        addressHex += "0";
+    if (_modbusAddress < 0x10) addressHex += "0";
     addressHex += String(_modbusAddress, HEX);
     return addressHex;
 }
@@ -105,47 +103,34 @@ String prettyprintAddressHex(byte _modbusAddress)
 // ==========================================================================
 //  Arduino Setup Function
 // ==========================================================================
-void setup()
-{
+void setup() {
     // Setup power pins
-    if (sensorPwrPin > 0)
-    {
+    if (sensorPwrPin > 0) {
         pinMode(sensorPwrPin, OUTPUT);
         digitalWrite(sensorPwrPin, HIGH);
     }
-    if (adapterPwrPin > 0)
-    {
+    if (adapterPwrPin > 0) {
         pinMode(adapterPwrPin, OUTPUT);
         digitalWrite(adapterPwrPin, HIGH);
     }
-    if (DEREPin > 0)
-    {
-        pinMode(DEREPin, OUTPUT);
-    }
+    if (DEREPin > 0) { pinMode(DEREPin, OUTPUT); }
 
     // Turn on the "main" serial port for debugging via USB Serial Monitor
     Serial.begin(serialBaud);
 
     // Setup your modbus hardware serial port
-    if (defaultModbusParity == "Odd")
-    {
+    if (defaultModbusParity == "Odd") {
         modbusSerial.begin(defaultModbusBaud, SERIAL_8O1);
         // ^^ use this for 8 data bits - odd parity - 1 stop bit
-    }
-    else if (defaultModbusParity == "Even")
-    {
+    } else if (defaultModbusParity == "Even") {
         modbusSerial.begin(defaultModbusBaud, SERIAL_8E1);
         // ^^ use this for 8 data bits - even parity - 1 stop bit
-    }
-    else if (defaultModbusParity == "None")
-    {
+    } else if (defaultModbusParity == "None") {
         modbusSerial.begin(defaultModbusBaud);
         // ^^ use this for 8 data bits - no parity - 1 stop bits
         // Despite being technically "non-compliant" with the modbus specifications
         // 8N1 parity is very common.
-    }
-    else
-    {
+    } else {
         modbusSerial.begin(defaultModbusBaud, SERIAL_8N2);
         // ^^ use this for 8 data bits - no parity - 2 stop bits
     }
@@ -209,9 +194,10 @@ void setup()
     Serial.print("Set sensor modbus baud to ");
     Serial.println(newModbusBaud);
     success = sensor.setSensorBaud(newModbusBaud);
-    if (success)
-        Serial.println("  Success! New baud will take effect once sensor is power cycled.");
-    else
+    if (success) {
+        Serial.println(
+            "  Success! New baud will take effect once sensor is power cycled.");
+    } else
         Serial.println("  Baud reset failed!");
     Serial.println();
 
@@ -219,9 +205,10 @@ void setup()
     Serial.print("Set sensor modbus parity to ");
     Serial.println(newModbusParity);
     success = sensor.setSensorParity(newModbusParity);
-    if (success)
-        Serial.println("  Success! New parity will take effect once sensor is power cycled.");
-    else
+    if (success) {
+        Serial.println(
+            "  Success! New parity will take effect once sensor is power cycled.");
+    } else
         Serial.println("  Parity reset failed!");
     Serial.println();
 
@@ -242,7 +229,6 @@ void setup()
 // ==========================================================================
 //  Arduino Loop Function
 // ==========================================================================
-void loop()
-{
+void loop() {
     // Empty loop function
 }
