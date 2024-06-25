@@ -170,7 +170,7 @@ void setup() {
     // Turn on your modbus serial port
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P) || \
     defined(ARDUINO_SAM_DUE) || not defined(SERIAL_8E1)
-    modbusSerial.begin(modbusBaudRate);
+    modbusSerial.begin(modbusBaud);
     // NOTE:  The AVR implementation of SoftwareSerial only supports 8N1
     // The hardware serial implementation of the Due also only supports 8N1
 #elif defined(ESP8266)

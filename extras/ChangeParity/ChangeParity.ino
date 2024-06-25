@@ -54,6 +54,7 @@ int32_t newModbusBaud     = 9600;   // 9600 is a safer baud rate to use
 // allowable parity for AltSoftSerial, NeoSWSerial, & SoftwareSerial and several other
 // board serial libraries.
 #if defined(ESP8266)
+#include <SoftwareSerial.h>
 uint8_t defaultModbusParity = SWSERIAL_8E1;
 uint8_t newModbusParity     = SWSERIAL_8N1;
 // NOTE:  See
@@ -109,7 +110,6 @@ const int SSTxPin = 11;  // Send pin for software serial (Tx on RS485 adapter)
 SoftwareSerial modbusSerial(SSRxPin, SSTxPin);
 // AltSoftSerial modbusSerial;
 #elif defined(ESP8266)
-#include <SoftwareSerial.h>
 #pragma message("Using Software Serial for the ESP8266")
 SoftwareSerial modbusSerial;
 #elif defined(NRF52832_FEATHER) || defined(ARDUINO_NRF52840_FEATHER)
