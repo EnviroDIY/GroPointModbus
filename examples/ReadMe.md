@@ -31,3 +31,6 @@ You will probably need to use this example to prepare a new sensor to communicat
 
 - [Instructions for the changing settings example](https://envirodiy.github.io/GroPointModbus/example_change_modbus_settings.html)
 - [The display values example on GitHub](https://github.com/EnviroDIY/GroPointModbus/tree/master/examples/ChangeModbusSettings)
+
+[//]: # ( @m_innerpage{example_get_values} )
+[//]: # ( @m_innerpage{example_change_modbus_settings} )

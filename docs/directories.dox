@@ -1,6 +1,6 @@
 /**
  * @dir src
- * @brief Contains the source code for the KellerModbus library
+ * @brief Contains the source code for the GroPointModbus library
  */
 /**
  * @dir docs
@@ -11,6 +11,8 @@
  * @brief Contains all of the example sketches
  * @dir examples/GetValues
  * @copybrief GetValues.ino
+ * @dir examples/ChangeModbusSettings
+ * @copybrief ChangeModbusSettings.ino
  */
 /**
  * @dir extras

@@ -1,8 +1,7 @@
 /** =========================================================================
- * @file ChangeParity.ino
+ * @example{lineno} ChangeParity.ino
  * @author Anthony Aufdenkampe
- * @copyright Stroud Water Research Center
- * This example is published under the BSD-3 license.
+ * @license This example is published under the BSD-3 license.
  *
  * @brief This sketch uses hardware serial to connect with GroPoint Profile and change
  * default modbus settings from 19200 8E1 to 9600 8N1.
@@ -17,6 +16,9 @@
  * This sketch does not depend on the GropointModbus library, but only on the
  * SensorModbusMaster library and is based on it's example sketch:
  * SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
+ *
+ * @m_examplenavigation{example_get_values,}
+ * @m_footernavigation
  * ======================================================================= */
 
 // ---------------------------------------------------------------------------
@@ -28,7 +30,6 @@
 // Turn on debugging outputs (i.e. raw Modbus requests & responsds)
 // by uncommenting next line (i.e. `#define DEBUG`)
 #define DEBUG
-
 // ==========================================================================
 //  Sensor Settings
 // ==========================================================================
@@ -48,11 +49,28 @@ int32_t newModbusBaud     = 9600;   // 9600 is a safer baud rate to use
 // see
 // https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/
 // for allowable configurations.
-uint8_t defaultModbusParity = SERIAL_8E1;  // 8-E-1 is GroPoint default parity.
-uint8_t newModbusParity     = SERIAL_8N1;  // 8-N-1 is the only allowable parity for
-                                       // AltSoftSerial, NeoSWSerial, & SoftwareSerial
+// 8-E-1 is GroPoint default parity.
+// 8-N-1 is the recommended parity because it is more widely supported and the only
+// allowable parity for AltSoftSerial, NeoSWSerial, & SoftwareSerial and several other
+// board serial libraries.
+#if defined(ESP8266)
+uint8_t defaultModbusParity = SWSERIAL_8E1;
+uint8_t newModbusParity     = SWSERIAL_8N1;
+// NOTE:  See
+// https://github.com/plerup/espsoftwareserial/blob/40038df/src/SoftwareSerial.h#L120-L160
+// for a list of data/parity/stop bit configurations that apply to the ESP8266's
+// implementation of SoftwareSerial
+#else
+uint8_t defaultModbusParity = SERIAL_8E1;
+uint8_t newModbusParity     = SERIAL_8N1;
+// NOTE: See
+// https://github.com/arduino/ArduinoCore-avr/blob/321fca0bac806bdd36af8afbc13587f4b67eb5f1/cores/arduino/HardwareSerial.h#L68-L91
+// for a list of data/parity/stop bit configurations that apply to AVR and most other
+// HardwareSerial instances.
+#endif
 
-// Sensor Timing. Edit these to explore!
+// Sensor Timing
+// Edit these to explore
 #define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
 // GroPoint Profile User Manual page 7:
 // The time from application of power to the SDI-12 power bus until the
@@ -74,17 +92,41 @@ const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 // Define pin number variables
 const int sensorPwrPin  = 10;  // The pin sending power to the sensor
 const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
-const int DEREPin       = -1;  // The pin controlling Recieve Enable & Driver Enable
+const int DEREPin       = -1;  // The pin controlling Recieve Enable and Driver Enable
                                // on the RS485 adapter, if applicable (else, -1)
-                               // Setting HIGH enables the driver (arduino) to send
-                               // Setting LOW enables the receiver (sensor) to send
+                               // Setting HIGH enables the driver (arduino) to send text
+                               // Setting LOW enables the receiver (sensor) to send text
 
-// Construct software serial object for Modbus
-// To access HardwareSerial on the Mayfly use a Grove to Male Jumpers cable
-// or other set of jumpers to connect Grove D5 & D6 lines to the hardware
-// serial TX1 (from D5) and RX1 (from D6) pins on the left 20-pin header.
+// Construct a Serial object for Modbus
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P)
+// The Uno only has 1 hardware serial port, which is dedicated to comunication with the
+// computer. If using an Uno, you will be restricted to using AltSofSerial or
+// SoftwareSerial
+#include <SoftwareSerial.h>
+const int SSRxPin = 10;  // Receive pin for software serial (Rx on RS485 adapter)
+const int SSTxPin = 11;  // Send pin for software serial (Tx on RS485 adapter)
+#pragma message("Using Software Serial for the Uno on pins 10 and 11")
+SoftwareSerial modbusSerial(SSRxPin, SSTxPin);
+// AltSoftSerial modbusSerial;
+#elif defined(ESP8266)
+#include <SoftwareSerial.h>
+#pragma message("Using Software Serial for the ESP8266")
+SoftwareSerial modbusSerial;
+#elif defined(NRF52832_FEATHER) || defined(ARDUINO_NRF52840_FEATHER)
+#pragma message("Using TinyUSB for the NRF52")
+#include <Adafruit_TinyUSB.h>
+HardwareSerial& modbusSerial = Serial1;
+#elif !defined(NO_GLOBAL_SERIAL1) && !defined(STM32_CORE_VERSION)
 // This is just a assigning another name to the same port, for convienence
-HardwareSerial* modbusSerial = &Serial1;
+// Unless it is unavailable, always prefer hardware serial.
+#pragma message("Using HarwareSerial / Serial1")
+HardwareSerial& modbusSerial = Serial1;
+#else
+// This is just a assigning another name to the same port, for convienence
+// Unless it is unavailable, always prefer hardware serial.
+#pragma message("Using HarwareSerial / Serial")
+HardwareSerial& modbusSerial = Serial;
+#endif
 
 // Construct a SensorModbusMaster class instance, from
 // https://github.com/EnviroDIY/SensorModbusMaster
@@ -156,21 +198,34 @@ bool setSensorParity(byte newParityCode) {
 // ==========================================================================
 void setup() {
     // Setup power pins
-    if (sensorPwrPin > 0) {
+    if (sensorPwrPin >= 0) {
         pinMode(sensorPwrPin, OUTPUT);
         digitalWrite(sensorPwrPin, HIGH);
     }
-    if (adapterPwrPin > 0) {
+    if (adapterPwrPin >= 0) {
         pinMode(adapterPwrPin, OUTPUT);
         digitalWrite(adapterPwrPin, HIGH);
     }
-    if (DEREPin > 0) { pinMode(DEREPin, OUTPUT); }
+    if (DEREPin >= 0) { pinMode(DEREPin, OUTPUT); }
 
     // Turn on the "main" serial port for debugging via USB Serial Monitor
     Serial.begin(serialBaud);
 
+    // Turn on your modbus serial port
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P) || \
+    defined(ARDUINO_SAM_DUE) || not defined(SERIAL_8E1)
+    println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
+    return;
+    // NOTE:  The AVR implementation of SoftwareSerial only supports 8N1
+    // The hardware serial implementation of the Due also only supports 8N1
+#elif defined(ESP8266)
+    const int SSRxPin = 13;  // Receive pin for software serial (Rx on RS485 adapter)
+    const int SSTxPin = 14;  // Send pin for software serial (Tx on RS485 adapter)
+    modbusSerial.begin(defaultModbusBaud, defaultModbusParity, SSRxPin, SSTxPin, false);
+#else
     // Setup your modbus hardware serial port
     modbusSerial.begin(defaultModbusBaud, defaultModbusParity);
+#endif
 
     // Setup the modbus instance
     modbus.begin(defaultModbusAddress, modbusSerial, DEREPin);
@@ -181,49 +236,49 @@ void setup() {
 #endif
 
     // Start up note
-    Serial.println("\nChange Parity utility for GroPoint Profile sensors ");
+    Serial.println(F("\nChange Parity utility for GroPoint Profile sensors "));
 
     // Allow the sensor and converter to warm up
-    Serial.println("Waiting for sensor and adapter to be ready.");
-    Serial.print("  Warm up time (ms): ");
+    Serial.println(F("Waiting for sensor and adapter to be ready."));
+    Serial.print(F("  Warm up time (ms): "));
     Serial.println(WARM_UP_TIME);
     Serial.println();
     delay(WARM_UP_TIME);
 
     // Confirm Modbus Address
-    Serial.println("Default sensor modbus address:");
-    Serial.print("  Decimal: ");
+    Serial.println(F("Default sensor modbus address:"));
+    Serial.print(F("  Decimal: "));
     Serial.print(defaultModbusAddress, DEC);
-    Serial.print(", Hexidecimal: ");
+    Serial.print(F(", Hexidecimal: "));
     Serial.println(prettyprintAddressHex(defaultModbusAddress));
     Serial.println();
 
     // Read Sensor Modbus Address from holding register 40201 (0x9D09)
-    Serial.println("Read sensor modbus address.");
+    Serial.println(F("Get sensor modbus address."));
     byte id = getSensorAddress();
-    Serial.print("  Decimal: ");
+    Serial.print(F("  Decimal: "));
     Serial.print(id, DEC);
-    Serial.print(", Hexidecimal: ");
+    Serial.print(F(", Hexidecimal: "));
     Serial.println(prettyprintAddressHex(id));
     Serial.println();
 
     // Get Sensor Modbus Baud from holding register 40203,
     // decimal offset 202 (hexadecimal 0x00CA)
-    Serial.println("Get sensor modbus baud setting.");
+    Serial.println(F("Get sensor modbus baud setting."));
     Serial.println(
         "  Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.");
     int16_t sensorBaudCode = -9999;
     sensorBaudCode         = modbus.int16FromRegister(0x03, 0x00CA, bigEndian);
-    Serial.print("    Baud Code: ");
+    Serial.print(F("    Baud Code: "));
     Serial.println(sensorBaudCode);
     Serial.println();
 
     // Get Sensor Modbus Parity from holding register 40204,
     // decimal offset 0203 (hexadecimal 0x00CB)
-    Serial.println("Get sensor modbus parity setting.");
+    Serial.println(F("Get sensor modbus parity setting."));
     int16_t sensorParity = -9999;
     sensorParity         = modbus.int16FromRegister(0x03, 0x00CB, bigEndian);
-    Serial.print("    Parity: ");
+    Serial.print(F("    Parity: "));
     Serial.println(sensorParity);
     Serial.println();
 
@@ -231,18 +286,34 @@ void setup() {
     delay(10000);
 
     // Set sensor modbus baud
-    Serial.print("Set sensor modbus baud to ");
+    Serial.print(F("Set sensor modbus baud to 9600"));
     Serial.println(newModbusBaud);
     // valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.
     Serial.println(setSensorBaud(0x01));
     Serial.println();
 
-
     // Set sensor modbus parity
-    Serial.println("Set sensor modbus baud.");
+    Serial.println(F("Set sensor modbus parity to no parity"));
     // Parity setting (0=none, 1=odd, 2=even)
     Serial.println(setSensorParity(0x00));
     Serial.println();
+
+    // Delay to give time to restart with serial monitor turned on.
+    delay(10000);
+
+    // Restart the modbus serial instance at the new parity and baud rate
+#if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P) || \
+    defined(ARDUINO_SAM_DUE) || not defined(SERIAL_8E1)
+    println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
+    return;
+    // NOTE:  The AVR implementation of SoftwareSerial only supports 8N1
+    // The hardware serial implementation of the Due also only supports 8N1
+#elif defined(ESP8266)
+    modbusSerial.begin(newModbusBaud, newModbusParity, SSRxPin, SSTxPin, false);
+#else
+    // Setup your modbus hardware serial port
+    modbusSerial.begin(newModbusBaud, newModbusParity);
+#endif
 }
 
 // ==========================================================================
@@ -255,18 +326,18 @@ void loop() {
     // int16_t M1 = -9999;
     // M1 = modbus.int16FromRegister(0x04, 0x0000, bigEndian);
     // float valueM1 = 0.1 * M1;
-    // Serial.print("Segment 1 Moisture: ");
+    // Serial.print(F("Segment 1 Moisture: "));
     // Serial.print(valueM1, 1);
-    // Serial.println(" % volumetric soil moisture");
+    // Serial.println(F(" % volumetric soil moisture"));
     // Serial.println();
 
     // // Temperature Sensor 1
     // int16_t T1 = -9999;
     // T1 = modbus.int16FromRegister(0x04, 0x0064, bigEndian);
     // float valueT1 = 0.1 * T1;
-    // Serial.print("Temperature Sensor 1: ");
+    // Serial.print(F("Temperature Sensor 1: "));
     // Serial.print(valueT1, 1);
-    // Serial.println(" degrees C");
+    // Serial.println(F(" degrees C"));
     // Serial.println();
 
     // int16_t startRegister = 0x0000; // Moisture
@@ -280,7 +351,7 @@ void loop() {
     // 7 registers had 4 "no response"
     // 8 registers had 4 "no response"
     // 13 registers had 4 "no response"
-    Serial.print("Requested Registers: ");
+    Serial.print(F("Requested Registers: "));
     Serial.println(numRegisters);
     modbus.getRegisters(0x04, startRegister, numRegisters);
     Serial.println();

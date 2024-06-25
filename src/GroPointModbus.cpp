@@ -1,10 +1,13 @@
-/*
- * GroPointModbus.cpp
-
-  Written by Anthony Aufdenkampe
-
-  Tested with a GPLP-8
-*/
+/**
+ * @file GroPointModbus.h
+ * Part of the EnviroDIY GroPointModbus library for Arduino.
+ * @license This library is published under the BSD-3 license.
+ * @author Anthony Aufdenkampe
+ *
+ * @brief Contains the GroPointModbus class definitions.
+ *
+ * Tested with GPLP-8
+ */
 
 #include "GroPointModbus.h"
 
@@ -152,7 +155,7 @@ int16_t gropoint::getSensorBaud(void) {
     } else if (sensorBaudCode == 6) {
         sensorBaud = 300;
     } else {
-        Serial.println("Error");
+        Serial.println(F("Error"));
     }
     return sensorBaud;
 }
@@ -171,7 +174,7 @@ bool gropoint::setSensorBaud(int32_t newSensorBaud) {
         case 1200: newSensorBaudCode = 0x04; break;
         case 600: newSensorBaudCode = 0x05; break;
         case 300: newSensorBaudCode = 0x06; break;
-        default: Serial.println("  Input value not valid!");
+        default: Serial.println(F("  Input value not valid!"));
     }
     byte dataToSend[2] = {0x00, newSensorBaudCode};
     return modbus.setRegisters(0x00CA, 1, dataToSend, true);
@@ -209,7 +212,7 @@ bool gropoint::setSensorParity(String newSensorParity) {
     } else if (newSensorParity == "Even") {
         newSensorParityCode = 2;
     } else {
-        Serial.println("  Input value not valid!");
+        Serial.println(F("  Input value not valid!"));
     }
     byte dataToSend[2] = {0x00, newSensorParityCode};
     return modbus.setRegisters(0x00CB, 1, dataToSend, true);
@@ -408,7 +411,7 @@ bool gropoint::getValues(float& valueM1, float& valueM2, float& valueM3, float& 
             break;
         }
         default: {
-            Serial.println("Other sensors not yet implemented.");
+            Serial.println(F("Other sensors not yet implemented."));
             break;
         }
     }
@@ -460,7 +463,7 @@ bool gropoint::getTemperatureValues(float& valueT1, float& valueT2, float& value
             break;
         }
         default: {
-            Serial.println("Other sensors not yet implemented.");
+            Serial.println(F("Other sensors not yet implemented."));
             break;
         }
     }

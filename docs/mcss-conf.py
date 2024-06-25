@@ -9,7 +9,7 @@ LINKS_NAVBAR1 = [
             ('<a href="change_log.html">ChangeLog</a>',),
         ],
     ),
-    ('<a href="classkeller.html">The gropoint Class</a>', []),
+    ('<a href="classgropoint.html">The gropoint Class</a>', []),
     (
         "Examples",
         "page_the_examples",
@@ -19,11 +19,6 @@ LINKS_NAVBAR1 = [
                 '<a href="example_change_modbus_settings.html">Changing Modbus Serial Settings</a>',
             ),
         ],
-    ),
-    (
-        "Source Files",
-        "files",
-        [],
     ),
 ]
 LINKS_NAVBAR2 = []
