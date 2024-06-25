@@ -214,7 +214,7 @@ void setup() {
     // Turn on your modbus serial port
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P) || \
     defined(ARDUINO_SAM_DUE) || not defined(SERIAL_8E1)
-    println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
+    Serial.println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
     return;
     // NOTE:  The AVR implementation of SoftwareSerial only supports 8N1
     // The hardware serial implementation of the Due also only supports 8N1
@@ -304,7 +304,7 @@ void setup() {
     // Restart the modbus serial instance at the new parity and baud rate
 #if defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P) || \
     defined(ARDUINO_SAM_DUE) || not defined(SERIAL_8E1)
-    println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
+    Serial.println(F("THIS DEVICE CANNOT BE USED TO CHANGE THE DEFAULT SERIAL PARITY"));
     return;
     // NOTE:  The AVR implementation of SoftwareSerial only supports 8N1
     // The hardware serial implementation of the Due also only supports 8N1
