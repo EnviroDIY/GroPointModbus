@@ -14,5 +14,5 @@ jobs:
     uses: EnviroDIY/workflows/.github/workflows/build_examples.yaml@main
     with:
       boards_to_build: 'all'
-      examples_to_build: 'examples/ChangeModbusSettings,examples/GetValues'
+      examples_to_build: 'examples/ChangeModbusSettings,examples/GetValues,extras/ChangeParity'
     secrets: inherit

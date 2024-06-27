@@ -54,6 +54,7 @@ int32_t modbusBaud = 9600;  // 19200 is GroPoint default baud rate.
 // allowable parity for AltSoftSerial, NeoSWSerial, & SoftwareSerial and several other
 // board serial libraries.
 #if defined(ESP8266)
+#include <SoftwareSerial.h>
 uint8_t modbusParity = SWSERIAL_8N1;
 // NOTE:  See
 // https://github.com/plerup/espsoftwareserial/blob/40038df/src/SoftwareSerial.h#L120-L160
@@ -108,7 +109,6 @@ const int SSTxPin = 11;  // Send pin for software serial (Tx on RS485 adapter)
 SoftwareSerial modbusSerial(SSRxPin, SSTxPin);
 // AltSoftSerial modbusSerial;
 #elif defined(ESP8266)
-#include <SoftwareSerial.h>
 #pragma message("Using Software Serial for the ESP8266")
 SoftwareSerial modbusSerial;
 #elif defined(NRF52832_FEATHER) || defined(ARDUINO_NRF52840_FEATHER)
