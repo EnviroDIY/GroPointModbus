@@ -1,0 +1,125 @@
+{
+  "version": "1.11.0",
+  "index": {
+    "symbols": [
+      {
+        "id": "classgropoint",
+        "kind": "class",
+        "name": "gropoint",
+        "url": "classgropoint.html",
+        "brief": "The Main Class.",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false,
+        "is_final": false
+      }
+    ],
+    "files": [
+      {
+        "id": "dir_49e56c817e5e54854c35e136979f97ca",
+        "kind": "dir",
+        "name": "docs",
+        "url": "dir_49e56c817e5e54854c35e136979f97ca.html",
+        "brief": "Contains extra documentation and files to help build the documentation.",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      },
+      {
+        "id": "dir_d28a4824dc47e487b107a5db32ef43c4",
+        "kind": "dir",
+        "name": "examples",
+        "url": "dir_d28a4824dc47e487b107a5db32ef43c4.html",
+        "brief": "Contains all of the example sketches.",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      },
+      {
+        "id": "dir_1510bd745cd29c20d24c27171ebe5ba5",
+        "kind": "dir",
+        "name": "extras",
+        "url": "dir_1510bd745cd29c20d24c27171ebe5ba5.html",
+        "brief": "Has helper and debugging sketches.",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      },
+      {
+        "id": "dir_68267d1309a1af8e8297ef4c3efbcdba",
+        "kind": "dir",
+        "name": "src",
+        "url": "dir_68267d1309a1af8e8297ef4c3efbcdba.html",
+        "brief": "Contains the source code for the GroPointModbus library.",
+        "children": [
+          {
+            "id": "_gro_point_modbus_8h",
+            "kind": "file",
+            "name": "GroPointModbus.h",
+            "url": "_gro_point_modbus_8h.html",
+            "brief": "Contains the GroPointModbus class definitions.",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          }
+        ],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      }
+    ],
+    "pages": [
+      {
+        "id": "change_log",
+        "kind": "page",
+        "name": "ChangeLog",
+        "url": "change_log.html",
+        "brief": "",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      },
+      {
+        "id": "page_the_examples",
+        "kind": "page",
+        "name": "Examples using the GroPoint Modbus Library",
+        "url": "page_the_examples.html",
+        "brief": "",
+        "children": [
+          {
+            "id": "example_get_values",
+            "kind": "page",
+            "name": "Getting Values",
+            "url": "example_get_values.html",
+            "brief": "",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          },
+          {
+            "id": "example_change_modbus_settings",
+            "kind": "page",
+            "name": "Changing Modbus Settings",
+            "url": "example_change_modbus_settings.html",
+            "brief": "",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          }
+        ],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      }
+    ],
+    "modules": []
+  }
+}

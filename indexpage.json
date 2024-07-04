@@ -1,0 +1,68 @@
+{
+  "version": "1.11.0",
+  "compound": {
+    "kind": "page",
+    "id": "indexpage",
+    "name": "GroPointModbus",
+    "url_base": "index",
+    "url": "index.html",
+    "include": null,
+    "has_template_details": false,
+    "templates": null,
+    "brief": "",
+    "description": "<p><a name=\"mainpage\"></a> A library to use an Arduino as a master to control and communicate via modbus with GroPoint soil moisture sensors. Depends on the EnviroDIY/SensorModbusMaster library.</p>",
+    "sections": [],
+    "deprecated": null,
+    "since": null,
+    "example_navigation": null,
+    "footer_navigation": null,
+    "modules": [],
+    "dirs": [],
+    "files": [],
+    "namespaces": [],
+    "classes": [],
+    "base_classes": [],
+    "derived_classes": [],
+    "enums": [],
+    "typedefs": [],
+    "funcs": [],
+    "vars": [],
+    "defines": [],
+    "public_types": [],
+    "public_static_funcs": [],
+    "typeless_funcs": [],
+    "public_funcs": [],
+    "signals": [],
+    "public_slots": [],
+    "public_static_vars": [],
+    "public_vars": [],
+    "protected_types": [],
+    "protected_static_funcs": [],
+    "protected_funcs": [],
+    "protected_slots": [],
+    "protected_static_vars": [],
+    "protected_vars": [],
+    "private_funcs": [],
+    "private_slots": [],
+    "related": [],
+    "friend_funcs": [],
+    "groups": [],
+    "has_enum_details": false,
+    "has_typedef_details": false,
+    "has_func_details": false,
+    "has_var_details": false,
+    "has_define_details": false,
+    "breadcrumb": [
+      [
+        "GroPointModbus",
+        "index.html"
+      ]
+    ],
+    "breadcrumbGroup": [
+      [
+        "GroPointModbus",
+        "index.html"
+      ]
+    ]
+  }
+}

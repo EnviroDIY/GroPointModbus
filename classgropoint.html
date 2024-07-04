@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <title>gropoint class | GroPointModbus0.1.1</title>
+  <link rel="stylesheet" href="m-EnviroDIY+documentation.compiled.css" />
+
+<style id="wp-emoji-styles-inline-css" type="text/css">
+  img.wp-smiley,
+  img.emoji {
+    display: inline !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 1em !important;
+    width: 1em !important;
+    margin: 0 0.07em !important;
+    vertical-align: -0.1em !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+</style>
+<link
+  rel="stylesheet"
+  id="gp-parent-style-css"
+  href="https://www.envirodiy.org/wp-content/themes/socialize/style.css?ver=6.5.4"
+  type="text/css"
+  media="all"
+/>
+<link
+  rel="stylesheet"
+  id="redux-extendify-styles-css"
+  href="https://www.envirodiy.org/wp-content/themes/socialize/lib/framework/redux/assets/css/extendify-utilities.css?ver=4.4.11"
+  type="text/css"
+  media="all"
+/>
+<style id="ghostpool-style-inline-css" type="text/css">
+  #gp-main-header {
+    min-height: 80px;
+  }
+  .gp-desktop-scrolling #gp-main-header {
+    min-height: 80px;
+  }
+  .gp-header-standard #gp-logo {
+    padding: 19px 0;
+  }
+  .gp-desktop-scrolling.gp-header-standard #gp-logo {
+    padding: 12.5px 0;
+  }
+  .gp-header-standard #gp-primary-main-nav .menu > li > a {
+    padding: 30.5px 0;
+  }
+  .gp-header-standard #gp-cart-button,
+  .gp-header-standard #gp-search-button,
+  .gp-header-standard #gp-profile-button {
+    padding: 31px 0;
+  }
+  .gp-desktop-scrolling.gp-header-standard #gp-primary-main-nav .menu > li > a {
+    padding: 30.5px 0;
+  }
+  .gp-desktop-scrolling.gp-header-standard #gp-cart-button,
+  .gp-desktop-scrolling.gp-header-standard #gp-search-button,
+  .gp-desktop-scrolling.gp-header-standard #gp-profile-button {
+    padding: 31px 0;
+  }
+  .gp-nav .menu > .gp-standard-menu > .sub-menu > li:hover > a {
+    color: #fff;
+  }
+  .gp-theme li:hover .gp-primary-dropdown-icon {
+    color: #fff;
+  }
+  .gp-theme .sub-menu li:hover .gp-secondary-dropdown-icon {
+    color: #fff;
+  }
+  .gp-header-centered #gp-cart-button,
+  .gp-header-centered #gp-search-button,
+  .gp-header-centered #gp-profile-button {
+    line-height: 18px;
+  }
+  .gp-header-standard #gp-secondary-main-nav .menu > li > a {
+    padding: 31.5px 0;
+  }
+  .gp-desktop-scrolling.gp-header-standard #gp-secondary-main-nav .menu > li > a {
+    padding: 31.5px 0;
+  }
+  .gp-header-centered #gp-secondary-main-nav .menu > li > a {
+    line-height: 16px;
+  }
+  .gp-active {
+    color: #000;
+  }
+  .gp-theme .widget.buddypress div.item-options a.selected:hover {
+    color: #0579bd !important;
+  }
+  .gp-theme #buddypress .activity-list .activity-content blockquote a {
+    color: #0579bd;
+  }
+  .gp-theme #buddypress .activity-list .activity-content blockquote a:hover {
+    color: #000;
+  }
+  @media only screen and (max-width: 1082px) {
+    .gp-header-standard #gp-primary-main-nav .menu > li > a {
+      padding: 30.5px 0;
+    }
+    .gp-desktop-scrolling.gp-header-standard #gp-primary-main-nav .menu > li > a {
+      padding: 30.5px 0;
+    }
+    .gp-header-standard #gp-cart-button,
+    .gp-header-standard #gp-search-button,
+    .gp-header-standard #gp-profile-button {
+      padding: 31px 0;
+    }
+    .gp-desktop-scrolling.gp-header-standard #gp-cart-button,
+    .gp-desktop-scrolling.gp-header-standard #gp-search-button,
+    .gp-desktop-scrolling.gp-header-standard #gp-profile-button {
+      padding: 31px 0;
+    }
+    .gp-header-standard #gp-secondary-main-nav .menu > li > a {
+      padding: 31.5px 0;
+    }
+    .gp-desktop-scrolling.gp-header-standard #gp-secondary-main-nav .menu > li > a {
+      padding: 31.5px 0;
+    }
+  }
+  @media only screen and (max-width: 1023px) {
+    .gp-responsive #gp-main-header {
+      min-height: 80px;
+    }
+    .gp-responsive #gp-logo {
+      padding: 26px 0;
+    }
+    .gp-responsive #gp-mobile-nav-button,
+    .gp-responsive #gp-cart-button,
+    .gp-responsive #gp-search-button,
+    .gp-responsive #gp-profile-button {
+      padding: 31px 0;
+    }
+  }
+</style>
+<link
+  rel="stylesheet"
+  id="fontawesome-css"
+  href="https://www.envirodiy.org/wp-content/themes/socialize/lib/fonts/font-awesome/css/font-awesome.min.css?ver=6.5.4"
+  type="text/css"
+  media="all"
+/>
+<link
+  rel="preload"
+  as="style"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500%7CRoboto%20Slab:400&#038;subset=latin&#038;display=swap&#038;ver=6.5.4"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500%7CRoboto%20Slab:400&#038;subset=latin&#038;display=swap&#038;ver=6.5.4"
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript
+  ><link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500%7CRoboto%20Slab:400&#038;subset=latin&#038;display=swap&#038;ver=6.5.4"
+/></noscript>
+
+<style type="text/css" id="wp-custom-css">
+  /* Print Styles */
+  @media print {
+    @page {
+      margin: 10mm 0;
+    }
+    body {
+      background: white;
+      color: black;
+      background-image: none;
+      margin: 0 !important;
+      padding: 0;
+    }
+
+    body:not(.gp-full-page-page-header) .gp-page-header.gp-has-text:before,
+    body:not(.gp-full-page-page-header)
+      .gp-page-header.gp-has-teaser-video.gp-has-text
+      .gp-video-header:before {
+      background-image: none !important;
+    }
+    /* End print styles */
+
+    #gp-main-header,
+    #gp-small-header,
+    #gp-header-area,
+    #gp-footer,
+    #gp-sidebar-right,
+    #swrc-post-navigation,
+    .hkb-subheader,
+    .hkb-feedback,
+    .hkb-mainpage__sidebar,
+    .print-page {
+      display: none;
+    }
+    .hkb-mainpage-wrapper {
+      padding: 0 !important;
+      background-image: none !important;
+    }
+    a#gp-to-top,
+    span#toTopHover {
+      display: none;
+    }
+    a[href]:after {
+      content: ' (' attr(href) ')';
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: 1.25em;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
+    .hkb-article__content h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: 1.25em;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
+    table {
+      page-break-before: avoid;
+      page-break-inside: avoid;
+      page-break-after: avoid;
+    }
+    img {
+      page-break-inside: avoid;
+      visibility: visible;
+      float: none;
+    }
+    blockquote,
+    table,
+    pre {
+      page-break-inside: avoid;
+    }
+    ul,
+    ol,
+    dl {
+      page-break-before: avoid;
+    }
+  }
+
+  /*Gutenberg styles*/
+  /*Buttons*/
+  a.wp-block-button__link {
+    background-color: #538122;
+    border-radius: 5px;
+    text-decoration: none !important;
+  }
+  .wp-block-button__link:hover {
+    background: #365516 !important;
+    color: #ffffff !important;
+  }
+  figcaption {
+    font-style: italic;
+  }
+  /*End Gutenberg styles*/
+  #gp-content a,
+  .gp-sidebar a {
+    font-weight: 400;
+    text-decoration: underline;
+  }
+  /*BuddyPress styles*/
+  /*Make activity feed content darker*/
+  #buddypress .activity-list .activity-content .activity-inner p {
+    color: #000000;
+  }
+  /*Hide activity filter on activity page*/
+  #activity-filter-select.last {
+    display: none !important;
+  }
+  /*Hide disabled BuddyPress status updates on profile page, activity page*/
+  #latest-update {
+    display: none;
+  }
+  .item-title .update {
+    display: none;
+  }
+  /*Prevent display of comment/favorite links in activity stream. Because the comments do not get applied to posts or forum topics, they just confuse users*/
+  .gp-theme #buddypress .activity-list div.activity-meta a.button,
+  .gp-theme #buddypress .activity .acomment-options a,
+  .gp-theme #buddypress .activity-list li.load-newest a,
+  .widget.buddypress div.item-options a.selected {
+    color: #26a9e0;
+    display: none;
+  }
+  /*End BuddyPress styles*/
+  /* Style print link */
+  .pdfprnt-buttons > a > span {
+    margin: 15px 0;
+    padding-left: 0;
+    text-decoration: underline;
+  }
+  /*Change caption text color and size*/
+  .wp-caption-text {
+    color: #333;
+    font-size: 14px;
+  }
+  /*Collapse table borders */
+  #gp-content table {
+    border-collapse: collapse;
+  }
+  /*Add borders to Tableizer tables */
+  .tableizer table,
+  th,
+  td {
+    border: 1px solid #333;
+  }
+  /*Nested list styles*/
+  #gp-content,
+  .hkb-article ol ol li {
+    list-style-type: lower-alpha;
+  }
+  #gp-content,
+  .hkb-article ol ol ol li {
+    list-style-type: lower-roman;
+  }
+  #gp-content,
+  .hkb-article ul ul li {
+    list-style-type: circle !important;
+  }
+  /* Add border */
+  tr:last-child td {
+    border-width: 1px;
+  }
+  /*bbPress*/
+  /* Make forum title and description larger, remove link underlining */
+  div.bbp-forum-content {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  div.bbp-forum-content p {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  #bbpress-forums a.bbp-forum-title {
+    text-decoration: none;
+  }
+  .widgettitle {
+    border-bottom: 3px solid #92d050 !important;
+  }
+  .bbp-author-name {
+    font-size: 14px;
+  }
+  /*End bbpress styles*/
+  #gp-copyright-text,
+  #gp-copyright-text a:link,
+  #gp-copyright-text a:visited {
+    color: #fff;
+    font-weight: 400;
+  }
+  /*WooCommerce styles*/
+  bdi {
+    color: #538122;
+    font-weight: 500;
+  }
+  a.button.product_type_simple {
+    display: none;
+  }
+  p.stock.out-of-stock {
+    color: red;
+    font-weight: 500;
+  }
+  .products li * {
+    text-decoration: none !important;
+  }
+  div.gp-entry-cats {
+    color: #333333;
+  }
+  span.woocommerce-Price-amount.amount {
+    text-decoration: none !important;
+  }
+  /* Hide additional information tab */
+  div.woocommerce-tabs {
+    display: none !important;
+  }
+  /*End WooCommerce styles*/
+  /*The Events Calendar*/
+  #tribe-events-content a {
+    color: #0579bd;
+  }
+  #tribe-events-content .wp-block-button__link {
+    color: #ffffff;
+  }
+  #gp-sidebar-right
+    > div
+    > div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--widget-events-list.tribe-events-widget {
+    background-color: #fff;
+    padding: 15px;
+  }
+  #gp-sidebar-right
+    > div
+    > div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--widget-events-list.tribe-events-widget
+    > div
+    > header {
+    text-transform: uppercase;
+    color: #000;
+    border-bottom: 3px solid #92d050;
+  }
+  #gp-sidebar-right
+    > div
+    > div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--widget-events-list.tribe-events-widget
+    > div
+    > header
+    > h3 {
+    font-family: Roboto !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    padding-bottom: 11px;
+  }
+  #gp-sidebar-right
+    > div
+    > div.tribe-common.tribe-events.tribe-events-view.tribe-events-view--widget-events-list.tribe-events-widget
+    > div
+    > div.tribe-events-widget-events-list__view-more.tribe-common-b1.tribe-common-b2--min-medium
+    > a {
+    color: #26a9e0;
+  }
+  /*Hero Knowledge Base styles*/
+  #hkb .hkb-fullwcontainer {
+    max-width: var(--hkb-main-container-width);
+    margin: 0 auto;
+    padding: 20px 20px;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  h1.hkb-article__title {
+    font-weight: 300 !important;
+    margin: 0 0 0.5em !important;
+  }
+  .hkb-categoryheader__title {
+    font-weight: 300 !important;
+    font-size: 40px !important;
+  }
+  .hkb-articlepreview__title a {
+    font-weight: 300 !important;
+    font-size: 28px !important;
+    text-decoration: underline !important;
+    color: #0579bd !important;
+    font-size: 28px !important;
+  }
+  #hkb a {
+    text-decoration: underline;
+    font-weight: 400;
+  }
+  a.hkb_widget_exit__btn {
+    background-color: #538122 !important;
+    border-radius: 5px;
+    text-decoration: none !important;
+  }
+  a.hkb_widget_exit__btn:hover {
+    background: #365516 !important;
+    color: #ffffff !important;
+  }
+  /* End Heroic KB styles */
+  #swrc-post-navigation a {
+    font-size: small;
+  }
+  p.last-updated {
+    font-size: 12px;
+    font-style: italic;
+  }
+  aside#gp-sidebar-right.gp-sidebar p.last-updated {
+    display: none;
+  }
+  #gp-content p.last-updated {
+    display: none;
+  }
+  #gp-content ul {
+    margin: 0 0 0 20px !important;
+  }
+</style>
+<style id="socialize-dynamic-css" title="dynamic-css" class="redux-options-output">
+  #footer-image img {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+  }
+  body {
+    background-color: #f1f1f1;
+  }
+  body:not(.gp-full-page-page-header) #gp-page-wrapper,
+  body:not(.gp-full-page-page-header) #gp-small-header .gp-container,
+  .gp-homepage .widgettitle.gp-fancy-title:before {
+    background-color: #e8e8e8;
+  }
+  body:not(.gp-full-page-page-header) #gp-small-header .gp-left-triangle {
+    border-left-color: #e8e8e8;
+  }
+  body:not(.gp-full-page-page-header) #gp-small-header .gp-right-triangle {
+    border-bottom-color: #e8e8e8;
+  }
+  #gp-content {
+    background-color: #ffffff;
+  }
+  body {
+    font-family: Roboto, 'Arial Black', Gadget, sans-serif;
+    line-height: 28px;
+    font-weight: 300;
+    font-style: normal;
+    color: #000;
+    font-size: 16px;
+  }
+  a {
+    color: #0579bd;
+  }
+  a:hover {
+    color: #000;
+  }
+  h1 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 40px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 36px;
+  }
+  h2 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 32px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 28px;
+  }
+  h3,
+  #tab-description h2,
+  .woocommerce #comments h2,
+  .woocommerce #reviews h3,
+  .woocommerce .related h2,
+  .woocommerce-checkout .woocommerce h2,
+  .woocommerce-checkout .woocommerce h3 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 28px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 24px;
+  }
+  h4 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 30px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+  }
+  h5 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 26px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+  }
+  h6 {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    line-height: 24px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+  }
+  .gp-entry-meta .gp-post-meta-row-1,
+  .gp-homepage #gp-content .gp-vc-element-3,
+  .gp-homepage #gp-content .gp-vc-element-4,
+  .gp-homepage #gp-content .gp-vc-element-5,
+  .gp-homepage #gp-content .gp-vc-element-6,
+  #comments .commentlist li .comment_container,
+  .gp-loop-divider:before,
+  .gp-recent-comments ul li,
+  .gp-search {
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .gp-entry-video-wrapper .gp-entry-meta .gp-post-meta-row-1,
+  .gp-footer-widget .gp-recent-comments ul li {
+    border-top: 1px solid #50504b;
+    border-bottom: 1px solid #50504b;
+  }
+  #gp-main-header {
+    background-color: #222222;
+  }
+  .gp-desktop-scrolling #gp-main-header {
+    background-color: #222222;
+  }
+  #gp-primary-main-nav .menu > li,
+  #gp-primary-main-nav .menu > li > a {
+    font-family: Roboto;
+    text-transform: none;
+    line-height: 16px;
+    font-weight: 400;
+    font-style: normal;
+    color: #ababab;
+    font-size: 16px;
+  }
+  #gp-primary-main-nav .menu > li:hover > a,
+  #gp-primary-main-nav .menu > li > a {
+    color: #fff;
+  }
+  #gp-primary-main-nav .menu > li:hover > a:hover,
+  #gp-primary-main-nav .menu > li > a:hover {
+    color: #fff;
+  }
+  #gp-primary-main-nav .menu > li > a:hover,
+  #gp-primary-main-nav .menu > li:hover > a {
+    border-top: 3px solid #fff;
+  }
+  #gp-secondary-main-nav .menu > li,
+  #gp-secondary-main-nav .menu > li > a {
+    font-family: Roboto;
+    text-transform: none;
+    line-height: 14px;
+    font-weight: 400;
+    font-style: normal;
+    color: #fff;
+    font-size: 14px;
+  }
+  #gp-secondary-main-nav .menu > li:hover > a,
+  #gp-secondary-main-nav .menu > li > a {
+    color: #fff;
+  }
+  #gp-secondary-main-nav .menu > li:hover > a:hover,
+  #gp-secondary-main-nav .menu > li > a:hover {
+    color: #fff;
+  }
+  #gp-secondary-main-nav .menu > li > a:hover,
+  #gp-secondary-main-nav .menu > li:hover > a {
+    border-top: 3px solid #fff;
+  }
+  #gp-search-button,
+  #gp-cart-button {
+    color: #fff;
+  }
+  #gp-search-button:hover,
+  #gp-cart-button:hover {
+    color: #fff;
+  }
+  .gp-nav .sub-menu,
+  .gp-nav .menu li .gp-menu-tabs li:hover,
+  .gp-nav .menu li .gp-menu-tabs li.gp-selected,
+  #gp-search-box {
+    background-color: #fff;
+  }
+  .gp-nav .menu > .gp-standard-menu > .sub-menu > li a:hover,
+  .gp-nav .menu > .gp-standard-menu > .sub-menu > li:hover > a {
+    background-color: #353535;
+  }
+  .gp-nav .gp-standard-menu .sub-menu li,
+  .gp-nav .gp-standard-menu .sub-menu li a,
+  .gp-nav li.gp-megamenu .sub-menu li,
+  .gp-nav .gp-megamenu .sub-menu li a {
+    font-family: Roboto;
+    font-weight: 400;
+    font-style: normal;
+    color: #000;
+    font-size: 14px;
+  }
+  .gp-nav .menu > .gp-standard-menu > .sub-menu > li a {
+    color: #000;
+  }
+  .gp-nav .menu > .gp-standard-menu > .sub-menu > li a:hover {
+    color: #fff;
+  }
+  .gp-nav .sub-menu li,
+  #gp-dropdowncart .total,
+  #gp-dropdowncart .buttons {
+    border-top: 1px solid #e0e0e0;
+  }
+  .gp-nav .gp-megamenu > .sub-menu > li > a,
+  .gp-nav .gp-megamenu > .sub-menu > li > span {
+    color: #000000;
+  }
+  .gp-nav li.gp-megamenu a {
+    color: #000;
+  }
+  .gp-nav li.gp-megamenu a:hover {
+    color: #e93100;
+  }
+  .gp-primary-dropdown-icon {
+    color: #fff;
+  }
+  .gp-primary-dropdown-icon:hover {
+    color: #fff;
+  }
+  .gp-secondary-dropdown-icon {
+    color: #000;
+  }
+  .gp-secondary-dropdown-icon:hover {
+    color: #fff;
+  }
+  .gp-menu-tabs {
+    background-color: #353535;
+  }
+  .gp-nav .menu li .gp-menu-tabs li {
+    color: #ffffff;
+  }
+  .gp-nav .menu li .gp-menu-tabs li:hover,
+  .gp-nav .menu li .gp-menu-tabs li.gp-selected {
+    color: #e93100;
+  }
+  #gp-small-header #gp-top-nav {
+    background-color: #26a9e0;
+  }
+  #gp-small-header .menu > li,
+  #gp-small-header .menu > li > a {
+    color: #ffffff;
+  }
+  #gp-small-header .menu > li:hover,
+  #gp-small-header .menu > li > a:hover {
+    color: #e0e0e0;
+  }
+  #gp-mobile-nav-button,
+  #gp-profile-button,
+  #gp-mobile-nav-close-button {
+    color: #ffffff;
+  }
+  #gp-mobile-nav {
+    background-color: #fff;
+  }
+  #gp-mobile-nav-close-button {
+    background-color: #0579bd;
+  }
+  #gp-mobile-nav li {
+    color: #000000;
+  }
+  #gp-mobile-nav .menu li span,
+  #gp-mobile-nav .menu li a {
+    color: #000;
+  }
+  #gp-mobile-nav .menu li span:hover,
+  #gp-mobile-nav .menu li a:hover {
+    color: #000;
+  }
+  #gp-mobile-nav li a:hover {
+    background-color: #f1f1f1;
+  }
+  #gp-mobile-nav li {
+    border-top: 1px solid #e0e0e0;
+  }
+  #gp-mobile-nav .gp-megamenu > .sub-menu > li > a {
+    color: #000000;
+  }
+  .gp-large-page-header .gp-page-header,
+  .gp-fullwidth-page-header .gp-page-header,
+  #gp-full-page-bg {
+    background-color: #353535;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+  }
+  .gp-page-header h1,
+  .gp-page-header h2 {
+    font-family: Roboto;
+    line-height: 90px;
+    font-weight: normal;
+    font-style: normal;
+    color: #fff;
+    font-size: 80px;
+  }
+  .gp-page-header .gp-container {
+    height: 250px;
+  }
+  .gp-entry-title,
+  .woocommerce .page-title,
+  .woocommerce div.product .entry-title.product_title {
+    font-family: Roboto;
+    line-height: 46px;
+    font-weight: 300;
+    font-style: normal;
+    color: #000;
+    font-size: 40px;
+  }
+  .gp-subtitle {
+    font-family: Roboto;
+    line-height: 32px;
+    font-weight: 300;
+    font-style: normal;
+    color: #0579bd;
+    font-size: 20px;
+  }
+  #gp-post-links a,
+  .gp-pagination-arrows a.prev,
+  .gp-pagination-arrows a.next,
+  .gp-carousel-wrapper .flex-direction-nav a {
+    color: #aaa;
+  }
+  #gp-post-links a:hover,
+  .gp-pagination-arrows a.prev:hover,
+  .gp-pagination-arrows a.next:hover,
+  .gp-carousel-wrapper .flex-direction-nav a:hover {
+    color: #333;
+  }
+  .gp-entry-meta,
+  .gp-meta-comments a {
+    color: #aaaaaa;
+  }
+  .gp-entry-cats,
+  .gp-entry-cats a,
+  .gp-entry-cats a:hover {
+    color: #ffffff;
+  }
+  .gp-entry-cats {
+    background-color: #92d050;
+  }
+  .gp-entry-tags a,
+  .gp-entry-tags a:hover {
+    color: #ffffff;
+  }
+  .gp-entry-tags a {
+    background-color: #353535;
+  }
+  .gp-author-info,
+  #gp-post-navigation #gp-share-icons {
+    background-color: #353535;
+  }
+  .gp-author-info,
+  .gp-author-info a,
+  #gp-post-navigation #gp-share-icons h3 {
+    line-height: 24px;
+    color: #fff;
+    font-size: 14px;
+  }
+  .gp-author-info a {
+    color: #b1b1b1;
+  }
+  .gp-author-info a:hover {
+    color: #fff;
+  }
+  .gp-entry-video-wrapper {
+    background-color: #353535;
+  }
+  .gp-entry-video-wrapper .gp-entry-title {
+    color: #ffffff;
+  }
+  .gp-entry-video-wrapper .gp-video-description {
+    color: #777777;
+  }
+  blockquote {
+    background-color: #0579bd;
+  }
+  blockquote,
+  blockquote a,
+  blockquote a:hover {
+    font-family: 'Roboto Slab';
+    line-height: 38px;
+    font-weight: 400;
+    font-style: normal;
+    color: #fff;
+    font-size: 24px;
+  }
+  .gp-loop-title {
+    line-height: 22px;
+    font-weight: 400;
+    font-size: 19px;
+  }
+  .gp-blog-large .gp-loop-title {
+    line-height: 46px;
+    font-weight: 200;
+    font-size: 40px;
+  }
+  .gp-loop-title a,
+  .bboss_search_item .entry-title a {
+    color: #000;
+  }
+  .gp-loop-title a:hover,
+  .bboss_search_item .entry-title a:hover {
+    color: #0579bd;
+  }
+  .gp-loop-text,
+  .gp-login-wrapper p {
+    color: #545454;
+  }
+  .gp-loop-meta,
+  .gp-loop-meta a,
+  #gp-breadcrumbs,
+  #gp-breadcrumbs a,
+  .woocommerce .woocommerce-breadcrumb a,
+  .woocommerce .woocommerce-breadcrumb,
+  .comment-text time,
+  div.bbp-breadcrumb,
+  div.bbp-breadcrumb a,
+  .gp-statistics-wrapper .gp-stat-title,
+  .widget_display_replies ul li div,
+  .widget_display_topics ul li div {
+    color: #545454;
+  }
+  .gp-loop-cats,
+  .gp-loop-cats a,
+  .gp-loop-cats a:hover {
+    color: #545454;
+  }
+  .gp-loop-tags,
+  .gp-loop-tags a,
+  .gp-loop-tags a:hover {
+    color: #0579bd;
+  }
+  .gp-blog-masonry section,
+  section.sticky {
+    background-color: #f8f8f8;
+  }
+  ul.page-numbers .page-numbers {
+    background-color: #538122;
+  }
+  ul.page-numbers .page-numbers:hover,
+  ul.page-numbers .page-numbers.current,
+  ul.page-numbers > span.page-numbers {
+    background-color: #353535;
+  }
+  ul.page-numbers .page-numbers {
+    color: #ffffff;
+  }
+  .widgettitle,
+  .widget-title,
+  .wp-block-search__label {
+    font-family: Roboto;
+    line-height: 18px;
+    font-weight: 500;
+    font-style: normal;
+    color: #000;
+    font-size: 14px;
+  }
+  .widgettitle a,
+  .widget-title a,
+  .wp-block-search__label {
+    color: #0579bd;
+  }
+  .widgettitle a:hover,
+  .widget-title a:hover,
+  .wp-block-search__label:hover {
+    color: #000;
+  }
+  .gp-sidebar .widgettitle,
+  .widgettitle.gp-standard-title,
+  .gp-sidebar .widget-title,
+  .gp-sidebar .wp-block-search__label {
+    border-bottom: 3px solid #538122;
+  }
+  .widget,
+  .gp-vc-element,
+  .widgettitle.gp-fancy-title .gp-widget-title,
+  .widgettitle.gp-fancy-title .gp-element-icon,
+  .widget .woocommerce {
+    background-color: #ffffff;
+  }
+  .widgettitle.gp-fancy-title .gp-triangle {
+    border-left-color: #ffffff;
+  }
+  input,
+  textarea,
+  .gp-search-bar,
+  .wp-block-search__input,
+  .gp-theme #buddypress .dir-search input[type='search'],
+  .gp-theme #buddypress .dir-search input[type='text'],
+  .gp-theme #buddypress .groups-members-search input[type='search'],
+  .gp-theme #buddypress .standard-form input[type='color'],
+  .gp-theme #buddypress .standard-form input[type='date'],
+  .gp-theme #buddypress .standard-form input[type='datetime-local'],
+  .gp-theme #buddypress .standard-form input[type='datetime'],
+  .gp-theme #buddypress .standard-form input[type='email'],
+  .gp-theme #buddypress .standard-form input[type='month'],
+  .gp-theme #buddypress .standard-form input[type='number'],
+  .gp-theme #buddypress .standard-form input[type='password'],
+  .gp-theme #buddypress .standard-form input[type='range'],
+  .gp-theme #buddypress .standard-form input[type='search'],
+  .gp-theme #buddypress .standard-form input[type='tel'],
+  .gp-theme #buddypress .standard-form input[type='text'],
+  .gp-theme #buddypress .standard-form input[type='time'],
+  .gp-theme #buddypress .standard-form input[type='url'],
+  .gp-theme #buddypress .standard-form input[type='week'],
+  .gp-theme #buddypress .standard-form textarea,
+  .gp-theme #buddypress div.activity-comments form .ac-textarea,
+  .gp-theme #buddypress form#whats-new-form textarea {
+    background-color: #fafafa;
+  }
+  input,
+  textarea,
+  .gp-search-bar,
+  .wp-block-search__input,
+  .gp-login-wrapper .gp-login-icon,
+  .gp-login-wrapper .gp-password-icon,
+  .gp-login-wrapper .gp-email-icon,
+  .gp-theme #buddypress .dir-search input[type='search'],
+  .gp-theme #buddypress .dir-search input[type='text'],
+  .gp-theme #buddypress .groups-members-search input[type='search'],
+  .gp-theme #buddypress .standard-form input[type='color'],
+  .gp-theme #buddypress .standard-form input[type='date'],
+  .gp-theme #buddypress .standard-form input[type='datetime-local'],
+  .gp-theme #buddypress .standard-form input[type='datetime'],
+  .gp-theme #buddypress .standard-form input[type='email'],
+  .gp-theme #buddypress .standard-form input[type='month'],
+  .gp-theme #buddypress .standard-form input[type='number'],
+  .gp-theme #buddypress .standard-form input[type='password'],
+  .gp-theme #buddypress .standard-form input[type='range'],
+  .gp-theme #buddypress .standard-form input[type='search'],
+  .gp-theme #buddypress .standard-form input[type='tel'],
+  .gp-theme #buddypress .standard-form input[type='text'],
+  .gp-theme #buddypress .standard-form input[type='time'],
+  .gp-theme #buddypress .standard-form input[type='url'],
+  .gp-theme #buddypress .standard-form input[type='week'],
+  .gp-theme #buddypress .standard-form textarea,
+  .gp-theme #buddypress div.activity-comments form .ac-textarea,
+  .bb-global-search-ac.ui-autocomplete {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+  input,
+  textarea,
+  .gp-search-bar,
+  .wp-block-search__input,
+  .gp-theme #buddypress .dir-search input[type='search'],
+  .gp-theme #buddypress .dir-search input[type='text'],
+  .gp-theme #buddypress .groups-members-search input[type='search'],
+  .gp-theme #buddypress .groups-members-search input[type='text'],
+  .gp-theme #buddypress .standard-form input[type='color'],
+  .gp-theme #buddypress .standard-form input[type='date'],
+  .gp-theme #buddypress .standard-form input[type='datetime-local'],
+  .gp-theme #buddypress .standard-form input[type='datetime'],
+  .gp-theme #buddypress .standard-form input[type='email'],
+  .gp-theme #buddypress .standard-form input[type='month'],
+  .gp-theme #buddypress .standard-form input[type='number'],
+  .gp-theme #buddypress .standard-form input[type='password'],
+  .gp-theme #buddypress .standard-form input[type='range'],
+  .gp-theme #buddypress .standard-form input[type='search'],
+  .gp-theme #buddypress .standard-form input[type='tel'],
+  .gp-theme #buddypress .standard-form input[type='text'],
+  .gp-theme #buddypress .standard-form input[type='time'],
+  .gp-theme #buddypress .standard-form input[type='url'],
+  .gp-theme #buddypress .standard-form input[type='week'],
+  .gp-theme #buddypress .standard-form textarea,
+  .gp-theme #buddypress div.activity-comments form .ac-textarea,
+  .gp-theme #buddypress form#whats-new-form textarea {
+    color: #000000;
+  }
+  select,
+  .gp-theme #buddypress .standard-form select,
+  .gp-theme #buddypress form#whats-new-form #whats-new-options select,
+  #buddypress .standard-form select:focus {
+    background-color: #353535;
+  }
+  select,
+  .gp-theme #buddypress .standard-form select,
+  .gp-theme #buddypress form#whats-new-form #whats-new-options select {
+    color: #ffffff;
+  }
+  input[type='button'],
+  input[type='submit'],
+  input[type='reset'],
+  button,
+  .button,
+  .wp-block-search__button,
+  .gp-theme #buddypress .comment-reply-link,
+  .gp-notification-counter,
+  #gp-cart-counter,
+  .gp-theme #buddypress a.button,
+  .gp-theme #buddypress button,
+  .gp-theme #buddypress div.generic-button a,
+  .gp-theme #buddypress input[type='button'],
+  .gp-theme #buddypress input[type='reset'],
+  .gp-theme #buddypress input[type='submit'],
+  .gp-theme #buddypress ul.button-nav li a,
+  a.bp-title-button,
+  .gp-theme #buddypress .activity-list #reply-title small a span,
+  .gp-theme #buddypress .activity-list a.bp-primary-action span,
+  .tribe-events-calendar thead th,
+  #tribe-events .tribe-events-button,
+  #tribe-events .tribe-events-button:hover,
+  #tribe_events_filters_wrapper input[type='submit'],
+  .tribe-events-button,
+  .tribe-events-button.tribe-active:hover,
+  .tribe-events-button.tribe-inactive,
+  .tribe-events-button:hover,
+  .tribe-events-calendar td.tribe-events-present div[id*='tribe-events-daynum-'],
+  .tribe-events-calendar td.tribe-events-present div[id*='tribe-events-daynum-'] > a,
+  #tribe-bar-form .tribe-bar-submit input[type='submit'],
+  .woocommerce #respond input#submit.alt,
+  .woocommerce a.button.alt,
+  .woocommerce button.button.alt,
+  .woocommerce input.button.alt,
+  #gp-dropdowncart .woocommerce a.button {
+    background-color: #0579bd;
+  }
+  input[type='button']:hover,
+  input[type='submit']:hover,
+  input[type='reset']:hover,
+  button:hover,
+  .button:hover,
+  .wp-block-search__button:hover,
+  .gp-theme #buddypress .comment-reply-link:hover,
+  .gp-theme #buddypress a.button:hover,
+  .gp-theme #buddypress button:hover,
+  .gp-theme #buddypress div.generic-button a:hover,
+  .gp-theme #buddypress input[type='button']:hover,
+  .gp-theme #buddypress input[type='reset']:hover,
+  .gp-theme #buddypress input[type='submit']:hover,
+  .gp-theme #buddypress ul.button-nav li a:hover,
+  a.bp-title-button:hover,
+  .gp-theme #buddypress .activity-list #reply-title small a:hover span,
+  .gp-theme #buddypress .activity-list a.bp-primary-action:hover span,
+  .woocommerce #respond input#submit.alt:hover,
+  .woocommerce a.button.alt:hover,
+  .woocommerce button.button.alt:hover,
+  .woocommerce input.button.alt:hover,
+  #gp-dropdowncart .woocommerce a.button:hover {
+    background-color: #353535;
+  }
+  input[type='button'],
+  input[type='submit'],
+  input[type='reset'],
+  button,
+  .button,
+  .wp-block-search__button,
+  a.gp-notification-counter,
+  a.gp-notification-counter:hover,
+  #gp-cart-counter:hover,
+  .gp-theme #buddypress .comment-reply-link,
+  .gp-theme #buddypress a.button,
+  .gp-theme #buddypress button,
+  .gp-theme #buddypress div.generic-button a,
+  .gp-theme #buddypress input[type='button'],
+  .gp-theme #buddypress input[type='reset'],
+  .gp-theme #buddypress input[type='submit'],
+  .gp-theme #buddypress ul.button-nav li a,
+  a.bp-title-button,
+  .gp-theme #buddypress .activity-list #reply-title small a span,
+  .gp-theme #buddypress .activity-list a.bp-primary-action span,
+  #gp-dropdowncart .woocommerce a.button {
+    color: #ffffff;
+  }
+  input[type='button']:hover,
+  input[type='submit']:hover,
+  input[type='reset']:hover,
+  button,
+  .button:hover,
+  .wp-block-search__button:hover,
+  .gp-theme #buddypress .comment-reply-link:hover,
+  .gp-theme #buddypress a.button:hover,
+  .gp-theme #buddypress button:hover,
+  .gp-theme #buddypress div.generic-button a:hover,
+  .gp-theme #buddypress input[type='button']:hover,
+  .gp-theme #buddypress input[type='reset']:hover,
+  .gp-theme #buddypress input[type='submit']:hover,
+  .gp-theme #buddypress ul.button-nav li a:hover,
+  a.bp-title-button:hover,
+  .gp-theme #buddypress .activity-list #reply-title small a span,
+  .gp-theme #buddypress .activity-list a.bp-primary-action span,
+  #gp-dropdowncart .woocommerce a.button:hover {
+    color: #ffffff;
+  }
+  #gp-footer {
+    background-color: #353535;
+  }
+  .gp-footer-widget .widgettitle,
+  .gp-footer-widget .widget-title,
+  .gp-footer-widget .wp-block-search__label {
+    font-family: Roboto;
+    line-height: 20px;
+    font-weight: 300;
+    font-style: normal;
+    color: #fff;
+    font-size: 16px;
+  }
+  .gp-footer-widget {
+    font-family: Roboto;
+    line-height: 20px;
+    font-weight: 300;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 14px;
+  }
+  .gp-footer-widget a {
+    color: #f9bd16;
+  }
+  .gp-footer-widget a:hover {
+    color: #b1b1b1;
+  }
+  #gp-copyright {
+    background-color: #353535;
+  }
+  #gp-copyright {
+    border-top: 1px solid #444;
+  }
+  #gp-copyright {
+    color: #777777;
+  }
+  #gp-copyright a {
+    color: #999;
+  }
+  #gp-copyright a:hover {
+    color: #e0e0e0;
+  }
+  #gp-to-top {
+    background-color: #0579bd;
+  }
+  #gp-to-top {
+    color: #ffffff;
+  }
+</style>
+  <link rel="icon" href="enviroDIY_Favicon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#cb4b16" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="clipboard.js"></script>
+</head>
+
+<body
+    class="theme-socialize page-template-socialize-child gp-theme gp-responsive gp-wide-layout gp-retina gp-normal-scrolling gp-no-back-to-top gp-relative-header gp-header-standard gp-cart-disabled gp-search-all gp-profile-disabled gp-small-header-all gp-standard-page-header gp-no-sidebar"
+>
+	<div id="gp-site-wrapper">
+
+  <nav id="gp-mobile-nav">
+    <div id="gp-mobile-nav-close-button"></div>
+    <ul class="menu">
+      <li
+        class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"
+      >
+<a href="index.html" class="menu-link main-menu-link">About</a>        <ul class="sub-menu menu-odd menu-depth-1">
+          <li
+            class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+          >
+<a href="change_log.html">ChangeLog</a>          </li>
+        </ul>
+      </li>
+      <li
+        class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page"
+      >
+<a href="classgropoint.html">The gropoint Class</a>      </li>
+      <li
+        class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"
+      >
+<a href="page_the_examples.html" class="menu-link main-menu-link">Examples using the GroPoint Modbus Library</a>        <ul class="sub-menu menu-odd menu-depth-1">
+          <li
+            class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+          >
+<a href="example_get_values.html">Reading Sensor Values</a>          </li>
+          <li
+            class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+          >
+<a href="example_change_modbus_settings.html">Changing Modbus Serial Settings</a>          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav> <!-- gp-mobile-nav -->
+  <div id="gp-mobile-nav-bg"></div>
+
+  <div id="gp-page-wrapper">
+
+    <header id="gp-main-header">
+      <div class="gp-container">
+        <div id="gp-logo">
+          <a href="index.html" title="GroPointModbus 0.1.1">
+            <img
+              src="gp-desktop-logo.png"
+              alt="GroPointModbus 0.1.1"
+              width="200"
+              height="42"
+              class="gp-desktop-logo"
+            />
+            <img
+              src="gp-scrolling-logo.png"
+              alt="GroPointModbus 0.1.1"
+              width="264"
+              height="55"
+              class="gp-scrolling-logo"
+            />
+            <img
+              src="gp-mobile-logo.png"
+              alt="GroPointModbus 0.1.1"
+              width="132"
+              height="28"
+              class="gp-mobile-logo"
+            />
+          </a>
+        </div> <!-- gp-logo -->
+
+        <a id="gp-mobile-nav-button"></a>
+
+        <nav id="gp-main-nav" class="gp-nav">
+          <nav id="gp-primary-main-nav">
+            <ul id="menu-main-menu-1" class="menu">
+              <li
+                class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"
+              >
+<a href="index.html" class="menu-link main-menu-link" >About</a>                <ul class="sub-menu menu-odd menu-depth-1">
+                  <li
+                    class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+                  >
+<a href="change_log.html">ChangeLog</a>                  </li>
+                </ul>
+              </li>
+              <li
+                class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page"
+              >
+<a href="classgropoint.html">The gropoint Class</a>              </li>
+              <li
+                class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children"
+              >
+<a href="page_the_examples.html" class="menu-link main-menu-link" >Examples using the GroPoint Modbus Library</a>                <ul class="sub-menu menu-odd menu-depth-1">
+                  <li
+                    class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+                  >
+<a href="example_get_values.html">Reading Sensor Values</a>                  </li>
+                  <li
+                    class="gp-standard-menu gp-menu-link gp-show-all sub-menu-item menu-item-odd menu-item-depth-1 menu-item menu-item-type-post_type menu-item-object-page"
+                  >
+<a href="example_change_modbus_settings.html">Changing Modbus Serial Settings</a>                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav> <!-- gp-primary-main-nav -->
+
+          <div id="gp-search">
+            <div id="m-search-button" class="m-show-m" onclick="return showSearch()">
+            </div> <!-- gp-search-box -->
+          </div> <!-- gp-search -->
+
+          <nav id="gp-secondary-main-nav"></nav>
+        </nav> <!-- gp-main-nav -->
+      </div> <!-- gp-container -->
+    </header> <!-- gp-main-header -->
+
+    <header id="gp-small-header">
+      <div class="gp-container">
+        <div class="gp-left-triangle"></div>
+        <div class="gp-right-triangle"></div>
+
+        <nav id="gp-top-nav" class="gp-nav">
+          <div id="gp-left-top-nav">
+            <p style="color:#fff">An Arduino library for communication with GroPoint soil moisture sensors via Modbus.</p>
+          </div>
+
+          <div id="gp-right-top-nav">
+            <ul id="menu-icon-links" class="menu">
+              <li
+                class="gp-standard-menu gp-columns-1 gp-show-all main-menu-item menu-item-even menu-item-depth-0 fa fa-github menu-item menu-item-type-custom menu-item-object-custom"
+              >
+                <a
+                  title="See it on GitHub"
+                  href="https://github.com/EnviroDIY/GroPointModbus"
+                  class="menu-link main-menu-link"
+                  >See the source code on GitHub</a
+                >
+              </li>
+            </ul>
+          </div>
+
+        </nav>
+      </div>
+    </header> <!-- gp-small-header -->
+
+    <div id="gp-fixed-header-padding"></div>
+
+    <div class="m-doc-search" id="search">
+      <a href="#!" onclick="return hideSearch()"></a>
+      <div id="gp-header-area">
+        <div class="gp-container">
+          <div style="background-color:#fff;padding:20px;">
+            <div class="m-doc-search-header m-text m-small">
+              <div><span class="m-label m-info">Tab</span> / <span class="m-label m-info">T</span> to search, <span class="m-label m-info">Esc</span> to close</div>
+              <div id="search-symbolcount">&hellip;</div>
+            </div>
+            <div class="m-doc-search-content">
+              <form>
+                <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+              </form>
+              <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+              <div id="search-help" class="m-text m-dim m-text-center">
+                <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+              </div>
+              <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+              <ul id="search-results"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="search-v2.js"></script>
+    <script src="searchdata-v2.js" async="async"></script>
+
+    <div class="gp-clear"></div>
+
+    <div id="gp-content-wrapper" class="gp-container">
+      <div id="gp-inner-container">
+        <div id="gp-left-column">
+          <div id="gp-content">
+
+            <main>
+              <article>
+                <div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/">
+        <span class="m-breadcrumb">
+          <a href="index.html">
+            GroPointModbus
+          </a> &gt; <wbr/>
+        </span>
+        <span class="m-breadcrumb">
+          <a href="annotated.html">
+            Classes
+          </a> &gt; <wbr/>
+        </span>
+                <span class="m-breadcrumb">
+          gropoint
+        </span>
+        <br>
+                </div>
+                <header class="gp-entry-header">
+                  <h1 class="gp-entry-title" itemprop="headline">
+
+            <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="_gro_point_modbus_8h.html">&lt;src/GroPointModbus.h&gt;</a></div>
+
+            gropoint
+            <span class="m-thin">class</span>
+
+                </h1>
+                </header>
+        <p>The Main Class.</p>
+        <nav class="m-block m-default">
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#functions-to-get-and-set-sensor-addresses-and-metadata">Functions to get and set sensor addresses and metadata</a></li>
+                <li><a href="#functions-to-start-and-stop-measurements">Functions to start and stop measurements</a></li>
+                <li><a href="#functions-to-get-one-or-more-values-from-a-sensor">Functions to get one or more values from a sensor.</a></li>
+                <li><a href="#debugging-functions">Debugging functions</a></li>
+              </ul>
+            </li>
+            <li>
+              Detailed Descriptions
+              <ul>
+                <li><a href="#function-details">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+          <p>This is the class for communication with GroPoint sensors via modbus.</p>
+        <section id="pub-methods">
+          <h2>Public functions</h2>
+          <dl class="m-doc">
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a20b949a555d5ec9a9d45a09f1cecb6d5" class="m-doc">begin</a>(</span><span class="m-doc-wrap"><span class="m-dim"><a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></span> <span class="m-param">model</span>,
+              <span class="m-dim">byte</span> <span class="m-param">modbusSlaveID</span>,
+              <span class="m-dim">Stream*</span> <span class="m-param">stream</span>,
+              <span class="m-dim">int</span> <span class="m-param">enablePin</span><span class="m-dim"> = -1</span>) -&gt; bool</span>
+            </dt>
+            <dd>This function sets up the communication.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#aa7d6a50b333a23278ea33631b2ca9b8d" class="m-doc">begin</a>(</span><span class="m-doc-wrap"><span class="m-dim"><a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></span> <span class="m-param">model</span>,
+              <span class="m-dim">byte</span> <span class="m-param">modbusSlaveID</span>,
+              <span class="m-dim">Stream&amp;</span> <span class="m-param">stream</span>,
+              <span class="m-dim">int</span> <span class="m-param">enablePin</span><span class="m-dim"> = -1</span>) -&gt; bool</span>
+            </dt>
+            <dd>This function sets up the communication.</dd>
+          </dl>
+        </section>
+        <hr>
+
+        <section id="functions-to-get-and-set-sensor-addresses-and-metadata">
+          <h2>Functions to get and set sensor addresses and metadata</h2>
+            <p><a name="metadata_fxns"></a></p>
+          <dl class="m-doc">
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#afeca5b0625db0120bb011c7559b0612c" class="m-doc">getModel</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Returns a pretty string with the model information.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#a8d682bbf3d559a081c39c76e14154923" class="m-doc">getParameter</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Returns a pretty string with the parameters measured by group 0 (soil moisture).</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#a121f6e618e71c7c1fda859ab1b5d16bd" class="m-doc">getParameter1</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Returns a pretty string with the parameters measured by group 1 (temperature).</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#a2349180baaaca93bcc62064ab9b4e46d" class="m-doc">getUnits</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Returns a pretty string with the measurement units for parameter group 0 (soil moisture).</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#a6c10f6ef967526e46bc1d1d98bf8397b" class="m-doc">getUnits1</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Returns a pretty string with the measurement units for parameter group 1 (temperature).</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">byte </span><a href="#a70a3b18c123f266200582eda9b2285f1" class="m-doc">getSensorAddress</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; byte</span>
+            </dt>
+            <dd>Gets the modbus sensor (slave) address.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#adc1ef07b9f4b75c3fb394a6c12a4288e" class="m-doc">setSensorAddress</a>(</span><span class="m-doc-wrap"><span class="m-dim">byte</span> <span class="m-param">newSensorAddress</span>) -&gt; bool</span>
+            </dt>
+            <dd>Set a new modbus sensor (slave) address.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">int16_t </span><a href="#ab27727c274695d0f2a065c3847123d6e" class="m-doc">getSensorBaud</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; int16_t</span>
+            </dt>
+            <dd>Get the sensor modbus baud rate.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a27200fd2c25ee9c498dd77ca0fbdefae" class="m-doc">setSensorBaud</a>(</span><span class="m-doc-wrap"><span class="m-dim">int32_t</span> <span class="m-param">newSensorBaud</span>) -&gt; bool</span>
+            </dt>
+            <dd>Set the sensor modbus baud.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#a915f9e081d071e3c9fda8b28f6dc4aab" class="m-doc">getSensorParity</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Get the Sensor modbus serial parity.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#ab3462ca9257436e7bf0bc4a436cc6d95" class="m-doc">setSensorParity</a>(</span><span class="m-doc-wrap"><span class="m-dim">String</span> <span class="m-param">newSensorParity</span>) -&gt; bool</span>
+            </dt>
+            <dd>Set the sensor modbus serial parity.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#aaa2b0164bbfc8c05f2cac7b6a0983a5c" class="m-doc">getSensorInfo</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Get the sensor information as a String.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String </span><a href="#aa9f63de5ef0b8fc6e38350aea13c9cac" class="m-doc">getSerialNumber</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; String</span>
+            </dt>
+            <dd>Gets the instrument serial number as a String.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a937f1170c969d00cd323a50dc688ecd8" class="m-doc">getVersion</a>(</span><span class="m-doc-wrap"><span class="m-dim">String&amp;</span> <span class="m-param">hardwareVersion</span>,
+              <span class="m-dim">String&amp;</span> <span class="m-param">softwareVersion</span>) -&gt; bool</span>
+            </dt>
+            <dd>Gets the hardware and software version of the sensor.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a0e45c09ce288c524ec35c33e3b75cbdf" class="m-doc">restartCommunications</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; bool</span>
+            </dt>
+            <dd>Restarts communication with the sensor using the modbus diagnostic command 08 (0x08) with subfunction 01.</dd>
+          </dl>
+        </section>
+        <hr>
+        <section id="functions-to-start-and-stop-measurements">
+          <h2>Functions to start and stop measurements</h2>
+            <p><a name="measurement_fxns"></a></p><p>Page 39 of GroPoint Profile User Manual says: A new measurement is triggered by a read request to the input registers (either read single or read multiple). The first read command will initiate the start of a measurement (soil moisture or soil temperature) and will respond to the master with an ACKNOWLEDGE (05) exception response. Moisture measurements take approximately 200 ms per segment. Temperature measurements take approximately 200 ms per sensor. The master should wait for this amount of time to expire before attempting to retrieve the measurement values with another read command.</p>
+          <dl class="m-doc">
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#ac86cfa0217fd8aad6efe806d8fd82bd4" class="m-doc">startMeasurement</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; bool</span>
+            </dt>
+            <dd>Tells the sensors to begin taking measurements.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a7022baf71569ca7579dc116a1fa5db2e" class="m-doc">stopMeasurement</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>) -&gt; bool</span>
+            </dt>
+            <dd>Tells the sensors to stop taking measurements.</dd>
+          </dl>
+        </section>
+        <hr>
+        <section id="functions-to-get-one-or-more-values-from-a-sensor">
+          <h2>Functions to get one or more values from a sensor.</h2>
+            <p><a name="value_fetching"></a></p><p>Based off modbusMaster::getRegisters(), but with trigger followed by a 200 ms delay before read request</p><p>Page 39 of GroPoint Profile User Manual says: A new measurement is triggered by a read request to the input registers (either read single or read multiple). The first read command will initiate the start of a measurement (soil moisture or soil temperature) and will respond to the master with an ACKNOWLEDGE (05) exception response. Moisture measurements take approximately 200 ms per segment. Temperature measurements take approximately 200 ms per sensor. The master should wait for this amount of time to expire before attempting to retrieve the measurement values with another read command.</p><p>Page 37-38 of GroPoint Profile User Manual says: The input registers are read-only registers containing soil moisture or temperature measurement values. Moisture and temperature readings are stored as 16-bit signed integers and will be returned without a decimal place. In order to obtain the true result, the decimal place setting must be applied. The default setting for this is 1 decimal place, so for example a decimal value of 123 indicates 12.3 % volumetric moisture content for volumetric soil moisture measurements, or 12.3 °C for the soil temperature sensor measurements.</p>
+          <dl class="m-doc">
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a784a13e20f657e003dce794d219634f7" class="m-doc">getInputRegisters</a>(</span><span class="m-doc-wrap"><span class="m-dim">int16_t</span> <span class="m-param">startRegister</span>,
+              <span class="m-dim">int16_t</span> <span class="m-param">numRegisters</span>) -&gt; bool</span>
+            </dt>
+            <dd>Get read-only input registers containing measured values.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a9d8309cb732690236e1bc87651d282ff" class="m-doc">getValues</a>(</span><span class="m-doc-wrap"><span class="m-dim">float&amp;</span> <span class="m-param">valueM1</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM2</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM3</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM4</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM5</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM6</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM7</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueM8</span>) -&gt; bool</span>
+            </dt>
+            <dd>Gets parameter group 0 (soil moisture) values back from the sensor.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool </span><a href="#a9e985d312cec8bc471c2e779e62ef267" class="m-doc">getTemperatureValues</a>(</span><span class="m-doc-wrap"><span class="m-dim">float&amp;</span> <span class="m-param">valueT1</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT2</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT3</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT4</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT5</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT6</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT7</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT8</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT9</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT10</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT11</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT12</span>,
+              <span class="m-dim">float&amp;</span> <span class="m-param">valueT13</span>) -&gt; bool</span>
+            </dt>
+            <dd>Gets parameter group 1 (temperature) values back from the sensor.</dd>
+          </dl>
+        </section>
+        <hr>
+        <section id="debugging-functions">
+          <h2>Debugging functions</h2>
+            <p><a name="debugging"></a></p>
+          <dl class="m-doc">
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">void </span><a href="#ab8b59f3c24b6c066859f4305d0e3dae2" class="m-doc">setDebugStream</a>(</span><span class="m-doc-wrap"><span class="m-dim">Stream*</span> <span class="m-param">stream</span>)</span>
+            </dt>
+            <dd>Set a stream for debugging information to go to.</dd>
+                          <dt>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">void </span><a href="#ac7b73f7eef0cfea30202242ef10dbb03" class="m-doc">setDebugStream</a>(</span><span class="m-doc-wrap"><span class="m-dim">Stream&amp;</span> <span class="m-param">stream</span>)</span>
+            </dt>
+            <dd>Set a stream for debugging information to go to.</dd>
+                          <dt id="aed3c9d5122e407e1414cea479f096b73">
+              <span class="m-doc-wrap-bumper"><span class="m-dim">void </span><a href="#aed3c9d5122e407e1414cea479f096b73" class="m-doc-self">stopDebugging</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span class="m-param"></span>)</span>
+            </dt>
+            <dd>Un-set the stream for debugging information to go to; stop debugging.</dd>
+          </dl>
+        </section>
+        <hr>
+
+        <section id="function-details">
+          <h2>Function documentation</h2>
+                      <section class="m-doc-details" id="a20b949a555d5ec9a9d45a09f1cecb6d5"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a20b949a555d5ec9a9d45a09f1cecb6d5" class="m-doc-self">begin</a>(</span><span class="m-doc-wrap"><span class="m-dim"><a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></span> <span
+                    class="m-param">model</span>,
+              <span class="m-dim">byte</span> <span
+                    class="m-param">modbusSlaveID</span>,
+              <span class="m-dim">Stream*</span> <span
+                    class="m-param">stream</span>,
+              <span class="m-dim">int</span> <span
+                    class="m-param">enablePin</span><span class="m-dim"> = -1</span>)</span></span>
+            </h3>
+            <p>This function sets up the communication.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">model</span></td>
+                  <td>The model of the GroPoint sensor, from <a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">modbusSlaveID</span></td>
+                  <td>The byte identifier of the modbus slave device.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">stream</span></td>
+                  <td>A pointer to the Arduino stream object to communicate with.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">enablePin</span></td>
+                  <td>A pin on the Arduino processor to use to send an enable signal to an RS485 to TTL adapter. Use a negative number if this does not apply. Optional with a default value of -1.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the starting communication was successful, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>It should be run during the arduino &quot;setup&quot; function. The &quot;stream&quot; device must be initialized prior to running this.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="aa7d6a50b333a23278ea33631b2ca9b8d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#aa7d6a50b333a23278ea33631b2ca9b8d" class="m-doc-self">begin</a>(</span><span class="m-doc-wrap"><span class="m-dim"><a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></span> <span
+                    class="m-param">model</span>,
+              <span class="m-dim">byte</span> <span
+                    class="m-param">modbusSlaveID</span>,
+              <span class="m-dim">Stream&amp;</span> <span
+                    class="m-param">stream</span>,
+              <span class="m-dim">int</span> <span
+                    class="m-param">enablePin</span><span class="m-dim"> = -1</span>)</span></span>
+            </h3>
+            <p>This function sets up the communication.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">model</span></td>
+                  <td>The model of the GroPoint sensor, from <a href="_gro_point_modbus_8h.html#a2eee1f9b124a42a2507ad3bdb246d09d" class="m-doc">gropointModel</a></td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">modbusSlaveID</span></td>
+                  <td>The byte identifier of the modbus slave device.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">stream</span></td>
+                  <td>A reference to the Arduino stream object to communicate with.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">enablePin</span></td>
+                  <td>A pin on the Arduino processor to use to send an enable signal to an RS485 to TTL adapter. Use a negative number if this does not apply. Optional with a default value of -1.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the starting communication was successful, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>It should be run during the arduino &quot;setup&quot; function. The &quot;stream&quot; device must be initialized prior to running this.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="afeca5b0625db0120bb011c7559b0612c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#afeca5b0625db0120bb011c7559b0612c" class="m-doc-self">getModel</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Returns a pretty string with the model information.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The GroPoint sensor model</td>
+                </tr>
+              </tfoot>
+            </table>
+            <aside class="m-note m-info"><h4>Note</h4><p>This is only based on the model input from the &quot;begin&quot; fxn. The sensor itself does not return its model information.</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a8d682bbf3d559a081c39c76e14154923"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a8d682bbf3d559a081c39c76e14154923" class="m-doc-self">getParameter</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Returns a pretty string with the parameters measured by group 0 (soil moisture).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The primary parameter being measured on this GroPoint sensor model.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <aside class="m-note m-info"><h4>Note</h4><p>This is only based on the model input from the &quot;begin&quot; fxn. The sensor itself does not return this information.</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a121f6e618e71c7c1fda859ab1b5d16bd"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a121f6e618e71c7c1fda859ab1b5d16bd" class="m-doc-self">getParameter1</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Returns a pretty string with the parameters measured by group 1 (temperature).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The secondary parameter being measured on this GroPoint sensor model.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <aside class="m-note m-info"><h4>Note</h4><p>This is only based on the model input from the &quot;begin&quot; fxn. The sensor itself does not return this information.</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a2349180baaaca93bcc62064ab9b4e46d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a2349180baaaca93bcc62064ab9b4e46d" class="m-doc-self">getUnits</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Returns a pretty string with the measurement units for parameter group 0 (soil moisture).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The units of primary parameter being measured on this GroPoint sensor model.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <aside class="m-note m-info"><h4>Note</h4><p>This is only based on the model input from the &quot;begin&quot; fxn. The sensor itself does not return this information.</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a6c10f6ef967526e46bc1d1d98bf8397b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a6c10f6ef967526e46bc1d1d98bf8397b" class="m-doc-self">getUnits1</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Returns a pretty string with the measurement units for parameter group 1 (temperature).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The units of secondary parameter being measured on this GroPoint sensor model.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <aside class="m-note m-info"><h4>Note</h4><p>This is only based on the model input from the &quot;begin&quot; fxn. The sensor itself does not return this information.</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a70a3b18c123f266200582eda9b2285f1"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">byte  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a70a3b18c123f266200582eda9b2285f1" class="m-doc-self">getSensorAddress</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Gets the modbus sensor (slave) address.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">byte</span> The slave ID of the GroPoint sensor</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The address is in holding register 40201, decimal offset 200 (hexadecimal 0x00C8).</p><p>Does not seem to work with a broadcast address of 0x00 or 0xFF</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="adc1ef07b9f4b75c3fb394a6c12a4288e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#adc1ef07b9f4b75c3fb394a6c12a4288e" class="m-doc-self">setSensorAddress</a>(</span><span class="m-doc-wrap"><span class="m-dim">byte</span> <span
+                    class="m-param">newSensorAddress</span>)</span></span>
+            </h3>
+            <p>Set a new modbus sensor (slave) address.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">newSensorAddress</span></td>
+                  <td>The new address (slave ID) for the GroPoint sensor</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the slave ID was successfully set, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The address is in holding register 40201, decimal offset 200 (hexadecimal 0x00C8).</p><p>The address change will take effect immediately, so any subsequent commands must use the new address.</p><p>This register cannot be updated using the broadcast address.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="ab27727c274695d0f2a065c3847123d6e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">int16_t  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#ab27727c274695d0f2a065c3847123d6e" class="m-doc-self">getSensorBaud</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Get the sensor modbus baud rate.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">int16_t</span> A code for the baud rate</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The baud rate is in holding register 40203, decimal offset 202 (hexadecimal 0x00CA)</p><p>The factory default value is 0, corresponding to a baud rate of 19200.</p><p>Valid values: 0=19200, 1=9600, 2=4800, 3=2400, 4=1200, 5=600, 6=300.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a27200fd2c25ee9c498dd77ca0fbdefae"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a27200fd2c25ee9c498dd77ca0fbdefae" class="m-doc-self">setSensorBaud</a>(</span><span class="m-doc-wrap"><span class="m-dim">int32_t</span> <span
+                    class="m-param">newSensorBaud</span>)</span></span>
+            </h3>
+            <p>Set the sensor modbus baud.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">newSensorBaud</span></td>
+                  <td>The new baud rate to use</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the baud rate was successfully set, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The baud rate is in holding register 40203, decimal offset 202 (hexadecimal 0x00CA)</p><p>Change this value to any of the following valid values: 19200, 9600, 4800, 2400, 1200, 600, 300.</p><p>The new baud rate <strong>does not take effect</strong> until the sensor is power cycled, or if the restart communications diagnostic command (08, with subfunction 01) is received.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a915f9e081d071e3c9fda8b28f6dc4aab"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a915f9e081d071e3c9fda8b28f6dc4aab" class="m-doc-self">getSensorParity</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Get the Sensor modbus serial parity.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The parity configuration</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The parity is in holding register 40204, decimal offset 0203 (hexadecimal 0x00CB).</p><p>The factory default value is 2 corresponding to Even parity.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="ab3462ca9257436e7bf0bc4a436cc6d95"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#ab3462ca9257436e7bf0bc4a436cc6d95" class="m-doc-self">setSensorParity</a>(</span><span class="m-doc-wrap"><span class="m-dim">String</span> <span
+                    class="m-param">newSensorParity</span>)</span></span>
+            </h3>
+            <p>Set the sensor modbus serial parity.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">newSensorParity</span></td>
+                  <td>the new parity, &quot;None&quot;, &quot;Odd&quot;, or &quot;Even&quot;</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the parity was successfully set, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>The parity is in holding register 40204, decimal offset 0203 (hexadecimal 0x00CB).</p><p>Change this value to any of the following valid values: &quot;None&quot;, &quot;Odd&quot;, &quot;Even&quot;.</p><p>The new parity setting <strong>does not take effect</strong> until the sensor is power cycled, or if the restart communications diagnostic command (08, with subfunction 01) is received.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="aaa2b0164bbfc8c05f2cac7b6a0983a5c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#aaa2b0164bbfc8c05f2cac7b6a0983a5c" class="m-doc-self">getSensorInfo</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Get the sensor information as a String.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The sensor information in the format ‘RIOTTECHGPLPTC vvvSNnnnnnn’ where vvv is the firmware version (v.v.v) and nnnnnn is the probe serial number.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>Page 35 of GroPoint Profile User Manual says: Function 17 (0x11) returns the ASCII encoded string</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="aa9f63de5ef0b8fc6e38350aea13c9cac"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">String  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#aa9f63de5ef0b8fc6e38350aea13c9cac" class="m-doc-self">getSerialNumber</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Gets the instrument serial number as a String.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">String</span> The serial number of the GroPoint sensor</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>This is pulled as a substring from the sensor information.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a937f1170c969d00cd323a50dc688ecd8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a937f1170c969d00cd323a50dc688ecd8" class="m-doc-self">getVersion</a>(</span><span class="m-doc-wrap"><span class="m-dim">String&amp;</span> <span
+                    class="m-param">hardwareVersion</span>,
+              <span class="m-dim">String&amp;</span> <span
+                    class="m-param">softwareVersion</span>)</span></span>
+            </h3>
+            <p>Gets the hardware and software version of the sensor.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">hardwareVersion</span></td>
+                  <td>A reference to a String object to be modified with the hardware version.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">softwareVersion</span></td>
+                  <td>A reference to a String object to be modified with the software version.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the hardware and software versions were successfully updated, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>This is pulled as a substring from the sensor information.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a0e45c09ce288c524ec35c33e3b75cbdf"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a0e45c09ce288c524ec35c33e3b75cbdf" class="m-doc-self">restartCommunications</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Restarts communication with the sensor using the modbus diagnostic command 08 (0x08) with subfunction 01.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">bool</span> True if the commuication was restarted, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>A request data field contents of FF 00 hex causes the port’s Communications Event Log to be cleared also. Contents of 00 00 leave the log as it was prior to the restart.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="ac86cfa0217fd8aad6efe806d8fd82bd4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#ac86cfa0217fd8aad6efe806d8fd82bd4" class="m-doc-self">startMeasurement</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Tells the sensors to begin taking measurements.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">bool</span> True if the measurements were successfully started, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>A start command is not in the GroPoint Modbus Manuals. However, Start/Stop functions are required to get these to work in ModularSensors. Instead, just confirm that sensor in communicating with a <a href="classgropoint.html#a70a3b18c123f266200582eda9b2285f1" class="m-doc">gropoint::<wbr />getSensorAddress()</a> command</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a7022baf71569ca7579dc116a1fa5db2e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a7022baf71569ca7579dc116a1fa5db2e" class="m-doc-self">stopMeasurement</a>(</span><span class="m-doc-wrap"><span class="m-dim">void</span><span
+                    class="m-param"></span>)</span></span>
+            </h3>
+            <p>Tells the sensors to stop taking measurements.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><span class="m-dim">bool</span> True if the measurements were successfully started, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>A stop command is not in the GroPoint Modbus Manuals; always returns true.</p>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a784a13e20f657e003dce794d219634f7"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a784a13e20f657e003dce794d219634f7" class="m-doc-self">getInputRegisters</a>(</span><span class="m-doc-wrap"><span class="m-dim">int16_t</span> <span
+                    class="m-param">startRegister</span>,
+              <span class="m-dim">int16_t</span> <span
+                    class="m-param">numRegisters</span>)</span></span>
+            </h3>
+            <p>Get read-only input registers containing measured values.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">startRegister</span></td>
+                  <td>The first register to read.</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">numRegisters</span></td>
+                  <td>The total number of registers to read</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the registers were read successfully, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>Similar to modbusMaster::getRegisters(), but with a trigger request followed by a 200 ms delay before the read measurement request</p><aside class="m-note m-default"><h4>See also</h4><p>value_fetching</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a9d8309cb732690236e1bc87651d282ff"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a9d8309cb732690236e1bc87651d282ff" class="m-doc-self">getValues</a>(</span><span class="m-doc-wrap"><span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM1</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM2</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM3</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM4</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM5</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM6</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM7</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueM8</span>)</span></span>
+            </h3>
+            <p>Gets parameter group 0 (soil moisture) values back from the sensor.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">valueM1</span></td>
+                  <td>The first value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM2</span></td>
+                  <td>The second value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM3</span></td>
+                  <td>The third value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM4</span></td>
+                  <td>The fourth value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM5</span></td>
+                  <td>The fifth value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM6</span></td>
+                  <td>The sixth value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM7</span></td>
+                  <td>The seventh value from parameter group 0 (soil moisture)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueM8</span></td>
+                  <td>The eighth value from parameter group 0 (soil moisture)</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the measurements were successfully obtained, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+            <p>Values starting at input register 30001, decimal offset 0 (hexadecimal 0x0000)</p><aside class="m-note m-default"><h4>See also</h4><p>value_fetching</p></aside>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="a9e985d312cec8bc471c2e779e62ef267"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">bool  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#a9e985d312cec8bc471c2e779e62ef267" class="m-doc-self">getTemperatureValues</a>(</span><span class="m-doc-wrap"><span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT1</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT2</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT3</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT4</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT5</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT6</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT7</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT8</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT9</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT10</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT11</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT12</span>,
+              <span class="m-dim">float&amp;</span> <span
+                    class="m-param">valueT13</span>)</span></span>
+            </h3>
+            <p>Gets parameter group 1 (temperature) values back from the sensor.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">valueT1</span></td>
+                  <td>The first value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT2</span></td>
+                  <td>The second value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT3</span></td>
+                  <td>The third value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT4</span></td>
+                  <td>The fourth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT5</span></td>
+                  <td>The fifth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT6</span></td>
+                  <td>The sixth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT7</span></td>
+                  <td>The seventh value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT8</span></td>
+                  <td>The eighth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT9</span></td>
+                  <td>The ninth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT10</span></td>
+                  <td>The tenth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT11</span></td>
+                  <td>The eleventh value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT12</span></td>
+                  <td>The twelvth value from parameter group 1 (temperature)</td>
+                </tr>
+                <tr>
+                  <td class="m-param" ><span class="m-param">valueT13</span></td>
+                  <td>The thirteenth value from parameter group 1 (temperature)</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><span class="m-dim">bool</span> True if the measurements were successfully obtained, false if not.</td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="ab8b59f3c24b6c066859f4305d0e3dae2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">void  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#ab8b59f3c24b6c066859f4305d0e3dae2" class="m-doc-self">setDebugStream</a>(</span><span class="m-doc-wrap"><span class="m-dim">Stream*</span> <span
+                    class="m-param">stream</span>)</span></span>
+            </h3>
+            <p>Set a stream for debugging information to go to.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">stream</span></td>
+                  <td>An Arduino stream object</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <hr>
+          </div>
+        </section>
+                      <section class="m-doc-details" id="ac7b73f7eef0cfea30202242ef10dbb03"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><span class="m-dim">void  gropoint::<wbr /></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a
+                    href="#ac7b73f7eef0cfea30202242ef10dbb03" class="m-doc-self">setDebugStream</a>(</span><span class="m-doc-wrap"><span class="m-dim">Stream&amp;</span> <span
+                    class="m-param">stream</span>)</span></span>
+            </h3>
+            <p>Set a stream for debugging information to go to.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="m-param"  style="width: 1%"><span class="m-param">stream</span></td>
+                  <td>An Arduino stream object</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <hr>
+          </div>
+        </section>
+        </section>
+        <hr>
+
+              </article>
+            </main>
+
+          </div> <!-- gp-content -->
+        </div> <!-- gp-left-column -->
+      </div> <!-- gp-inner-container -->
+    </div> <!-- gp-content-wrapper -->
+
+    <div id="footer-image">
+      <div class="gp-container">
+        <img
+          src="https://www.envirodiy.org/wp-content/uploads/2016/05/EnviroDIY_LogoMaster_Square_V5_TwoTree_Trans_notext-e1462820115833.png"
+          width="99"
+          height="22"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <footer id="gp-footer">
+      <div id="gp-copyright">
+        <div class="gp-container">
+          <div id="gp-copyright-text">
+            <p>
+              <a href="https://stroudcenter.org/" target="_blank"
+                >EnviroDIY™ is a community for do-it-yourself ideas for environmental
+                science and monitoring. EnviroDIY is an initiative of
+                <a
+                  style="text-decoration: underline"
+                  href="https://stroudcenter.org/"
+                  target="_blank"
+                  >Stroud Water Research Center</a
+                >, which advances knowledge and stewardship of freshwater systems through
+                global research, education, and watershed restoration.
+              </a>
+            </p>
+            <p>
+              All content on EnviroDIY is licensed as Creative Commons
+              Attribution-ShareAlike 4.0 International (CC-BY-SA). Hardware designs on this
+              website are released under the CERN Open Hardware License 1.2.
+              <a style="text-decoration: underline" href="https://envirodiy.org/licenses/"
+                >See all licenses.</a
+              >
+              <a style="text-decoration: underline" href="https://envirodiy.org/terms/"
+                >Terms of Use</a
+              >
+              |
+              <a style="text-decoration: underline" href="https://envirodiy.org/privacy/"
+                >Privacy Policy</a
+              >
+              |
+              <a style="text-decoration: underline" href="https://envirodiy.org/cookies/"
+                >Cookie Policy</a
+              >
+              |
+              <a
+                style="text-decoration: underline"
+                href="https://envirodiy.org/shop-policies/"
+                >Shop Policies</a
+              >
+              |
+              <a style="text-decoration: underline" href="https://envirodiy.org/contact/"
+                >Contact</a
+              >
+            </p>
+            <p>
+              Created with <a href="https://doxygen.org/">Doxygen</a> 1.11.0 and <a href="https://mcss.mosra.cz/">m.css</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="gp-clear"></div>
+
+    </div> <!-- gp-site-wrapper -->
+  </div> <!-- gp-site-wrapper -->
+
+</body>
+</html>
