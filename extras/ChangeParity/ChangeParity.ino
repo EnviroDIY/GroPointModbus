@@ -44,6 +44,7 @@ byte newModbusAddress     = 0x19;  // Hex 0x19 = Decimal 25 is unique in Modular
 // The Modbus baud rate the sensor uses
 int32_t defaultModbusBaud = 19200;  // GroPoint default baud rate is 19200.
 int32_t newModbusBaud     = 9600;   // 9600 is a safer baud rate to use
+                                    // and the default for YosemiTech & Keller.
 
 // The Modbus parity the sensor uses
 // see
@@ -136,6 +137,7 @@ modbusMaster modbus;
 // ==========================================================================
 // Working Functions
 // ==========================================================================
+
 // A function for pretty-printing the Modbuss Address in Hexadecimal notation,
 // from ModularSensors `sensorLocation()`
 String prettyprintAddressHex(byte _modbusAddress) {
@@ -146,8 +148,8 @@ String prettyprintAddressHex(byte _modbusAddress) {
 }
 
 
-// Get modbus slave ID or Sensor Modbus Address from
-// holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
+// Get modbus slave ID or Sensor Modbus Address
+// from holding register 40201, decimal offset 200 (hexadecimal 0x00C8)
 byte getSensorAddress(void) {
     byte getAddressCommand[8] = {
         defaultModbusAddress, 0x03, 0x00, 0xC8, 0x00, 0x01, 0x0000
