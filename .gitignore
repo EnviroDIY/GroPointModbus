@@ -163,3 +163,7 @@ generateKeywords.bat
 output_*.log
 sync.ffs_db
 docs/Doxyfile.bak
+run_mcss.bat
+installWorkingDependencies.bat
+clang-format-all.py
+clang_format_all.bat
