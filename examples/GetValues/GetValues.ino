@@ -66,12 +66,13 @@ uint8_t modbusParity = SERIAL_8N1;
 
 // Sensor Timing
 // Edit these to explore
-#define WARM_UP_TIME 350  // milliseconds for sensor to respond to commands.
+#define WARM_UP_TIME \
+    350  // milliseconds for sensor to respond to commands.
          // GroPoint Profile User Manual page 7:
-         // The time from application of power to the SDI-12 power bus until the
-         // sensor is ready to receive a command is approximately 350 ms.
+// The time from application of power to the SDI-12 power bus until the
+// sensor is ready to receive a command is approximately 350 ms.
 
-#define STABILIZATION_TIME 100  // milliseconds for readings to stablize.
+#define STABILIZATION_TIME 100  // milliseconds for readings to stabilize.
 
 #define MEASUREMENT_TIME 200  // milliseconds to complete a measurement.
 // GroPoint Profile User Manual page 39:
@@ -87,7 +88,7 @@ const int32_t serialBaud = 115200;  // Baud rate for serial monitor
 // Define pin number variables
 const int sensorPwrPin  = 10;  // The pin sending power to the sensor
 const int adapterPwrPin = 22;  // The pin sending power to the RS485 adapter
-const int DEREPin       = -1;  // The pin controlling Recieve Enable and Driver Enable
+const int DEREPin       = -1;  // The pin controlling Receive Enable and Driver Enable
                                // on the RS485 adapter, if applicable (else, -1)
                                // Setting HIGH enables the driver (arduino) to send text
                                // Setting LOW enables the receiver (sensor) to send text
@@ -100,22 +101,22 @@ const int DEREPin       = -1;  // The pin controlling Recieve Enable and Driver 
 // ==========================================================================
 // Create and Assign a Serial Port for Modbus
 // ==========================================================================
-// Harware serial ports are prefered when available.
+// Hardware serial ports are preferred when available.
 // AltSoftSerial is the most stable alternative for modbus.
 //   Select over alternatives with the define below.
-#define BUILD_ALTSOFTSERIAL // Comment-out if you prefer alternatives
+// #define BUILD_ALTSOFTSERIAL  // Comment-out if you prefer alternatives
 
 #if defined(BUILD_ALTSOFTSERIAL)
 #include <AltSoftSerial.h>
 AltSoftSerial modbusSerial;
 
 #elif defined(ARDUINO_AVR_UNO) || defined(ARDUINO_AVR_FEATHER328P)
-// The Uno only has 1 hardware serial port, which is dedicated to comunication with the
+// The Uno only has 1 hardware serial port, which is dedicated to communication with the
 // computer. If using an Uno, you will be restricted to using AltSofSerial or
 // SoftwareSerial
 #include <SoftwareSerial.h>
-const int SSRxPin = 10;  // Receive pin for software serial (Rx on RS485 adapter)
-const int SSTxPin = 11;  // Send pin for software serial (Tx on RS485 adapter)
+const int      SSRxPin = 10;  // Receive pin for software serial (Rx on RS485 adapter)
+const int      SSTxPin = 11;  // Send pin for software serial (Tx on RS485 adapter)
 #pragma message("Using Software Serial for the Uno on pins 10 and 11")
 SoftwareSerial modbusSerial(SSRxPin, SSTxPin);
 
@@ -130,15 +131,15 @@ SoftwareSerial modbusSerial;
 HardwareSerial& modbusSerial = Serial1;
 
 #elif !defined(NO_GLOBAL_SERIAL1) && !defined(STM32_CORE_VERSION)
-// This is just a assigning another name to the same port, for convienence
+// This is just a assigning another name to the same port, for convience
 // Unless it is unavailable, always prefer hardware serial.
-#pragma message("Using HarwareSerial / Serial1")
+#pragma message("Using HardwareSerial / Serial1")
 HardwareSerial& modbusSerial = Serial1;
 
 #else
-// This is just a assigning another name to the same port, for convienence
+// This is just a assigning another name to the same port, for convience
 // Unless it is unavailable, always prefer hardware serial.
-#pragma message("Using HarwareSerial / Serial")
+#pragma message("Using HardwareSerial / Serial")
 HardwareSerial& modbusSerial = Serial;
 #endif
 
@@ -191,7 +192,7 @@ void setup() {
     modbusSerial.begin(modbusBaud, modbusParity, SSRxPin, SSTxPin, false);
 #elif defined(BUILD_ALTSOFTSERIAL)
     modbusSerial.begin(modbusBaud);
-#else // For Hardware Serial
+#else  // For Hardware Serial
     modbusSerial.begin(modbusBaud, modbusParity);
 #endif
 

@@ -9,7 +9,7 @@ Neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial will support either
 
 8-N-1 (no parity) is the most common configuration for serial communications.
 
-This sketch depends on the GropointModbus library and also loosly on the SensorModbusMaster library via it's example sketch: SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
+This sketch depends on the GropointModbus library and also loosely on the SensorModbusMaster library via it's example sketch: SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 
 _______
 

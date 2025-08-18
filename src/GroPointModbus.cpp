@@ -338,7 +338,7 @@ bool gropoint::getInputRegisters(int16_t startRegister, int16_t numRegisters) {
 
     // Put in the starting register
     leFrame fram  = {{
-         0,
+        0,
     }};
     fram.Int16[0] = startRegister;
     command[2]    = fram.Byte[1];
@@ -397,7 +397,7 @@ bool gropoint::getValues(float& valueM1, float& valueM2, float& valueM3, float& 
         case GPLP8: {
             int16_t numRegisters = 8;
             if (getInputRegisters(startRegister, numRegisters)) {
-                // Muliply by 0.1 to convert from int to float as per manual
+                // Multiply by 0.1 to convert from int to float as per manual
                 valueM1 = 0.1 * modbus.int16FromFrame(bigEndian, 3);
                 valueM2 = 0.1 * modbus.int16FromFrame(bigEndian, 5);
                 valueM3 = 0.1 * modbus.int16FromFrame(bigEndian, 7);
@@ -444,7 +444,7 @@ bool gropoint::getTemperatureValues(float& valueT1, float& valueT2, float& value
         case GPLP8: {
             int16_t numRegisters = 13;
             if (getInputRegisters(startRegister, numRegisters)) {
-                // Muliply by 0.1 to convert from int to float as per manual
+                // Multiply by 0.1 to convert from int to float as per manual
                 valueT1  = 0.1 * modbus.int16FromFrame(bigEndian, 3);
                 valueT2  = 0.1 * modbus.int16FromFrame(bigEndian, 5);
                 valueT3  = 0.1 * modbus.int16FromFrame(bigEndian, 7);
@@ -470,3 +470,5 @@ bool gropoint::getTemperatureValues(float& valueT1, float& valueT2, float& value
     // If something fails, we'll get here
     return false;
 }
+
+// cspell: ignore fram RIOTTECHGPLPTC
