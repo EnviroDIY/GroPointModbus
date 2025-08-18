@@ -16,6 +16,9 @@
  * This sketch depends on the GropointModbus library and also loosely on the
  * SensorModbusMaster library via it's example sketch:
  * SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
+ *
+ * @m_examplenavigation{example_change_modbus_settings,}
+ * @m_footernavigation
  * ======================================================================= */
 
 // ---------------------------------------------------------------------------

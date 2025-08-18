@@ -17,7 +17,7 @@
  * SensorModbusMaster library and is based on it's example sketch:
  * SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
  *
- * @m_examplenavigation{example_get_values,}
+ * @m_examplenavigation{extras_change_parity,}
  * @m_footernavigation
  * ======================================================================= */
 

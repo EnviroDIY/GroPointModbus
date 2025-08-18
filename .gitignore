@@ -167,3 +167,4 @@ run_mcss.bat
 installWorkingDependencies.bat
 clang-format-all.py
 clang_format_all.bat
+pio_common_libdeps.ini
