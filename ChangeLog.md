@@ -12,11 +12,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Changed
 
+- Updated doxygen formatting
+- Bumped SensorModbusMaster dependency
+
 ### Added
+
+- Added code spell configurations
 
 ### Removed
 
 ### Fixed
+
+- Fixed spelling errors
 
 ***
 
@@ -34,6 +41,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Added keywords.txt for Arduino IDE
 
 ***
+
 ### Fixed
 
 ***
