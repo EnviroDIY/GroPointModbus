@@ -1,6 +1,6 @@
 {
   "name": "GroPointModbus",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "keywords": "GroPoint, Modbus, communication, bus, sensor",
   "description": "Arduino library for communication with GroPoint soil moisture sensors via Modbus.",
   "repository": {
