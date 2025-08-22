@@ -1,4 +1,4 @@
-# Changing the parity <!-- {#extras_change_parity} -->
+# Changing the parity <!--! {#extras_change_parity} -->
 
 This sketch uses hardware serial to connect with GroPoint Profile and change default modbus settings from 19200 8E1 to 9600 8N1.
 

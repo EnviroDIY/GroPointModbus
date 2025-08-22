@@ -1,4 +1,4 @@
-# Getting Values <!-- {#example_get_values} -->
+# Getting Values <!--! {#example_get_values} -->
 
 This prints basic meta-data about a sensor to the first serial port and then begins taking measurements from the sensor.
 
@@ -10,10 +10,10 @@ Neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial will support either
 
 _______
 
-[//]: # ( @section example_get_values_pio_config PlatformIO Configuration )
+<!--! @section example_get_values_pio_config PlatformIO Configuration -->
 
-[//]: # ( @include{lineno} GetValues/platformio.ini )
+<!--! @include{lineno} GetValues/platformio.ini -->
 
-[//]: # ( @section example_get_values_code The Complete Code )
+<!--! @section example_get_values_code The Complete Code -->
 
-[//]: # ( @include{lineno} GetValues/GetValues.ino )
+<!--! @include{lineno} GetValues/GetValues.ino -->
