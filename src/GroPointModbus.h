@@ -270,7 +270,7 @@ class gropoint {
      * Log to be cleared also. Contents of 00 00 leave the log as it was prior to the
      * restart.
      *
-     * @return *bool* True if the commuication was restarted, false if not.
+     * @return *bool* True if the communication was restarted, false if not.
      */
     bool restartCommunications(void);
     /**@}*/
@@ -392,7 +392,7 @@ class gropoint {
      * @param valueT9 The ninth value from parameter group 1 (temperature)
      * @param valueT10 The tenth value from parameter group 1 (temperature)
      * @param valueT11 The eleventh value from parameter group 1 (temperature)
-     * @param valueT12 The twelvth value from parameter group 1 (temperature)
+     * @param valueT12 The twelfth value from parameter group 1 (temperature)
      * @param valueT13 The thirteenth value from parameter group 1 (temperature)
      * @return *bool* True if the measurements were successfully obtained, false if not.
      */
@@ -442,3 +442,5 @@ class gropoint {
 };
 
 #endif
+
+// cspell: ignore RIOTTECHGPLPTC

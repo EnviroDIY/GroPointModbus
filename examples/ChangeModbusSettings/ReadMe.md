@@ -1,4 +1,4 @@
-# Changing Modbus Settings <!-- {#example_change_modbus_settings} -->
+# Changing Modbus Settings <!--! {#example_change_modbus_settings} -->
 
 This sketch uses hardware serial to connect with GroPoint Profile and change the default modbus settings from 19200 8E1 to 9600 8N1.
 
@@ -9,14 +9,14 @@ Neither SoftwareSerial, AltSoftSerial, nor NeoSoftwareSerial will support either
 
 8-N-1 (no parity) is the most common configuration for serial communications.
 
-This sketch depends on the GropointModbus library and also loosly on the SensorModbusMaster library via it's example sketch: SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
+This sketch depends on the GropointModbus library and also loosely on the SensorModbusMaster library via it's example sketch: SensorModbusMaster/examples/readWriteRegister/readWriteRegister.ino
 
 _______
 
-[//]: # ( @section example_change_modbus_settings_pio_config PlatformIO Configuration )
+<!--! @section example_change_modbus_settings_pio_config PlatformIO Configuration -->
 
-[//]: # ( @include{lineno} ChangeModbusSettings/platformio.ini )
+<!--! @include{lineno} ChangeModbusSettings/platformio.ini -->
 
-[//]: # ( @section example_change_modbus_settings_code The Complete Code )
+<!--! @section example_change_modbus_settings_code The Complete Code -->
 
-[//]: # ( @include{lineno} ChangeModbusSettings/ChangeModbusSettings.ino )
+<!--! @include{lineno} ChangeModbusSettings/ChangeModbusSettings.ino -->
