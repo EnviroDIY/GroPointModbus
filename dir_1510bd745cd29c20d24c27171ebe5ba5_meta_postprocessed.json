@@ -1,0 +1,20 @@
+{
+  "is_final": null,
+  "parent": null,
+  "parentGroup": null,
+  "id": "dir_1510bd745cd29c20d24c27171ebe5ba5",
+  "kind": "dir",
+  "name": "extras",
+  "url": "dir_1510bd745cd29c20d24c27171ebe5ba5.html",
+  "brief": "Has helper and debugging sketches.",
+  "has_details": true,
+  "children": [
+    "dir_53508286ff56c283fe96e74ec21ae883"
+  ],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null,
+  "leaf_name": "extras"
+}

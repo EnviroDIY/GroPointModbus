@@ -1,5 +1,5 @@
 {
-  "version": "1.11.0",
+  "version": "1.14.0",
   "compound": {
     "kind": "class",
     "id": "classgropoint",
@@ -19,7 +19,7 @@
     "since": null,
     "example_navigation": null,
     "footer_navigation": null,
-    "modules": [],
+    "topics": [],
     "dirs": [],
     "files": [],
     "namespaces": [],
@@ -885,7 +885,7 @@
               "name": "restartCommunications",
               "brief": "Restarts communication with the sensor using the modbus diagnostic command 08 (0x08) with subfunction 01.",
               "description": "<p>A request data field contents of FF 00 hex causes the port\u2019s Communications Event Log to be cleared also. Contents of 00 00 leave the log as it was prior to the restart.</p>",
-              "return_value": "True if the commuication was restarted, false if not.",
+              "return_value": "True if the communication was restarted, false if not.",
               "return_values": [],
               "exceptions": [],
               "deprecated": null,
@@ -939,7 +939,7 @@
               "type": "bool",
               "name": "startMeasurement",
               "brief": "Tells the sensors to begin taking measurements.",
-              "description": "<p>A start command is not in the GroPoint Modbus Manuals. However, Start/Stop functions are required to get these to work in ModularSensors. Instead, just confirm that sensor in communicating with a <a href=\"classgropoint.html#a70a3b18c123f266200582eda9b2285f1\" class=\"m-doc\">gropoint::<wbr />getSensorAddress()</a> command</p>",
+              "description": "<p>A start command is not in the GroPoint Modbus Manuals. However, Start/Stop functions are required to get these to work in ModularSensors. Instead, just confirm that sensor in communicating with a <a href=\"#a70a3b18c123f266200582eda9b2285f1\" class=\"m-doc\">gropoint::<wbr />getSensorAddress()</a> command</p>",
               "return_value": "True if the measurements were successfully started, false if not.",
               "return_values": [],
               "exceptions": [],
@@ -1322,7 +1322,7 @@
                   "type": "float&amp;",
                   "type_name": "float&amp; valueT12",
                   "default": null,
-                  "description": "The twelvth value from parameter group 1 (temperature)",
+                  "description": "The twelfth value from parameter group 1 (temperature)",
                   "direction": ""
                 },
                 {

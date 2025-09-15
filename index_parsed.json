@@ -1,5 +1,5 @@
 {
-  "version": "1.11.0",
+  "version": "1.14.0",
   "index": {
     "symbols": [
       {
@@ -33,10 +33,33 @@
         "name": "examples",
         "url": "dir_d28a4824dc47e487b107a5db32ef43c4.html",
         "brief": "Contains all of the example sketches.",
-        "children": [],
+        "children": [
+          {
+            "id": "dir_991c63275f681fccaf024d70f7829bdd",
+            "kind": "dir",
+            "name": "ChangeModbusSettings",
+            "url": "dir_991c63275f681fccaf024d70f7829bdd.html",
+            "brief": "Contains the ChangeModbusSettings example.",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          },
+          {
+            "id": "dir_67ec081ba6b5a9137a8114a038b678e6",
+            "kind": "dir",
+            "name": "GetValues",
+            "url": "dir_67ec081ba6b5a9137a8114a038b678e6.html",
+            "brief": "Contains the GetValues example.",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          }
+        ],
         "deprecated": null,
         "since": null,
-        "has_nestable_children": false
+        "has_nestable_children": true
       },
       {
         "id": "dir_1510bd745cd29c20d24c27171ebe5ba5",
@@ -44,10 +67,22 @@
         "name": "extras",
         "url": "dir_1510bd745cd29c20d24c27171ebe5ba5.html",
         "brief": "Has helper and debugging sketches.",
-        "children": [],
+        "children": [
+          {
+            "id": "dir_53508286ff56c283fe96e74ec21ae883",
+            "kind": "dir",
+            "name": "ChangeParity",
+            "url": "dir_53508286ff56c283fe96e74ec21ae883.html",
+            "brief": "Contains the ChangeParity example.",
+            "children": [],
+            "deprecated": null,
+            "since": null,
+            "has_nestable_children": false
+          }
+        ],
         "deprecated": null,
         "since": null,
-        "has_nestable_children": false
+        "has_nestable_children": true
       },
       {
         "id": "dir_68267d1309a1af8e8297ef4c3efbcdba",
@@ -118,8 +153,30 @@
         "deprecated": null,
         "since": null,
         "has_nestable_children": false
+      },
+      {
+        "id": "extras_change_parity",
+        "kind": "page",
+        "name": "Changing the parity",
+        "url": "extras_change_parity.html",
+        "brief": "",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
+      },
+      {
+        "id": "page_extras",
+        "kind": "page",
+        "name": "Extra Helpers for GroPoint Modbus Library",
+        "url": "page_extras.html",
+        "brief": "",
+        "children": [],
+        "deprecated": null,
+        "since": null,
+        "has_nestable_children": false
       }
     ],
-    "modules": []
+    "topics": []
   }
 }

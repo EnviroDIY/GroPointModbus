@@ -1,0 +1,18 @@
+{
+  "is_final": null,
+  "parent": null,
+  "parentGroup": null,
+  "id": "extras_change_parity",
+  "kind": "page",
+  "name": "Changing the parity",
+  "url": "extras_change_parity.html",
+  "brief": "",
+  "has_details": 3,
+  "children": [],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null,
+  "leaf_name": "Changing the parity"
+}

@@ -1,0 +1,17 @@
+{
+  "is_final": null,
+  "parent": null,
+  "parentGroup": null,
+  "id": "page_extras",
+  "kind": "page",
+  "name": "Extra Helpers for GroPoint Modbus Library",
+  "url": "page_extras.html",
+  "brief": "",
+  "has_details": 2,
+  "children": [],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null
+}

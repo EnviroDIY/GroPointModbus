@@ -1,0 +1,18 @@
+{
+  "is_final": null,
+  "parent": "page_the_examples",
+  "parentGroup": null,
+  "id": "example_change_modbus_settings",
+  "kind": "page",
+  "name": "Changing Modbus Settings",
+  "url": "example_change_modbus_settings.html",
+  "brief": "",
+  "has_details": 9,
+  "children": [],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null,
+  "leaf_name": "Changing Modbus Settings"
+}

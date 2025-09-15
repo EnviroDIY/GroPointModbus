@@ -1,0 +1,18 @@
+{
+  "is_final": null,
+  "parent": "dir_1510bd745cd29c20d24c27171ebe5ba5",
+  "parentGroup": null,
+  "id": "dir_53508286ff56c283fe96e74ec21ae883",
+  "kind": "dir",
+  "name": "extras/ChangeParity",
+  "url": "dir_53508286ff56c283fe96e74ec21ae883.html",
+  "brief": "Contains the ChangeParity example.",
+  "has_details": true,
+  "children": [],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null,
+  "leaf_name": "ChangeParity"
+}

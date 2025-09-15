@@ -1,5 +1,5 @@
 {
-  "version": "1.11.0",
+  "version": "1.14.0",
   "compound": {
     "kind": "dir",
     "id": "dir_1510bd745cd29c20d24c27171ebe5ba5",
@@ -16,8 +16,16 @@
     "since": null,
     "example_navigation": null,
     "footer_navigation": null,
-    "modules": [],
-    "dirs": [],
+    "topics": [],
+    "dirs": [
+      {
+        "url": "dir_53508286ff56c283fe96e74ec21ae883.html",
+        "name": "ChangeParity",
+        "brief": "Contains the ChangeParity example.",
+        "deprecated": null,
+        "since": null
+      }
+    ],
     "files": [],
     "namespaces": [],
     "classes": [],

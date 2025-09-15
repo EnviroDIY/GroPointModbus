@@ -1,0 +1,17 @@
+{
+  "is_final": null,
+  "parent": null,
+  "parentGroup": null,
+  "id": "dir_991c63275f681fccaf024d70f7829bdd",
+  "kind": "dir",
+  "name": "examples/ChangeModbusSettings",
+  "url": "dir_991c63275f681fccaf024d70f7829bdd.html",
+  "brief": "Contains the ChangeModbusSettings example.",
+  "has_details": true,
+  "children": [],
+  "childrenClasses": [],
+  "childrenNamespaces": [],
+  "childrenCompoundRefs": [],
+  "deprecated": null,
+  "since": null
+}
