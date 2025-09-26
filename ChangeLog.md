@@ -20,6 +20,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ***
 
+## [0.1.4]
+
+### Changed
+
+- Bumped SensorModbusMaster dependency
+
+***
+
 ## [0.1.3]
 
 ### Changed
@@ -70,7 +78,8 @@ Initial release
 
 ***
 
-[Unreleased]: https://github.com/EnviroDIY/GroPointModbus/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/EnviroDIY/GroPointModbus/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/EnviroDIY/GroPointModbus/releases/tag/v0.1.4
 [0.1.3]: https://github.com/EnviroDIY/GroPointModbus/releases/tag/v0.1.3
 [0.1.2]: https://github.com/EnviroDIY/GroPointModbus/releases/tag/v0.1.2
 [0.1.1]: https://github.com/EnviroDIY/GroPointModbus/releases/tag/v0.1.1
