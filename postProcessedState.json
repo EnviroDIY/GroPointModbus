@@ -70,7 +70,7 @@
       "name": "ChangeLog",
       "url": "change_log.html",
       "brief": "",
-      "has_details": 11,
+      "has_details": 12,
       "children": [],
       "childrenClasses": [],
       "childrenNamespaces": [],
@@ -401,7 +401,7 @@
   ],
   "doxyfile": {
     "PROJECT_NAME": "GroPointModbus",
-    "PROJECT_NUMBER": "0.1.4",
+    "PROJECT_NUMBER": "0.1.5",
     "PROJECT_BRIEF": "An Arduino library for communication with GroPoint soil moisture sensors via Modbus.",
     "PROJECT_LOGO": "gp-desktop-logo.png",
     "OUTPUT_DIRECTORY": "../../GroPointModbus_Doxygen",
